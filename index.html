@@ -31,11 +31,50 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
+            position: relative;
         }
 
         /* Screen Switcher */
         .screen { display: none; flex-direction: column; gap: 14px; width: 100%; }
         .screen.active { display: flex; }
+
+        /* Header Navigation Styles */
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .icon-btn-rounded {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #161926;
+            border: 1px solid #23283b;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .reward-badge-icon {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background: #f59e0b;
+            border-radius: 50%;
+            border: 2px solid #0b0f17;
+        }
 
         /* --- 1. MAIN MENU STYLES --- */
         .profile-header {
@@ -64,19 +103,6 @@
         .user-details { display: flex; flex-direction: column; }
         .brand-name { font-size: 10px; letter-spacing: 1px; color: #6c757d; font-weight: 700; }
         .username { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-
-        .icon-btn-rounded {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #161926;
-            border: 1px solid #23283b;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
 
         .menu-card {
             background: #161926;
@@ -148,7 +174,221 @@
             font-size: 18px;
         }
 
-        /* --- 2. GAME PLAY STYLES --- */
+        /* --- 2. ONLINE LOBBY STYLES --- */
+        .user-stats-card {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .points-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 8px 16px;
+            text-align: center;
+        }
+
+        .points-value { font-size: 18px; font-weight: 900; color: #f59e0b; }
+        .points-label { font-size: 9px; color: #6c757d; font-weight: 700; letter-spacing: 1px; }
+
+        .lobby-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-action {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-action.primary {
+            background: rgba(56, 239, 125, 0.08);
+            border-color: rgba(56, 239, 125, 0.3);
+            color: #38ef7d;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #f59e0b;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        .room-item {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .room-info { display: flex; align-items: center; gap: 12px; }
+        .flag-icon { font-size: 20px; }
+        .room-title { font-size: 14px; font-weight: 700; }
+        .room-host { font-size: 11px; color: #6c757d; }
+
+        .btn-join {
+            background: #23283b;
+            border: 1px solid #323952;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* --- 3. MY ACCOUNT STYLES --- */
+        .account-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .account-item {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .account-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            width: 40px;
+            height: 22px;
+            background: #38ef7d;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            transition: all 0.2s;
+        }
+
+        .danger-text { color: #ff5252; }
+
+        /* --- 4. LEADERBOARD & STATS STYLES --- */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .stat-box {
+            background: #202538;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-num { font-size: 16px; font-weight: 800; }
+        .stat-lbl { font-size: 9px; color: #6c757d; font-weight: 700; margin-top: 2px; }
+
+        .tab-group {
+            display: flex;
+            background: #161926;
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid #23283b;
+        }
+
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #6c757d;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: #23283b;
+            color: #fff;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 16px;
+            padding: 12px;
+        }
+
+        .lb-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 4px;
+            border-bottom: 1px solid #1f2436;
+        }
+
+        .lb-item:last-child { border-bottom: none; }
+
+        .lb-left { display: flex; align-items: center; gap: 10px; }
+        .lb-rank {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            background: #23283b;
+        }
+
+        .lb-rank.top-1 { background: #f59e0b; color: #000; }
+        .lb-rank.top-2 { background: #cbd5e1; color: #000; }
+        .lb-rank.top-3 { background: #d97706; color: #fff; }
+
+        .lb-user { font-size: 13px; font-weight: 700; }
+        .lb-country { font-size: 10px; color: #6c757d; }
+        .lb-score { font-size: 13px; font-weight: 800; color: #f59e0b; }
+
+        /* --- 5. GAME PLAY STYLES --- */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -320,7 +560,7 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        /* Modal */
+        /* Modal Base */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -342,7 +582,7 @@
             border-radius: 20px;
             padding: 24px;
             text-align: center;
-            max-width: 300px;
+            max-width: 320px;
             width: 90%;
         }
 
@@ -353,11 +593,45 @@
             background: linear-gradient(135deg, #11998e, #38ef7d);
             color: #fff;
             border: none;
-            padding: 10px 24px;
+            padding: 12px 24px;
             border-radius: 10px;
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
+            width: 100%;
+        }
+
+        /* Daily Rewards Modal Specific */
+        .reward-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 16px 0;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+
+        .reward-day-item {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .reward-day-item.active {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .reward-day-item.grand {
+            border-color: #f59e0b;
+            background: linear-gradient(90deg, #2a1f0d 0%, #161926 100%);
+            font-weight: 800;
+            color: #f59e0b;
         }
     </style>
 </head>
@@ -369,16 +643,16 @@
     <div id="screen-menu" class="screen active">
       <div class="profile-header">
         <div class="user-info">
-          <div class="avatar-logo">W/B</div>
+          <div class="avatar-logo">FH</div>
           <div class="user-details">
             <span class="brand-name">WAYBLOCK</span>
             <span class="username">fhsnov545 🇦🇿</span>
           </div>
         </div>
-        <button class="icon-btn-rounded">👤</button>
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
       </div>
 
-      <div class="menu-card" style="background: linear-gradient(180deg, #1e293b 0%, #161926 100%);">
+      <div class="menu-card" style="background: linear-gradient(180deg, #1e293b 0%, #161926 100%);" onclick="navigateTo('screen-lobby')">
         <div class="status-row">
           <span class="badge-online">ONLINE</span>
           <span class="badge-streak">🔥 Best Streak: 3</span>
@@ -392,7 +666,7 @@
         </div>
       </div>
 
-      <div class="menu-card reward-card">
+      <div class="menu-card reward-card" onclick="openRewardModal()">
         <div style="display: flex; align-items: center; gap: 12px;">
           <span style="font-size: 22px;">🎁</span>
           <div>
@@ -421,7 +695,7 @@
         </div>
       </div>
 
-      <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screen-stats')">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 18px;">🏆</span>
           <span style="font-weight: 700; font-size: 15px;">Leaderboard</span>
@@ -430,10 +704,250 @@
       </div>
     </div>
 
-    <!-- 2. GAME PLAY SCREEN -->
+    <!-- 2. ONLINE LOBBY SCREEN -->
+    <div id="screen-lobby" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Online Lobby</div>
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
+      </div>
+
+      <div class="user-stats-card">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="avatar-logo">FH</div>
+          <div>
+            <div class="username">fhsnov545 🇦🇿</div>
+            <div class="card-sub" style="margin-top: 2px;">Win Rate 43%</div>
+          </div>
+        </div>
+        <div class="points-box">
+          <div class="points-value">485</div>
+          <div class="points-label">POINTS</div>
+        </div>
+      </div>
+
+      <div class="menu-card" style="padding: 12px 16px;" onclick="navigateTo('screen-stats')">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; font-weight: 800; color: #f59e0b;">🏆 LEADERBOARD</span>
+          <span style="color: #6c757d; font-size: 14px;">›</span>
+        </div>
+      </div>
+
+      <div class="lobby-actions">
+        <button class="btn-action primary">
+          <span style="font-size: 20px;">⊕</span>
+          <span>Create Room</span>
+        </button>
+        <button class="btn-action">
+          <span style="font-size: 20px;">👥</span>
+          <span>Online Players</span>
+        </button>
+      </div>
+
+      <div class="section-label">AVAILABLE ROOMS</div>
+
+      <div class="room-item">
+        <div class="room-info">
+          <span class="flag-icon">🇷🇺</span>
+          <div>
+            <div class="room-title">Комната honl1k</div>
+            <div class="room-host">honl1k</div>
+          </div>
+        </div>
+        <button class="btn-join" onclick="startGame('two_players')">Join</button>
+      </div>
+    </div>
+
+    <!-- 3. MY ACCOUNT SCREEN -->
+    <div id="screen-account" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">My Account</div>
+        <button class="icon-btn-rounded" onclick="openRewardModal()">
+            🎁
+            <div class="reward-badge-icon"></div>
+        </button>
+      </div>
+
+      <div class="user-stats-card">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="avatar-logo" style="background: #23283b; border-color: #323952;">👤</div>
+          <div>
+            <div class="card-sub">Username</div>
+            <div class="username" style="font-size: 16px;">fhsnov545 🇦🇿</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="account-menu">
+        <div class="account-item">
+          <div class="account-item-left">
+            <span>👥</span>
+            <span>Friends</span>
+          </div>
+          <span style="color: #6c757d;">›</span>
+        </div>
+
+        <div class="account-item">
+          <div class="account-item-left">
+            <span>📖</span>
+            <span>How to Play</span>
+          </div>
+          <span style="color: #6c757d;">›</span>
+        </div>
+
+        <div class="account-item">
+          <div class="account-item-left">
+            <span>🌐</span>
+            <span>Select Language</span>
+          </div>
+          <span style="color: #6c757d; font-size: 12px;">Language ›</span>
+        </div>
+
+        <div class="account-item">
+          <div class="account-item-left">
+            <span>🎨</span>
+            <span>Wall / Pawn Color</span>
+          </div>
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: #a3e635;"></div>
+        </div>
+
+        <div class="account-item">
+          <div class="account-item-left">
+            <span>🔊</span>
+            <span>Sound Effects</span>
+          </div>
+          <div class="toggle-switch"></div>
+        </div>
+
+        <div class="account-item">
+          <div class="account-item-left">
+            <span>📳</span>
+            <span>Vibration</span>
+          </div>
+          <div class="toggle-switch"></div>
+        </div>
+
+        <div class="account-item" onclick="navigateTo('screen-menu')">
+          <div class="account-item-left danger-text">
+            <span>🚪</span>
+            <span>Log Out</span>
+          </div>
+          <span class="danger-text">›</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 10px;">
+        <span style="color: #ef4444; font-size: 12px; font-weight: 600; cursor: pointer;">Delete Account</span>
+      </div>
+    </div>
+
+    <!-- 4. LEADERBOARD & STATS SCREEN -->
+    <div id="screen-stats" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Stats</div>
+        <button class="icon-btn-rounded" onclick="openRewardModal()">🎁</button>
+      </div>
+
+      <div class="user-stats-card" style="flex-direction: column; align-items: stretch; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="avatar-logo">FH</div>
+          <div>
+            <div class="username">fhsnov545 🇦🇿</div>
+            <div style="font-size: 11px; color: #f59e0b; font-weight: 700; margin-top: 2px;">🔥 Best Streak: 3</div>
+          </div>
+        </div>
+
+        <div class="stats-summary">
+          <div class="stat-box">
+            <div class="stat-num">535</div>
+            <div class="stat-lbl">SCORE</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">7</div>
+            <div class="stat-lbl">GAMES</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">3</div>
+            <div class="stat-lbl">WINS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-group">
+        <div class="tab-btn">Countries</div>
+        <div class="tab-btn active">Weekly</div>
+        <div class="tab-btn">Monthly</div>
+      </div>
+
+      <div class="leaderboard-list">
+        <div class="lb-item">
+          <div class="lb-left">
+            <div class="lb-rank top-1">1</div>
+            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px;">GH</div>
+            <div>
+              <div class="lb-user">ghalib</div>
+              <div class="lb-country">🇾🇪 Yemen</div>
+            </div>
+          </div>
+          <div class="lb-score">28.9K</div>
+        </div>
+
+        <div class="lb-item">
+          <div class="lb-left">
+            <div class="lb-rank top-2">2</div>
+            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #3b82f6;">ER</div>
+            <div>
+              <div class="lb-user">erla</div>
+              <div class="lb-country">🇰🇿 Kazakhstan</div>
+            </div>
+          </div>
+          <div class="lb-score">21.7K</div>
+        </div>
+
+        <div class="lb-item">
+          <div class="lb-left">
+            <div class="lb-rank top-3">3</div>
+            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #ec4899;">PA</div>
+            <div>
+              <div class="lb-user">papatya81</div>
+              <div class="lb-country">🇹🇷 Turkey</div>
+            </div>
+          </div>
+          <div class="lb-score">19.4K</div>
+        </div>
+
+        <div class="lb-item">
+          <div class="lb-left">
+            <div class="lb-rank">4</div>
+            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #10b981;">WE</div>
+            <div>
+              <div class="lb-user">wesley18081</div>
+              <div class="lb-country">🇧🇪 Belgium</div>
+            </div>
+          </div>
+          <div class="lb-score">15.5K</div>
+        </div>
+
+        <div class="lb-item">
+          <div class="lb-left">
+            <div class="lb-rank">5</div>
+            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #8b5cf6;">BA</div>
+            <div>
+              <div class="lb-user">baobao</div>
+              <div class="lb-country">🇻🇳 Vietnam</div>
+            </div>
+          </div>
+          <div class="lb-score">15.1K</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. GAME PLAY SCREEN -->
     <div id="screen-game" class="screen">
       <div class="game-header">
-        <button class="icon-btn" onclick="showMenu()">←</button>
+        <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
         <div class="game-mode-indicator" id="game-mode-title">🤖 vs Kompüter</div>
         <button class="icon-btn" onclick="restartGame()">🔄</button>
       </div>
@@ -469,11 +983,53 @@
 
   </div>
 
+  <!-- GAME END MODAL -->
   <div class="modal-overlay" id="modal">
       <div class="modal">
           <h2 id="modal-title">Qələbə!</h2>
           <p id="modal-desc">Siz qazandınız!</p>
           <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
+      </div>
+  </div>
+
+  <!-- DAILY REWARDS MODAL -->
+  <div class="modal-overlay" id="reward-modal">
+      <div class="modal" style="max-width: 340px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 11px; font-weight: 800; color: #f59e0b;">🔥 7-Day Reward Path</span>
+            <span style="font-size: 11px; color: #6c757d;">0/7 days completed</span>
+          </div>
+          <div class="reward-list">
+            <div class="reward-day-item active">
+              <span>Day 1</span>
+              <span style="font-weight: 800; color: #f59e0b;">+50</span>
+            </div>
+            <div class="reward-day-item">
+              <span>Day 2</span>
+              <span style="font-weight: 800; color: #6c757d;">+100</span>
+            </div>
+            <div class="reward-day-item">
+              <span>Day 3</span>
+              <span style="font-weight: 800; color: #6c757d;">+150</span>
+            </div>
+            <div class="reward-day-item">
+              <span>Day 4</span>
+              <span style="font-weight: 800; color: #6c757d;">+200</span>
+            </div>
+            <div class="reward-day-item">
+              <span>Day 5</span>
+              <span style="font-weight: 800; color: #6c757d;">+300</span>
+            </div>
+            <div class="reward-day-item">
+              <span>Day 6</span>
+              <span style="font-weight: 800; color: #6c757d;">+400</span>
+            </div>
+            <div class="reward-day-item grand">
+              <span>DAY 7 · GRAND REWARD</span>
+              <span>+600</span>
+            </div>
+          </div>
+          <button class="modal-btn" onclick="claimReward()">🎁 Claim Reward (+50 Pts)</button>
       </div>
   </div>
 
@@ -483,24 +1039,33 @@
     let p2 = { r: 0, c: 4, walls: 10 };
     let turn = 1; 
     let activeMode = 'move';
-    let currentGameMode = 'vs_bot'; // 'vs_bot' or 'two_players'
+    let currentGameMode = 'vs_bot';
 
     let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
     let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
 
     let boardEl = document.getElementById('board');
 
-    function startGame(mode) {
-        currentGameMode = mode;
-        document.getElementById('screen-menu').classList.remove('active');
-        document.getElementById('screen-game').classList.add('active');
-        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? '🤖 vs Kompüter' : '👥 2 Nəfərlik';
-        restartGame();
+    // Navigation System
+    function navigateTo(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
     }
 
-    function showMenu() {
-        document.getElementById('screen-game').classList.remove('active');
-        document.getElementById('screen-menu').classList.add('active');
+    function openRewardModal() {
+        document.getElementById('reward-modal').classList.add('active');
+    }
+
+    function claimReward() {
+        document.getElementById('reward-modal').classList.remove('active');
+        alert("50 Xal təbrik üçün hesabınıza əlavə olundu!");
+    }
+
+    function startGame(mode) {
+        currentGameMode = mode;
+        navigateTo('screen-game');
+        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? '🤖 vs Kompüter' : '👥 2 Nəfərlik';
+        restartGame();
     }
 
     function initBoard() {
