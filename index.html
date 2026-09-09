@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quoridor Game</title>
+  <style>
+    :root {
+      --bg-color: #121826;
+      --panel-bg: #1e293b;
+      --text-color: #f8fafc;
+      --board-bg: #0f172a;
+      --cell-bg: #1e293b;
+      --cell-hover: #334155;
+      --p1-color: #10b981;
+      --p2-color: #ef4444;
+      --wall-preview: #f59e0b;
+      --wall-placed: #f59e0b;
+    }
+    body.light-mode {
+      --bg-color: #f1f5f9;
+      --panel-bg: #ffffff;
+      --text-color: #0f172a;
+      --board-bg: #cbd5e1;
+      --cell-bg: #94a3b8;
+      --cell-hover: #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+    .game-container {
+      width: 100%;
+      max-width: 450px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .top-bar, .status-bar, .controls {
+      background: var(--panel-bg);
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn {
+      background: #334155;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn.active { background: #2563eb; }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr 12px);
+      grid-template-rows: repeat(9, 1fr 12px);
+      background: var(--board-bg);
+      padding: 8px;
+      border-radius: 12px;
+      aspect-ratio: 1;
+    }
+    .cell {
+      background: var(--cell-bg);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+    }
+    .cell.highlight { background: #059669; opacity: 0.8; }
+    .pawn {
+      width: 70%;
+      height: 70%;
+      border-radius: 50%;
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+    .p1 { background: var(--p1-color); }
+    .p2 { background: var(--p2-color); }
+    .v-wall-slot, .h-wall-slot, .intersection { position: relative; cursor: pointer; }
+    .wall-placed { background: var(--wall-placed) !important; border-radius: 4px; }
+    .wall-preview { background: var(--wall-preview) !important; opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="top-bar">
+      <button class="btn" id="reset-btn">🔄</button>
+      <button class="btn" id="theme-btn">☀️</button>
+      <button class="btn" id="diff-btn">🧱 Hard</button>
+    </div>
+    <div class="status-bar">
+      <div id="turn-indicator">🟢 Sizin növbəniz</div>
+      <div>HESAB <span id="score">0 - 0</span></div>
+      <div>
+        <span style="color:var(--p1-color)">❚</span> <span id="p1-walls">10</span> 
+        <span style="color:var(--p2-color)">❚</span> <span id="p2-walls">8</span>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+    <div class="controls">
+      <button class="btn active" id="mode-move">🏃 Hərəkət</button>
+      <button class="btn" id="mode-h">▬ Horizontal</button>
+      <button class="btn" id="mode-v">❚ Vertical</button>
+    </div>
+  </div>
+
+  <script>
+    // Oyun məntiqi üçün əsas skript
+    document.getElementById('theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+    // Qalan funksionallıq
+  </script>
+</body>
+</html>
