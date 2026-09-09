@@ -1,238 +1,365 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wayblock - Quoridor Game</title>
-  <style>
-    :root {
-      --bg-color: #0b0f17;
-      --card-bg: #161d2a;
-      --card-border: #232d3f;
-      --accent-gold: #f59e0b;
-      --accent-blue: #2563eb;
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --green-online: #10b981;
-      --board-bg: #0f172a;
-      --cell-bg: #1e293b;
-      --p1-color: #10b981;
-      --p2-color: #ef4444;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wayblock - Quoridor</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 12px;
-    }
+        body {
+            background-color: #0b0f17;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
 
-    .app-container {
-      width: 100%;
-      max-width: 420px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
 
-    /* Screen Management */
-    .screen { display: none; flex-direction: column; gap: 14px; }
-    .screen.active { display: flex; }
+        /* Screen Switcher */
+        .screen { display: none; flex-direction: column; gap: 14px; width: 100%; }
+        .screen.active { display: flex; }
 
-    /* Header Profile */
-    .profile-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 0;
-    }
+        /* --- 1. MAIN MENU STYLES --- */
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
 
-    .user-info { display: flex; align-items: center; gap: 10px; }
-    
-    .avatar-logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #00f2fe, #4facfe);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 14px;
-      border: 2px solid #38ef7d;
-      color: #fff;
-    }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        
+        .avatar-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 13px;
+            border: 2px solid #38ef7d;
+            color: #fff;
+        }
 
-    .user-details { display: flex; flex-direction: column; }
-    .brand-name { font-size: 10px; letter-spacing: 1px; color: var(--text-sub); font-weight: 700; }
-    .username { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+        .user-details { display: flex; flex-direction: column; }
+        .brand-name { font-size: 10px; letter-spacing: 1px; color: #6c757d; font-weight: 700; }
+        .username { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
 
-    .profile-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
+        .icon-btn-rounded {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #161926;
+            border: 1px solid #23283b;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
 
-    /* Main Menu Cards */
-    .status-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 12px;
-    }
+        .menu-card {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 18px;
+            padding: 16px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
 
-    .badge-online {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--green-online);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+        .menu-card:active { transform: scale(0.98); }
 
-    .badge-online::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      background: var(--green-online);
-      border-radius: 50%;
-    }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
 
-    .badge-streak {
-      font-size: 12px;
-      color: var(--accent-gold);
-      font-weight: 700;
-    }
+        .badge-online {
+            background: rgba(56, 239, 125, 0.15);
+            color: #38ef7d;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 16px;
-      cursor: pointer;
-      transition: transform 0.1s ease, border-color 0.2s ease;
-    }
+        .badge-online::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: #38ef7d;
+            border-radius: 50%;
+        }
 
-    .card:active { transform: scale(0.98); }
+        .badge-streak { font-size: 12px; color: #f59e0b; font-weight: 700; }
 
-    .card-main {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        .card-main-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+        .card-sub { font-size: 12px; color: #6c757d; }
 
-    .card-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
-    .card-sub { font-size: 12px; color: var(--text-sub); }
+        .reward-card {
+            border: 1px solid #785213;
+            background: linear-gradient(90deg, #2a1f0d 0%, #161926 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .card-arrow {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
 
-    .reward-card {
-      border: 1px solid #785213;
-      background: linear-gradient(90deg, #2a1f0d 0%, #161d2a 100%);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        .mode-card { display: flex; flex-direction: column; gap: 12px; }
 
-    .reward-info { display: flex; align-items: center; gap: 12px; }
-    .reward-icon { font-size: 20px; }
+        .mode-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+        /* --- 2. GAME PLAY STYLES --- */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
 
-    .mode-card {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+        .icon-btn {
+            background: #161926;
+            border: 1px solid #23283b;
+            color: #a0a6b8;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-    .mode-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.06);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
+        .game-mode-indicator {
+            background: #161926;
+            border: 1px solid #23283b;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    /* Game Screen Elements */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card-bg);
-      padding: 10px 14px;
-      border-radius: 14px;
-    }
+        .card-game-info {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
 
-    .btn {
-      background: var(--card-border);
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-    }
+        .turn-info { display: flex; align-items: center; gap: 8px; }
+        .dot-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #38ef7d;
+            box-shadow: 0 0 8px #38ef7d;
+        }
 
-    .board {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr 10px);
-      grid-template-rows: repeat(9, 1fr 10px);
-      background: var(--board-bg);
-      padding: 8px;
-      border-radius: 16px;
-      aspect-ratio: 1;
-      border: 1px solid var(--card-border);
-    }
+        .wall-counters { display: flex; gap: 6px; }
+        .wall-pill {
+            background: #1f2436;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            border: 1px solid #2d344b;
+        }
 
-    .cell {
-      background: var(--cell-bg);
-      border-radius: 6px;
-      cursor: pointer;
-      position: relative;
-    }
+        .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
+        .p1-pill .wall-pill-icon { background: #38ef7d; }
+        .p2-pill .wall-pill-icon { background: #ff5252; }
 
-    .controls {
-      display: flex;
-      gap: 8px;
-      background: var(--card-bg);
-      padding: 8px;
-      border-radius: 14px;
-    }
+        /* Board Styling */
+        #board-wrapper {
+            position: relative;
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            touch-action: none;
+        }
 
-    .controls .btn { flex: 1; }
-    .btn.active { background: var(--accent-blue); }
-  </style>
+        #board {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            gap: 10px;
+            width: 340px;
+            height: 340px;
+            position: relative;
+        }
+
+        .cell {
+            background: #23293e;
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .cell.valid-move {
+            background: rgba(56, 239, 125, 0.15);
+            border: 1px dashed rgba(56, 239, 125, 0.5);
+        }
+
+        .cell.valid-move::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #38ef7d;
+            box-shadow: 0 0 6px #38ef7d;
+        }
+
+        .pawn {
+            width: 65%;
+            height: 65%;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .pawn-p1 {
+            background: radial-gradient(circle at 30% 30%, #51f296, #11998e);
+            border: 2px solid #a3ffce;
+            box-shadow: 0 0 12px rgba(56, 239, 125, 0.5);
+        }
+
+        .pawn-p2 {
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b);
+            border: 2px solid #ffb8b8;
+            box-shadow: 0 0 12px rgba(255, 82, 82, 0.5);
+        }
+
+        .wall-placed {
+            position: absolute;
+            background: #e67e22;
+            box-shadow: 0 0 8px rgba(230, 126, 34, 0.6);
+            border-radius: 3px;
+            z-index: 10;
+        }
+
+        /* Controls */
+        .controls { display: flex; gap: 10px; width: 100%; }
+
+        .btn-mode {
+            flex: 1;
+            padding: 12px;
+            background: #161926;
+            border: 1px solid #23283b;
+            color: #8c96a8;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .btn-mode.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .modal {
+            background: #181b29;
+            border: 1px solid #2a3148;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+        }
+
+        .modal h2 { font-size: 20px; margin-bottom: 10px; }
+        .modal p { color: #a0a6b8; font-size: 14px; margin-bottom: 20px; }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -240,8 +367,6 @@
 
     <!-- 1. MAIN MENU SCREEN -->
     <div id="screen-menu" class="screen active">
-      
-      <!-- Profile Header -->
       <div class="profile-header">
         <div class="user-info">
           <div class="avatar-logo">W/B</div>
@@ -250,107 +375,467 @@
             <span class="username">fhsnov545 🇦🇿</span>
           </div>
         </div>
-        <button class="profile-btn">👤</button>
+        <button class="icon-btn-rounded">👤</button>
       </div>
 
-      <!-- Main Banner Card -->
-      <div class="card" style="background: linear-gradient(180deg, #1e293b 0%, #161d2a 100%);">
+      <div class="menu-card" style="background: linear-gradient(180deg, #1e293b 0%, #161926 100%);">
         <div class="status-row">
           <span class="badge-online">ONLINE</span>
           <span class="badge-streak">🔥 Best Streak: 3</span>
         </div>
-        <div class="card-main" style="margin-top: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
           <div>
-            <div class="card-title">Play Online</div>
+            <div class="card-main-title">Play Online</div>
             <div class="card-sub">Ranked matches</div>
           </div>
-          <div class="card-arrow">→</div>
+          <div class="icon-btn-rounded">→</div>
         </div>
       </div>
 
-      <!-- Daily Reward Banner -->
-      <div class="card reward-card">
-        <div class="reward-info">
-          <span class="reward-icon">🎁</span>
+      <div class="menu-card reward-card">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 22px;">🎁</span>
           <div>
-            <div style="font-size: 13px; font-weight: 700; color: var(--accent-gold);">Daily reward ready +50</div>
-            <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">● ◌ ◌ ◌ ◌ ◌ ◌ &nbsp; 1/7</div>
+            <div style="font-size: 13px; font-weight: 700; color: #f59e0b;">Daily reward ready +50</div>
+            <div style="font-size: 10px; color: #6c757d; margin-top: 2px;">● ◌ ◌ ◌ ◌ ◌ ◌ &nbsp; 1/7</div>
           </div>
         </div>
-        <span style="color: var(--accent-gold); font-size: 14px;">›</span>
+        <span style="color: #f59e0b; font-size: 16px;">›</span>
       </div>
 
-      <!-- Game Modes Grid -->
       <div class="grid-2">
-        <div class="card mode-card" onclick="startGame('computer')">
+        <div class="menu-card mode-card" onclick="startGame('vs_bot')">
           <div class="mode-icon">🤖</div>
           <div>
-            <div class="card-title" style="font-size: 15px;">Play vs Computer</div>
+            <div class="card-main-title" style="font-size: 15px;">Play vs Computer</div>
             <div class="card-sub">Single Player</div>
           </div>
         </div>
 
-        <div class="card mode-card" onclick="startGame('two_players')">
+        <div class="menu-card mode-card" onclick="startGame('two_players')">
           <div class="mode-icon">👥</div>
           <div>
-            <div class="card-title" style="font-size: 15px;">Two Players</div>
+            <div class="card-main-title" style="font-size: 15px;">Two Players</div>
             <div class="card-sub">Same Device</div>
           </div>
         </div>
       </div>
 
-      <!-- Leaderboard Card -->
-      <div class="card card-main">
+      <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 18px;">🏆</span>
           <span style="font-weight: 700; font-size: 15px;">Leaderboard</span>
         </div>
-        <span style="color: var(--text-sub);">›</span>
+        <span style="color: #6c757d;">›</span>
       </div>
-
     </div>
 
     <!-- 2. GAME PLAY SCREEN -->
     <div id="screen-game" class="screen">
-      <div class="top-bar">
-        <button class="btn" onclick="showMenu()">←</button>
-        <button class="btn" id="mode-badge">🤖 Hard</button>
-        <button class="btn" id="reset-btn">🔄</button>
+      <div class="game-header">
+        <button class="icon-btn" onclick="showMenu()">←</button>
+        <div class="game-mode-indicator" id="game-mode-title">🤖 vs Kompüter</div>
+        <button class="icon-btn" onclick="restartGame()">🔄</button>
       </div>
 
-      <div class="top-bar" style="font-size: 13px;">
-        <div id="turn-indicator">🟢 Sizin növbəniz</div>
-        <div>HESAB <span id="score">0 - 0</span></div>
-        <div>
-          <span style="color:var(--p1-color)">❚</span> <span id="p1-walls">10</span> 
-          <span style="color:var(--p2-color)">❚</span> <span id="p2-walls">8</span>
+      <div class="card-game-info">
+        <div class="turn-info">
+          <div class="dot-indicator" id="turn-dot"></div>
+          <span id="turn-text">Sizin növbəniz</span>
+        </div>
+        <div>HESAB <span id="score-text">0 - 0</span></div>
+        <div class="wall-counters">
+          <div class="wall-pill p1-pill">
+            <div class="wall-pill-icon"></div>
+            <span id="p1-walls">10</span>
+          </div>
+          <div class="wall-pill p2-pill">
+            <div class="wall-pill-icon"></div>
+            <span id="p2-walls">10</span>
+          </div>
         </div>
       </div>
 
-      <!-- Quoridor Board Grid -->
-      <div class="board" id="board"></div>
+      <div id="board-wrapper">
+        <div id="board"></div>
+      </div>
 
-      <!-- Control Buttons -->
       <div class="controls">
-        <button class="btn active" id="mode-move">🏃 Hərəkət</button>
-        <button class="btn" id="mode-h">▬ Yatay</button>
-        <button class="btn" id="mode-v">❚ Dikey</button>
+        <button class="btn-mode active" id="btn-move" onclick="setMode('move')">🏃 Hərəkət</button>
+        <button class="btn-mode" id="btn-h" onclick="setMode('H')">▬ Yatay</button>
+        <button class="btn-mode" id="btn-v" onclick="setMode('V')">❚ Dikey</button>
       </div>
     </div>
 
   </div>
 
-  <script>
+  <div class="modal-overlay" id="modal">
+      <div class="modal">
+          <h2 id="modal-title">Qələbə!</h2>
+          <p id="modal-desc">Siz qazandınız!</p>
+          <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
+      </div>
+  </div>
+
+<script>
+    const BOARD_SIZE = 9;
+    let p1 = { r: 8, c: 4, walls: 10 };
+    let p2 = { r: 0, c: 4, walls: 10 };
+    let turn = 1; 
+    let activeMode = 'move';
+    let currentGameMode = 'vs_bot'; // 'vs_bot' or 'two_players'
+
+    let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+    let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+
+    let boardEl = document.getElementById('board');
+
     function startGame(mode) {
-      document.getElementById('screen-menu').classList.remove('active');
-      document.getElementById('screen-game').classList.add('active');
-      document.getElementById('mode-badge').innerText = mode === 'computer' ? '🤖 vs Kompüter' : '👥 2 Nəfərlik';
+        currentGameMode = mode;
+        document.getElementById('screen-menu').classList.remove('active');
+        document.getElementById('screen-game').classList.add('active');
+        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? '🤖 vs Kompüter' : '👥 2 Nəfərlik';
+        restartGame();
     }
 
     function showMenu() {
-      document.getElementById('screen-game').classList.remove('active');
-      document.getElementById('screen-menu').classList.add('active');
+        document.getElementById('screen-game').classList.remove('active');
+        document.getElementById('screen-menu').classList.add('active');
     }
-  </script>
+
+    function initBoard() {
+        boardEl.innerHTML = '';
+        for (let r = 0; r < BOARD_SIZE; r++) {
+            for (let c = 0; c < BOARD_SIZE; c++) {
+                let cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.r = r;
+                cell.dataset.c = c;
+                cell.onclick = () => onCellClick(r, c);
+                boardEl.appendChild(cell);
+            }
+        }
+        renderPawns();
+        updateUI();
+    }
+
+    function renderPawns() {
+        document.querySelectorAll('.pawn').forEach(p => p.remove());
+        
+        let cell1 = getCellEl(p1.r, p1.c);
+        let pawn1 = document.createElement('div');
+        pawn1.className = 'pawn pawn-p1';
+        cell1.appendChild(pawn1);
+
+        let cell2 = getCellEl(p2.r, p2.c);
+        let pawn2 = document.createElement('div');
+        pawn2.className = 'pawn pawn-p2';
+        cell2.appendChild(pawn2);
+
+        highlightValidMoves();
+    }
+
+    function getCellEl(r, c) {
+        return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+    }
+
+    function highlightValidMoves() {
+        document.querySelectorAll('.cell').forEach(c => c.classList.remove('valid-move'));
+        if (currentGameMode === 'vs_bot' && turn !== 1) return;
+        if (activeMode !== 'move') return;
+
+        let currP = turn === 1 ? p1 : p2;
+        let oppP = turn === 1 ? p2 : p1;
+
+        let moves = getValidMoves(currP, oppP);
+        moves.forEach(m => {
+            let el = getCellEl(m.r, m.c);
+            if (el) el.classList.add('valid-move');
+        });
+    }
+
+    function getValidMoves(p, opp) {
+        let moves = [];
+        let dr = [-1, 1, 0, 0];
+        let dc = [0, 0, -1, 1];
+
+        for (let i = 0; i < 4; i++) {
+            let nr = p.r + dr[i];
+            let nc = p.c + dc[i];
+
+            if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
+                if (!isWallBetween(p.r, p.c, nr, nc)) {
+                    if (nr === opp.r && nc === opp.c) {
+                        let jx = nr + dr[i];
+                        let jy = nc + dc[i];
+                        if (jx >= 0 && jx < BOARD_SIZE && jy >= 0 && jy < BOARD_SIZE && !isWallBetween(nr, nc, jx, jy)) {
+                            moves.push({ r: jx, c: jy });
+                        }
+                    } else {
+                        moves.push({ r: nr, c: nc });
+                    }
+                }
+            }
+        }
+        return moves;
+    }
+
+    function isWallBetween(r1, c1, r2, c2) {
+        if (r1 === r2) {
+            let minC = Math.min(c1, c2);
+            if (r1 > 0 && vWalls[r1 - 1][minC]) return true;
+            if (r1 < 8 && vWalls[r1][minC]) return true;
+        } else if (c1 === c2) {
+            let minR = Math.min(r1, r2);
+            if (c1 > 0 && hWalls[minR][c1 - 1]) return true;
+            if (c1 < 8 && hWalls[minR][c1]) return true;
+        }
+        return false;
+    }
+
+    function onCellClick(r, c) {
+        if (currentGameMode === 'vs_bot' && turn !== 1) return;
+
+        let currP = turn === 1 ? p1 : p2;
+        let oppP = turn === 1 ? p2 : p1;
+
+        if (activeMode === 'move') {
+            let validMoves = getValidMoves(currP, oppP);
+            if (validMoves.some(m => m.r === r && m.c === c)) {
+                currP.r = r; currP.c = c;
+                if (turn === 1 && p1.r === 0) return endGame("Siz qazandınız!");
+                if (turn === 2 && p2.r === 8) return endGame("2-ci oyunçu qazandı!");
+                switchTurn();
+            }
+        } else {
+            let wr = r < 8 ? r : 7;
+            let wc = c < 8 ? c : 7;
+            
+            if (canPlaceWall(wr, wc, activeMode)) {
+                placeWall(wr, wc, activeMode);
+                currP.walls--;
+                setMode('move');
+                switchTurn();
+            }
+        }
+    }
+
+    function setMode(mode) {
+        activeMode = mode;
+        document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
+        if (mode === 'move') document.getElementById('btn-move').classList.add('active');
+        if (mode === 'H') document.getElementById('btn-h').classList.add('active');
+        if (mode === 'V') document.getElementById('btn-v').classList.add('active');
+        highlightValidMoves();
+    }
+
+    function canPlaceWall(r, c, type) {
+        let currP = turn === 1 ? p1 : p2;
+        if (currP.walls <= 0) return false;
+        if (r < 0 || r >= 8 || c < 0 || c >= 8) return false;
+
+        if (type === 'H') {
+            if (hWalls[r][c] || (c > 0 && hWalls[r][c - 1]) || (c < 7 && hWalls[r][c + 1]) || vWalls[r][c]) return false;
+        } else {
+            if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
+        }
+
+        if (type === 'H') hWalls[r][c] = true;
+        else vWalls[r][c] = true;
+
+        let p1HasPath = hasPath(p1, 0);
+        let p2HasPath = hasPath(p2, 8);
+
+        if (type === 'H') hWalls[r][c] = false;
+        else vWalls[r][c] = false;
+
+        return p1HasPath && p2HasPath;
+    }
+
+    function placeWall(r, c, type) {
+        if (type === 'H') hWalls[r][c] = true;
+        else vWalls[r][c] = true;
+
+        let wallEl = document.createElement('div');
+        wallEl.className = 'wall-placed';
+        
+        let cellW = (340 - 80) / 9;
+        let gap = 10;
+
+        if (type === 'H') {
+            wallEl.style.width = `${cellW * 2 + gap}px`;
+            wallEl.style.height = `8px`;
+            wallEl.style.left = `${10 + c * (cellW + gap)}px`;
+            wallEl.style.top = `${10 + (r + 1) * cellW + r * gap + 1}px`;
+        } else {
+            wallEl.style.width = `8px`;
+            wallEl.style.height = `${cellW * 2 + gap}px`;
+            wallEl.style.left = `${10 + (c + 1) * cellW + c * gap + 1}px`;
+            wallEl.style.top = `${10 + r * (cellW + gap)}px`;
+        }
+
+        boardEl.appendChild(wallEl);
+    }
+
+    function hasPath(p, targetRow) {
+        let queue = [{ r: p.r, c: p.c }];
+        let visited = Array(9).fill(0).map(() => Array(9).fill(false));
+        visited[p.r][p.c] = true;
+
+        while (queue.length > 0) {
+            let curr = queue.shift();
+            if (curr.r === targetRow) return true;
+
+            let dr = [-1, 1, 0, 0];
+            let dc = [0, 0, -1, 1];
+
+            for (let i = 0; i < 4; i++) {
+                let nr = curr.r + dr[i];
+                let nc = curr.c + dc[i];
+
+                if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && !visited[nr][nc]) {
+                    if (!isWallBetween(curr.r, curr.c, nr, nc)) {
+                        visited[nr][nc] = true;
+                        queue.push({ r: nr, c: nc });
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    function switchTurn() {
+        turn = turn === 1 ? 2 : 1;
+        updateUI();
+        renderPawns();
+
+        if (currentGameMode === 'vs_bot' && turn === 2) {
+            setTimeout(aiTurn, 500);
+        }
+    }
+
+    function updateUI() {
+        document.getElementById('p1-walls').textContent = p1.walls;
+        document.getElementById('p2-walls').textContent = p2.walls;
+
+        let dot = document.getElementById('turn-dot');
+        let txt = document.getElementById('turn-text');
+
+        if (turn === 1) {
+            dot.style.backgroundColor = '#38ef7d';
+            dot.style.boxShadow = '0 0 8px #38ef7d';
+            txt.textContent = 'Sizin növbəniz';
+        } else {
+            dot.style.backgroundColor = '#ff5252';
+            dot.style.boxShadow = '0 0 8px #ff5252';
+            txt.textContent = currentGameMode === 'vs_bot' ? 'Rəqibin növbəsi (AI)' : '2-ci Oyunçunun növbəsi';
+        }
+    }
+
+    function aiTurn() {
+        let p2Moves = getValidMoves(p2, p1);
+        let p2Dist = getShortestDistance(p2, 8);
+        let p1Dist = getShortestDistance(p1, 0);
+
+        if (p1Dist <= p2Dist && p2.walls > 0 && Math.random() < 0.7) {
+            let bestWall = null;
+            let maxP1Dist = p1Dist;
+
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    for (let type of ['H', 'V']) {
+                        if (canPlaceWall(r, c, type)) {
+                            if (type === 'H') hWalls[r][c] = true;
+                            else vWalls[r][c] = true;
+
+                            let newP1Dist = getShortestDistance(p1, 0);
+                            let newP2Dist = getShortestDistance(p2, 8);
+
+                            if (newP1Dist > maxP1Dist && newP2Dist === p2Dist) {
+                                maxP1Dist = newP1Dist;
+                                bestWall = { r, c, type };
+                            }
+
+                            if (type === 'H') hWalls[r][c] = false;
+                            else vWalls[r][c] = false;
+                        }
+                    }
+                }
+            }
+
+            if (bestWall) {
+                placeWall(bestWall.r, bestWall.c, bestWall.type);
+                p2.walls--;
+                switchTurn();
+                return;
+            }
+        }
+
+        let bestMove = p2Moves[0];
+        let minDist = 999;
+
+        p2Moves.forEach(m => {
+            let dist = getShortestDistance({ r: m.r, c: m.c }, 8);
+            if (dist < minDist) {
+                minDist = dist;
+                bestMove = m;
+            }
+        });
+
+        if (bestMove) {
+            p2.r = bestMove.r;
+            p2.c = bestMove.c;
+            if (p2.r === 8) return endGame("Rəqib (AI) qazandı!");
+        }
+
+        switchTurn();
+    }
+
+    function getShortestDistance(p, targetRow) {
+        let queue = [{ r: p.r, c: p.c, dist: 0 }];
+        let visited = Array(9).fill(0).map(() => Array(9).fill(false));
+        visited[p.r][p.c] = true;
+
+        while (queue.length > 0) {
+            let curr = queue.shift();
+            if (curr.r === targetRow) return curr.dist;
+
+            let dr = [-1, 1, 0, 0];
+            let dc = [0, 0, -1, 1];
+
+            for (let i = 0; i < 4; i++) {
+                let nr = curr.r + dr[i];
+                let nc = curr.c + dc[i];
+
+                if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && !visited[nr][nc]) {
+                    if (!isWallBetween(curr.r, curr.c, nr, nc)) {
+                        visited[nr][nc] = true;
+                        queue.push({ r: nr, c: nc, dist: curr.dist + 1 });
+                    }
+                }
+            }
+        }
+        return 999;
+    }
+
+    function endGame(msg) {
+        document.getElementById('modal-title').textContent = msg.includes("Siz") ? "Təbriklər! 🎉" : "Oyun Bitdi!";
+        document.getElementById('modal-desc').textContent = msg;
+        document.getElementById('modal').classList.add('active');
+    }
+
+    function restartGame() {
+        p1 = { r: 8, c: 4, walls: 10 };
+        p2 = { r: 0, c: 4, walls: 10 };
+        turn = 1;
+        activeMode = 'move';
+        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        document.querySelectorAll('.wall-placed').forEach(w => w.remove());
+        document.getElementById('modal').classList.remove('active');
+        setMode('move');
+        initBoard();
+    }
+</script>
 </body>
 </html>
