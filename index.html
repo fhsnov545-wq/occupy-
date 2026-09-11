@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wayblock - Quoridor MultiPlayer</title>
+    <title>Wayblock - Quoridor AI & MultiPlayer</title>
     <style>
         * {
             box-sizing: border-box;
@@ -373,7 +373,7 @@
     <div id="screen-login" class="screen active">
       <div style="text-align: center; margin-top: 20px;">
         <h1 style="font-size: 28px; font-weight: 900; letter-spacing: 1px;">WAYBLOCK</h1>
-        <p style="color: #6c757d; font-size: 12px; margin-top: 4px;">Multiplayer Quoridor & Strategy</p>
+        <p style="color: #6c757d; font-size: 12px; margin-top: 4px;">AI Bot, Local & Online MultiPlayer</p>
       </div>
       <div class="login-card">
         <input type="text" id="input-username" class="username-input" placeholder="İstifadəçi adı daxil edin..." maxlength="12">
@@ -399,14 +399,21 @@
 
       <div style="font-size: 11px; font-weight: 800; color: #f59e0b; margin-top: 6px;">OYUN REJİMLƏRİ</div>
 
+      <!-- BOT REJİMİ -->
+      <div class="menu-card" onclick="startGame('vs_bot')">
+        <div style="font-weight: 800; font-size: 14px; color: #ec4899;">🤖 Kompüterə Qarşı (Bot AI)</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Ağıllı robota qarşı təkbaşına mübarizə aparın</div>
+      </div>
+
+      <!-- LOKAL DOSTLARLA -->
       <div class="menu-card" onclick="startGame('2p_center')">
         <div style="font-weight: 800; font-size: 14px; color: #38ef7d;">🎯 2 Oyunçu (Mərkəzə Qaçış)</div>
-        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Qarşı-qarşıya başlayıb mərkəzə ilk çatan qalib gəlir</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Dostunla qarşı-qarşıya mərkəzə yarışın</div>
       </div>
 
       <div class="menu-card" onclick="startGame('4p_center')">
         <div style="font-weight: 800; font-size: 14px; color: #f59e0b;">🧩 4 Oyunçu (Mərkəzə Qaçış)</div>
-        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">4 tərəfdən başlayıb mərkəzdəki finişə çatın</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">4 dost eyni cihazda mərkəzə çatın</div>
       </div>
 
       <div class="menu-card" onclick="startGame('2p_side_finish')">
@@ -414,9 +421,10 @@
         <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Aşağıda yan-yana başlayıb yuxarı finişə çatın</div>
       </div>
 
+      <!-- ONLAYN LOBBİ -->
       <div class="menu-card" onclick="navigateTo('screen-lobby')">
-        <div style="font-weight: 800; font-size: 14px; color: #a78bfa;">🌐 Onlayn Lobbi</div>
-        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Otaq yaradın və ya dostlarınızın oyununa qoşulun</div>
+        <div style="font-weight: 800; font-size: 14px; color: #a78bfa;">🌐 Onlayn Lobbi (Digər İnsanlar)</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Otaq kodu yaradıb onlayn rəqiblərlə oynayın</div>
       </div>
     </div>
 
@@ -566,6 +574,7 @@
     let turn = 0;
     let activeMode = 'move';
     let gameMode = '2p_center';
+    let isBotTurn = false;
 
     let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
     let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
@@ -577,7 +586,10 @@
         let titleEl = document.getElementById('game-mode-title');
         let bannerEl = document.getElementById('finish-banner');
 
-        if(mode === '2p_center') {
+        if(mode === 'vs_bot') {
+            titleEl.textContent = '🤖 VS Bot';
+            bannerEl.textContent = '🏁 MƏRKƏZƏ İLK ÇATAN QAZANIR 🏁';
+        } else if(mode === '2p_center') {
             titleEl.textContent = '🎯 2P Mərkəz';
             bannerEl.textContent = '🏁 MƏRKƏZƏ İLK ÇATAN QAZANIR 🏁';
         } else if(mode === '4p_center') {
@@ -594,28 +606,34 @@
     function restartGame() {
         turn = 0;
         activeMode = 'move';
+        isBotTurn = false;
         hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         document.querySelectorAll('.wall-placed').forEach(w => w.remove());
         document.getElementById('modal').classList.remove('active');
 
         // Oyunçu Mövqeləri
-        if(gameMode === '2p_center') {
+        if(gameMode === 'vs_bot') {
             players = [
-                { id: 1, r: 8, c: 4, walls: 10, class: 'pawn-p1' },
-                { id: 2, r: 0, c: 4, walls: 10, class: 'pawn-p2' }
+                { id: 1, name: currentUser.name, r: 8, c: 4, walls: 10, class: 'pawn-p1', isBot: false },
+                { id: 2, name: 'Bot AI', r: 0, c: 4, walls: 10, class: 'pawn-p2', isBot: true }
+            ];
+        } else if(gameMode === '2p_center') {
+            players = [
+                { id: 1, name: '1-ci Oyunçu', r: 8, c: 4, walls: 10, class: 'pawn-p1', isBot: false },
+                { id: 2, name: '2-ci Oyunçu', r: 0, c: 4, walls: 10, class: 'pawn-p2', isBot: false }
             ];
         } else if(gameMode === '4p_center') {
             players = [
-                { id: 1, r: 8, c: 4, walls: 5, class: 'pawn-p1' },
-                { id: 2, r: 0, c: 4, walls: 5, class: 'pawn-p2' },
-                { id: 3, r: 4, c: 0, walls: 5, class: 'pawn-p3' },
-                { id: 4, r: 4, c: 8, walls: 5, class: 'pawn-p4' }
+                { id: 1, name: 'Mavi', r: 8, c: 4, walls: 5, class: 'pawn-p1', isBot: false },
+                { id: 2, name: 'Qırmızı', r: 0, c: 4, walls: 5, class: 'pawn-p2', isBot: false },
+                { id: 3, name: 'Yaşıl', r: 4, c: 0, walls: 5, class: 'pawn-p3', isBot: false },
+                { id: 4, name: 'Sarı', r: 4, c: 8, walls: 5, class: 'pawn-p4', isBot: false }
             ];
         } else if(gameMode === '2p_side_finish') {
             players = [
-                { id: 1, r: 8, c: 2, walls: 10, class: 'pawn-p1' },
-                { id: 2, r: 8, c: 6, walls: 10, class: 'pawn-p2' }
+                { id: 1, name: '1-ci Oyunçu', r: 8, c: 2, walls: 10, class: 'pawn-p1', isBot: false },
+                { id: 2, name: '2-ci Oyunçu', r: 8, c: 6, walls: 10, class: 'pawn-p2', isBot: false }
             ];
         }
 
@@ -634,7 +652,7 @@
                 cell.dataset.c = c;
 
                 // Finiş Xənəsi Təyini
-                if((gameMode === '2p_center' || gameMode === '4p_center') && r === 4 && c === 4) {
+                if((gameMode === '2p_center' || gameMode === '4p_center' || gameMode === 'vs_bot') && r === 4 && c === 4) {
                     cell.classList.add('finish-cell');
                 }
 
@@ -667,7 +685,7 @@
 
     function highlightValidMoves() {
         document.querySelectorAll('.cell').forEach(c => c.classList.remove('valid-move'));
-        if (activeMode !== 'move') return;
+        if (activeMode !== 'move' || players[turn].isBot) return;
 
         let currP = players[turn];
         let moves = getValidMoves(currP);
@@ -713,6 +731,8 @@
     }
 
     function onCellClick(r, c) {
+        if(players[turn].isBot) return;
+
         let currP = players[turn];
 
         if (activeMode === 'move') {
@@ -741,7 +761,7 @@
     }
 
     function checkWin(p) {
-        if (gameMode === '2p_center' || gameMode === '4p_center') {
+        if (gameMode === '2p_center' || gameMode === '4p_center' || gameMode === 'vs_bot') {
             return p.r === 4 && p.c === 4;
         } else if (gameMode === '2p_side_finish') {
             return p.r === 0;
@@ -798,6 +818,45 @@
     function switchTurn() {
         turn = (turn + 1) % players.length;
         renderPawns();
+
+        if (players[turn].isBot) {
+            setTimeout(playBotTurn, 600);
+        }
+    }
+
+    // BOT AI LOGICS (PATHFINDING)
+    function playBotTurn() {
+        let bot = players[turn];
+        let targetR = 4, targetC = 4;
+
+        let moves = getValidMoves(bot);
+        if(moves.length === 0) { switchTurn(); return; }
+
+        // Mərkəzə ən yaxın addımı hesablayır
+        let bestMove = moves[0];
+        let minDistance = 999;
+
+        moves.forEach(m => {
+            let dist = Math.abs(m.r - targetR) + Math.abs(m.c - targetC);
+            if(dist < minDistance) {
+                minDistance = dist;
+                bestMove = m;
+            }
+        });
+
+        bot.r = bestMove.r;
+        bot.c = bestMove.c;
+
+        // Bot Smailik atır (20% ehtimalla)
+        if(Math.random() < 0.25) {
+            sendEmoji('😏');
+        }
+
+        if (checkWin(bot)) {
+            return endGame(bot);
+        }
+
+        switchTurn();
     }
 
     // SMAILİK / EMOJI ANİMASİYASI
@@ -823,7 +882,7 @@
         updateUserUI();
 
         document.getElementById('modal-title').textContent = "QƏLƏBƏ! 🎉";
-        document.getElementById('modal-desc').textContent = `${winner.id}-ci Oyunçu finiş xəttinə çatdı və qalib gəldi!`;
+        document.getElementById('modal-desc').textContent = `${winner.name} finiş xəttinə çatdı və qalib gəldi!`;
         document.getElementById('modal').classList.add('active');
     }
 </script>
