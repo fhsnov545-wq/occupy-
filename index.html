@@ -199,6 +199,98 @@
             font-size: 18px;
         }
 
+        /* PASS & PLAY SETUP STYLES */
+        .mode-toggle-container {
+            display: flex;
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .mode-toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: #6c757d;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .mode-toggle-btn.active {
+            background: #23283b;
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .player-setup-card {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .player-setup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #23283b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .color-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.15s ease, border 0.15s ease;
+            border: 2px solid transparent;
+        }
+
+        .color-circle.selected {
+            transform: scale(1.15);
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.4);
+        }
+
+        .vs-divider {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 900;
+            color: #6c757d;
+            letter-spacing: 2px;
+        }
+
         /* ONLINE LOBBY STYLES */
         .user-stats-card {
             background: #161926;
@@ -432,8 +524,6 @@
         }
 
         .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
-        .p1-pill .wall-pill-icon { background: #38ef7d; }
-        .p2-pill .wall-pill-icon { background: #ff5252; }
 
         /* Board Styling */
         #board-wrapper {
@@ -468,6 +558,12 @@
             cursor: pointer;
         }
 
+        .cell.center-cell::before {
+            content: "👑";
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
         .cell.valid-move {
             background: rgba(56, 239, 125, 0.15);
             border: 1px dashed rgba(56, 239, 125, 0.5);
@@ -488,23 +584,11 @@
             border-radius: 50%;
             position: absolute;
             transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .pawn-p1 {
-            background: radial-gradient(circle at 30% 30%, #51f296, #11998e);
-            border: 2px solid #a3ffce;
-            box-shadow: 0 0 12px rgba(56, 239, 125, 0.5);
-        }
-
-        .pawn-p2 {
-            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b);
-            border: 2px solid #ffb8b8;
-            box-shadow: 0 0 12px rgba(255, 82, 82, 0.5);
+            z-index: 5;
         }
 
         .wall-placed {
             position: absolute;
-            background: #e67e22;
             box-shadow: 0 0 8px rgba(230, 126, 34, 0.6);
             border-radius: 3px;
             z-index: 10;
@@ -630,7 +714,7 @@
       </div>
 
       <div class="grid-2">
-        <div class="menu-card mode-card" onclick="startGame('vs_bot')">
+        <div class="menu-card mode-card" onclick="openSetup('vs_bot')">
           <div class="mode-icon">🤖</div>
           <div>
             <div class="card-main-title" style="font-size: 15px;">Bot ilə Oyna</div>
@@ -638,7 +722,7 @@
           </div>
         </div>
 
-        <div class="menu-card mode-card" onclick="startGame('two_players')">
+        <div class="menu-card mode-card" onclick="openSetup('two_players')">
           <div class="mode-icon">👥</div>
           <div>
             <div class="card-main-title" style="font-size: 15px;">İki Oyunçu</div>
@@ -654,6 +738,75 @@
         </div>
         <span style="color: #6c757d;">›</span>
       </div>
+    </div>
+
+    <!-- 1.5 SETUP SCREEN (BOT & TWO PLAYERS) -->
+    <div id="screen-pass-setup" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
+        <div style="text-align: center;">
+            <div class="header-title" id="setup-title">Pass & Play</div>
+            <div style="font-size: 11px; color: #6c757d;">Set up your mode and players</div>
+        </div>
+        <div></div>
+      </div>
+
+      <div class="mode-toggle-container">
+        <button class="mode-toggle-btn active" id="btn-mode-classic" onclick="setGameRule('classic')">
+            <span>🚩</span> Classic
+        </button>
+        <button class="mode-toggle-btn" id="btn-mode-center" onclick="setGameRule('center_race')">
+            <span>👑</span> Center Race
+        </button>
+      </div>
+
+      <!-- Player 1 Config -->
+      <div class="player-setup-card">
+        <div class="player-setup-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="player-badge" id="p1-setup-badge" style="background: #3b82f6; color: #fff;">1</div>
+                <div>
+                    <div style="font-size: 14px; font-weight: 800;">Player 1</div>
+                    <div style="font-size: 10px; color: #6c757d; font-weight: 700;">SETUP</div>
+                </div>
+            </div>
+            <div id="p1-color-preview" style="width: 16px; height: 16px; border-radius: 50%; background: #3b82f6;"></div>
+        </div>
+        <div>
+            <div style="font-size: 10px; color: #6c757d; font-weight: 800; margin-bottom: 6px;">NAME</div>
+            <input type="text" id="p1-name-input" class="username-input" style="text-align: left; padding: 10px 14px;" value="Player 1">
+        </div>
+        <div>
+            <div style="font-size: 10px; color: #6c757d; font-weight: 800; margin-bottom: 6px;">COLOR PALETTE</div>
+            <div class="color-palette" id="p1-palette"></div>
+        </div>
+      </div>
+
+      <div class="vs-divider">VS</div>
+
+      <!-- Player 2 / Bot Config -->
+      <div class="player-setup-card">
+        <div class="player-setup-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="player-badge" id="p2-setup-badge" style="background: #ffffff; color: #000;">2</div>
+                <div>
+                    <div style="font-size: 14px; font-weight: 800;" id="p2-setup-title">Player 2</div>
+                    <div style="font-size: 10px; color: #6c757d; font-weight: 700;">SETUP</div>
+                </div>
+            </div>
+            <div id="p2-color-preview" style="width: 16px; height: 16px; border-radius: 50%; background: #ffffff;"></div>
+        </div>
+        <div>
+            <div style="font-size: 10px; color: #6c757d; font-weight: 800; margin-bottom: 6px;">NAME</div>
+            <input type="text" id="p2-name-input" class="username-input" style="text-align: left; padding: 10px 14px;" value="Player 2">
+        </div>
+        <div>
+            <div style="font-size: 10px; color: #6c757d; font-weight: 800; margin-bottom: 6px;">COLOR PALETTE</div>
+            <div class="color-palette" id="p2-palette"></div>
+        </div>
+      </div>
+
+      <button class="btn-submit" style="margin-top: 6px;" onclick="confirmAndStartGame()">Oyuna Başla</button>
     </div>
 
     <!-- 2. ONLINE LOBBY SCREEN -->
@@ -794,11 +947,11 @@
         </div>
         <div class="wall-counters">
           <div class="wall-pill p1-pill">
-            <div class="wall-pill-icon"></div>
+            <div class="wall-pill-icon" id="p1-pill-icon"></div>
             <span id="p1-walls">10</span>
           </div>
           <div class="wall-pill p2-pill">
-            <div class="wall-pill-icon"></div>
+            <div class="wall-pill-icon" id="p2-pill-icon"></div>
             <span id="p2-walls">10</span>
           </div>
         </div>
@@ -836,6 +989,22 @@
         streak: 0
     };
 
+    // SETUP STATE
+    const COLOR_OPTIONS = [
+        '#5865F2', '#E74C3C', '#2ECC71', '#F1C40F', 
+        '#E91E63', '#00BCD4', '#FFFFFF', '#8BC34A', 
+        '#9B59B6', '#1ABC9C'
+    ];
+
+    let gameSetup = {
+        mode: 'two_players', // 'vs_bot' or 'two_players'
+        rule: 'classic',    // 'classic' or 'center_race'
+        p1Name: 'Player 1',
+        p1Color: '#5865F2',
+        p2Name: 'Player 2',
+        p2Color: '#FFFFFF'
+    };
+
     // Auto load user if saved before
     window.onload = function() {
         let savedUser = localStorage.getItem('wayblock_user');
@@ -844,6 +1013,7 @@
             updateUserUI();
             navigateTo('screen-menu');
         }
+        initSetupUI();
     };
 
     function saveUserData() {
@@ -896,10 +1066,91 @@
         document.getElementById('lb-current-score').textContent = currentUser.score;
     }
 
+    // SETUP FUNCTIONS FOR BOTH BOT AND PASS & PLAY
+    function initSetupUI() {
+        const p1Pal = document.getElementById('p1-palette');
+        const p2Pal = document.getElementById('p2-palette');
+        p1Pal.innerHTML = '';
+        p2Pal.innerHTML = '';
+
+        COLOR_OPTIONS.forEach(color => {
+            // P1 Circle
+            let c1 = document.createElement('div');
+            c1.className = `color-circle ${color === gameSetup.p1Color ? 'selected' : ''}`;
+            c1.style.background = color;
+            c1.onclick = () => selectColor(1, color);
+            p1Pal.appendChild(c1);
+
+            // P2 Circle
+            let c2 = document.createElement('div');
+            c2.className = `color-circle ${color === gameSetup.p2Color ? 'selected' : ''}`;
+            c2.style.background = color;
+            c2.onclick = () => selectColor(2, color);
+            p2Pal.appendChild(c2);
+        });
+    }
+
+    function openSetup(mode) {
+        gameSetup.mode = mode;
+        if(currentUser.name) {
+            document.getElementById('p1-name-input').value = currentUser.name;
+            gameSetup.p1Name = currentUser.name;
+        }
+
+        let titleEl = document.getElementById('setup-title');
+        let p2TitleEl = document.getElementById('p2-setup-title');
+        let p2InputEl = document.getElementById('p2-name-input');
+
+        if(mode === 'vs_bot') {
+            titleEl.textContent = "Bot vs Player";
+            p2TitleEl.textContent = "Bot";
+            p2InputEl.value = "Easy Bot";
+            p2InputEl.disabled = true;
+            gameSetup.p2Name = "Easy Bot";
+            gameSetup.p2Color = "#E74C3C";
+        } else {
+            titleEl.textContent = "Pass & Play";
+            p2TitleEl.textContent = "Player 2";
+            p2InputEl.value = "Player 2";
+            p2InputEl.disabled = false;
+            gameSetup.p2Name = "Player 2";
+            gameSetup.p2Color = "#FFFFFF";
+        }
+
+        initSetupUI();
+        navigateTo('screen-pass-setup');
+    }
+
+    function setGameRule(rule) {
+        gameSetup.rule = rule;
+        document.getElementById('btn-mode-classic').classList.toggle('active', rule === 'classic');
+        document.getElementById('btn-mode-center').classList.toggle('active', rule === 'center_race');
+    }
+
+    function selectColor(player, color) {
+        if(player === 1) {
+            gameSetup.p1Color = color;
+            document.getElementById('p1-color-preview').style.background = color;
+        } else {
+            gameSetup.p2Color = color;
+            document.getElementById('p2-color-preview').style.background = color;
+        }
+        initSetupUI();
+    }
+
+    function confirmAndStartGame() {
+        gameSetup.p1Name = document.getElementById('p1-name-input').value.trim() || 'Player 1';
+        if(gameSetup.mode === 'two_players') {
+            gameSetup.p2Name = document.getElementById('p2-name-input').value.trim() || 'Player 2';
+        }
+        
+        startGame(gameSetup.mode);
+    }
+
     // GAME LOGIC
     const BOARD_SIZE = 9;
-    let p1 = { r: 8, c: 4, walls: 10 };
-    let p2 = { r: 0, c: 4, walls: 10 };
+    let p1 = { r: 8, c: 4, walls: 10, name: "Player 1", color: "#38ef7d" };
+    let p2 = { r: 0, c: 4, walls: 10, name: "Player 2", color: "#ff5252" };
     let turn = 1; 
     let activeMode = 'move';
     let currentGameMode = 'vs_bot';
@@ -917,7 +1168,16 @@
     function startGame(mode) {
         currentGameMode = mode;
         navigateTo('screen-game');
-        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? '🤖 vs Bot' : '👥 2 Oyunçu';
+        
+        p1.name = gameSetup.p1Name;
+        p1.color = gameSetup.p1Color;
+        p2.name = gameSetup.p2Name;
+        p2.color = gameSetup.p2Color;
+
+        let icon = gameSetup.rule === 'center_race' ? '👑' : (mode === 'vs_bot' ? '🤖' : '🚩');
+        let modeText = gameSetup.rule === 'center_race' ? 'Center Race' : (mode === 'vs_bot' ? 'vs Bot' : 'Classic');
+        document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
+
         restartGame();
     }
 
@@ -927,6 +1187,9 @@
             for (let c = 0; c < BOARD_SIZE; c++) {
                 let cell = document.createElement('div');
                 cell.className = 'cell';
+                if(gameSetup.rule === 'center_race' && r === 4 && c === 4) {
+                    cell.classList.add('center-cell');
+                }
                 cell.dataset.r = r;
                 cell.dataset.c = c;
                 cell.onclick = () => onCellClick(r, c);
@@ -942,12 +1205,18 @@
         
         let cell1 = getCellEl(p1.r, p1.c);
         let pawn1 = document.createElement('div');
-        pawn1.className = 'pawn pawn-p1';
+        pawn1.className = 'pawn';
+        pawn1.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${p1.color})`;
+        pawn1.style.border = `2px solid ${p1.color}`;
+        pawn1.style.boxShadow = `0 0 12px ${p1.color}`;
         cell1.appendChild(pawn1);
 
         let cell2 = getCellEl(p2.r, p2.c);
         let pawn2 = document.createElement('div');
-        pawn2.className = 'pawn pawn-p2';
+        pawn2.className = 'pawn';
+        pawn2.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${p2.color})`;
+        pawn2.style.border = `2px solid ${p2.color}`;
+        pawn2.style.boxShadow = `0 0 12px ${p2.color}`;
         cell2.appendChild(pawn2);
 
         highlightValidMoves();
@@ -1021,8 +1290,15 @@
             let validMoves = getValidMoves(currP, oppP);
             if (validMoves.some(m => m.r === r && m.c === c)) {
                 currP.r = r; currP.c = c;
-                if (turn === 1 && p1.r === 0) return endGame(true);
-                if (turn === 2 && p2.r === 8) return endGame(false);
+                
+                // WIN CONDITIONS
+                if(gameSetup.rule === 'center_race') {
+                    if (currP.r === 4 && currP.c === 4) return endGame(turn === 1);
+                } else {
+                    if (turn === 1 && p1.r === 0) return endGame(true);
+                    if (turn === 2 && p2.r === 8) return endGame(false);
+                }
+
                 switchTurn();
             }
         } else {
@@ -1065,8 +1341,10 @@
         if (type === 'H') hWalls[r][c] = true;
         else vWalls[r][c] = true;
 
+        let currP = turn === 1 ? p1 : p2;
         let wallEl = document.createElement('div');
         wallEl.className = 'wall-placed';
+        wallEl.style.background = currP.color;
         
         let cellW = (340 - 80) / 9;
         let gap = 10;
@@ -1092,7 +1370,7 @@
         renderPawns();
 
         if (currentGameMode === 'vs_bot' && turn === 2) {
-            setTimeout(aiTurn, 500);
+            setTimeout(aiTurn, 400);
         }
     }
 
@@ -1100,52 +1378,73 @@
         document.getElementById('p1-walls').textContent = p1.walls;
         document.getElementById('p2-walls').textContent = p2.walls;
 
+        document.getElementById('p1-pill-icon').style.background = p1.color;
+        document.getElementById('p2-pill-icon').style.background = p2.color;
+
         let dot = document.getElementById('turn-dot');
         let txt = document.getElementById('turn-text');
 
         if (turn === 1) {
-            dot.style.backgroundColor = '#38ef7d';
-            dot.style.boxShadow = '0 0 8px #38ef7d';
-            txt.textContent = 'Sizin növbəniz';
+            dot.style.backgroundColor = p1.color;
+            dot.style.boxShadow = `0 0 8px ${p1.color}`;
+            txt.textContent = `${p1.name} Sırası`;
         } else {
-            dot.style.backgroundColor = '#ff5252';
-            dot.style.boxShadow = '0 0 8px #ff5252';
-            txt.textContent = currentGameMode === 'vs_bot' ? 'Rəqibin növbəsi (Bot)' : '2-ci Oyunçunun növbəsi';
+            dot.style.backgroundColor = p2.color;
+            dot.style.boxShadow = `0 0 8px ${p2.color}`;
+            txt.textContent = `${p2.name} Sırası`;
         }
     }
 
     function aiTurn() {
         let p2Moves = getValidMoves(p2, p1);
-        let bestMove = p2Moves[Math.floor(Math.random() * p2Moves.length)];
+        if (!p2Moves || p2Moves.length === 0) return;
+
+        let targetR = gameSetup.rule === 'center_race' ? 4 : 8;
+        let targetC = gameSetup.rule === 'center_race' ? 4 : p2.c;
+
+        // Bot target logic
+        p2Moves.sort((a, b) => {
+            let distA = Math.abs(a.r - targetR) + Math.abs(a.c - targetC);
+            let distB = Math.abs(b.r - targetR) + Math.abs(b.c - targetC);
+            return distA - distB;
+        });
+
+        let bestMove = p2Moves[0];
 
         if (bestMove) {
             p2.r = bestMove.r;
             p2.c = bestMove.c;
-            if (p2.r === 8) return endGame(false);
+            
+            if(gameSetup.rule === 'center_race') {
+                if (p2.r === 4 && p2.c === 4) return endGame(false);
+            } else {
+                if (p2.r === 8) return endGame(false);
+            }
         }
 
         switchTurn();
     }
 
-    function endGame(isWin) {
+    function endGame(isP1Win) {
         currentUser.games++;
-        if(isWin) {
+        let winnerName = isP1Win ? p1.name : p2.name;
+
+        if(isP1Win) {
             currentUser.wins++;
             currentUser.score += 50;
-            document.getElementById('modal-title').textContent = "Təbriklər! 🎉";
-            document.getElementById('modal-desc').textContent = "Siz qalib gəldiniz (+50 Xal)!";
-        } else {
-            document.getElementById('modal-title').textContent = "Oyun Bitdi";
-            document.getElementById('modal-desc').textContent = "Rəqib qalib gəldi.";
         }
+
+        document.getElementById('modal-title').textContent = "Təbriklər! 🎉";
+        document.getElementById('modal-desc').textContent = `${winnerName} qalib gəldi!`;
+
         saveUserData();
         updateUserUI();
         document.getElementById('modal').classList.add('active');
     }
 
     function restartGame() {
-        p1 = { r: 8, c: 4, walls: 10 };
-        p2 = { r: 0, c: 4, walls: 10 };
+        p1.r = 8; p1.c = 4; p1.walls = 10;
+        p2.r = 0; p2.c = 4; p2.walls = 10;
         turn = 1;
         activeMode = 'move';
         hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
