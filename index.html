@@ -434,8 +434,6 @@
         .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
         .p1-pill .wall-pill-icon { background: #38ef7d; }
         .p2-pill .wall-pill-icon { background: #ff5252; }
-        .p3-pill .wall-pill-icon { background: #38bdf8; }
-        .p4-pill .wall-pill-icon { background: #f59e0b; }
 
         /* Board Styling */
         #board-wrapper {
@@ -470,17 +468,6 @@
             cursor: pointer;
         }
 
-        .cell.finish-cell {
-            background: rgba(245, 158, 11, 0.25) !important;
-            border: 2px dashed #f59e0b !important;
-        }
-
-        .cell.finish-cell::before {
-            content: "🏁";
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
         .cell.valid-move {
             background: rgba(56, 239, 125, 0.15);
             border: 1px dashed rgba(56, 239, 125, 0.5);
@@ -501,7 +488,6 @@
             border-radius: 50%;
             position: absolute;
             transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 5;
         }
 
         .pawn-p1 {
@@ -516,57 +502,12 @@
             box-shadow: 0 0 12px rgba(255, 82, 82, 0.5);
         }
 
-        .pawn-p3 {
-            background: radial-gradient(circle at 30% 30%, #38bdf8, #0284c7);
-            border: 2px solid #bae6fd;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-        }
-
-        .pawn-p4 {
-            background: radial-gradient(circle at 30% 30%, #fbbf24, #d97706);
-            border: 2px solid #fef08a;
-            box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
-        }
-
         .wall-placed {
             position: absolute;
             background: #e67e22;
             box-shadow: 0 0 8px rgba(230, 126, 34, 0.6);
             border-radius: 3px;
             z-index: 10;
-        }
-
-        /* EMOJI BAR & POPUP */
-        .emoji-bar {
-            display: flex;
-            justify-content: space-around;
-            background: #161926;
-            border: 1px solid #23283b;
-            padding: 8px 12px;
-            border-radius: 12px;
-        }
-
-        .emoji-btn {
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .emoji-btn:active { transform: scale(1.4); }
-
-        .emoji-popup {
-            position: absolute;
-            top: -30px;
-            font-size: 24px;
-            animation: floatUp 1.2s ease-out forwards;
-            pointer-events: none;
-            z-index: 20;
-        }
-
-        @keyframes floatUp {
-            0% { opacity: 0; transform: translateY(0) scale(0.5); }
-            30% { opacity: 1; transform: translateY(-15px) scale(1.2); }
-            100% { opacity: 0; transform: translateY(-35px) scale(1); }
         }
 
         .controls { display: flex; gap: 10px; width: 100%; }
@@ -693,34 +634,15 @@
           <div class="mode-icon">🤖</div>
           <div>
             <div class="card-main-title" style="font-size: 15px;">Bot ilə Oyna</div>
-            <div class="card-sub">Mərkəzə Qaçış</div>
+            <div class="card-sub">Tək Oyunçu</div>
           </div>
         </div>
 
         <div class="menu-card mode-card" onclick="startGame('two_players')">
           <div class="mode-icon">👥</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">2 Oyunçu</div>
-            <div class="card-sub">Mərkəzə Qaçış</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ƏLAVƏ OLUNAN YENİ REJİMLƏR (ƏVVƏLKİ DİZAYNDA) -->
-      <div class="grid-2">
-        <div class="menu-card mode-card" onclick="startGame('four_players')">
-          <div class="mode-icon">🧩</div>
-          <div>
-            <div class="card-main-title" style="font-size: 15px;">4 Oyunçu</div>
-            <div class="card-sub">Mərkəzə Qaçış</div>
-          </div>
-        </div>
-
-        <div class="menu-card mode-card" onclick="startGame('side_by_side')">
-          <div class="mode-icon">🏁</div>
-          <div>
-            <div class="card-main-title" style="font-size: 15px;">Side-by-Side</div>
-            <div class="card-sub">Üst Finişə Qaçış</div>
+            <div class="card-main-title" style="font-size: 15px;">İki Oyunçu</div>
+            <div class="card-sub">Eyni Cihazda</div>
           </div>
         </div>
       </div>
@@ -870,21 +792,20 @@
           <div class="dot-indicator" id="turn-dot"></div>
           <span id="turn-text">Sizin növbəniz</span>
         </div>
-        <div class="wall-counters" id="wall-counters-container">
-          <!-- Dinamik olaraq div-lər əlavə ediləcək -->
+        <div class="wall-counters">
+          <div class="wall-pill p1-pill">
+            <div class="wall-pill-icon"></div>
+            <span id="p1-walls">10</span>
+          </div>
+          <div class="wall-pill p2-pill">
+            <div class="wall-pill-icon"></div>
+            <span id="p2-walls">10</span>
+          </div>
         </div>
       </div>
 
       <div id="board-wrapper">
         <div id="board"></div>
-      </div>
-
-      <!-- EMOJI / SMAILIK PANELİ -->
-      <div class="emoji-bar">
-        <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span>
-        <span class="emoji-btn" onclick="sendEmoji('🤣')">🤣</span>
-        <span class="emoji-btn" onclick="sendEmoji('😡')">😡</span>
-        <span class="emoji-btn" onclick="sendEmoji('😏')">😏</span>
       </div>
 
       <div class="controls">
@@ -915,6 +836,7 @@
         streak: 0
     };
 
+    // Auto load user if saved before
     window.onload = function() {
         let savedUser = localStorage.getItem('wayblock_user');
         if(savedUser) {
@@ -974,10 +896,11 @@
         document.getElementById('lb-current-score').textContent = currentUser.score;
     }
 
-    // GAME LOGIC & MULTI-MODE
+    // GAME LOGIC
     const BOARD_SIZE = 9;
-    let players = [];
-    let turn = 0; 
+    let p1 = { r: 8, c: 4, walls: 10 };
+    let p2 = { r: 0, c: 4, walls: 10 };
+    let turn = 1; 
     let activeMode = 'move';
     let currentGameMode = 'vs_bot';
 
@@ -994,13 +917,7 @@
     function startGame(mode) {
         currentGameMode = mode;
         navigateTo('screen-game');
-        
-        let titleEl = document.getElementById('game-mode-title');
-        if(mode === 'vs_bot') titleEl.innerHTML = '🤖 vs Bot';
-        else if(mode === 'two_players') titleEl.innerHTML = '🎯 2 Oyunçu (Mərkəz)';
-        else if(mode === 'four_players') titleEl.innerHTML = '🧩 4 Oyunçu (Mərkəz)';
-        else if(mode === 'side_by_side') titleEl.innerHTML = '🏁 Side-by-Side';
-
+        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? '🤖 vs Bot' : '👥 2 Oyunçu';
         restartGame();
     }
 
@@ -1012,15 +929,6 @@
                 cell.className = 'cell';
                 cell.dataset.r = r;
                 cell.dataset.c = c;
-
-                // Finiş Xanaları
-                if ((currentGameMode === 'vs_bot' || currentGameMode === 'two_players' || currentGameMode === 'four_players') && r === 4 && c === 4) {
-                    cell.classList.add('finish-cell');
-                }
-                if (currentGameMode === 'side_by_side' && r === 0) {
-                    cell.classList.add('finish-cell');
-                }
-
                 cell.onclick = () => onCellClick(r, c);
                 boardEl.appendChild(cell);
             }
@@ -1031,16 +939,16 @@
 
     function renderPawns() {
         document.querySelectorAll('.pawn').forEach(p => p.remove());
+        
+        let cell1 = getCellEl(p1.r, p1.c);
+        let pawn1 = document.createElement('div');
+        pawn1.className = 'pawn pawn-p1';
+        cell1.appendChild(pawn1);
 
-        players.forEach((p, idx) => {
-            let cell = getCellEl(p.r, p.c);
-            if(cell) {
-                let pawn = document.createElement('div');
-                pawn.className = `pawn ${p.class}`;
-                pawn.id = `pawn-player-${idx}`;
-                cell.appendChild(pawn);
-            }
-        });
+        let cell2 = getCellEl(p2.r, p2.c);
+        let pawn2 = document.createElement('div');
+        pawn2.className = 'pawn pawn-p2';
+        cell2.appendChild(pawn2);
 
         highlightValidMoves();
     }
@@ -1051,19 +959,20 @@
 
     function highlightValidMoves() {
         document.querySelectorAll('.cell').forEach(c => c.classList.remove('valid-move'));
-        if (players[turn].isBot) return;
+        if (currentGameMode === 'vs_bot' && turn !== 1) return;
         if (activeMode !== 'move') return;
 
-        let currP = players[turn];
-        let moves = getValidMoves(currP);
+        let currP = turn === 1 ? p1 : p2;
+        let oppP = turn === 1 ? p2 : p1;
 
+        let moves = getValidMoves(currP, oppP);
         moves.forEach(m => {
             let el = getCellEl(m.r, m.c);
             if (el) el.classList.add('valid-move');
         });
     }
 
-    function getValidMoves(p) {
+    function getValidMoves(p, opp) {
         let moves = [];
         let dr = [-1, 1, 0, 0];
         let dc = [0, 0, -1, 1];
@@ -1074,8 +983,13 @@
 
             if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
                 if (!isWallBetween(p.r, p.c, nr, nc)) {
-                    let isOccupied = players.some(other => other.r === nr && other.c === nc);
-                    if (!isOccupied) {
+                    if (nr === opp.r && nc === opp.c) {
+                        let jx = nr + dr[i];
+                        let jy = nc + dc[i];
+                        if (jx >= 0 && jx < BOARD_SIZE && jy >= 0 && jy < BOARD_SIZE && !isWallBetween(nr, nc, jx, jy)) {
+                            moves.push({ r: jx, c: jy });
+                        }
+                    } else {
                         moves.push({ r: nr, c: nc });
                     }
                 }
@@ -1098,20 +1012,17 @@
     }
 
     function onCellClick(r, c) {
-        if (players[turn].isBot) return;
+        if (currentGameMode === 'vs_bot' && turn !== 1) return;
 
-        let currP = players[turn];
+        let currP = turn === 1 ? p1 : p2;
+        let oppP = turn === 1 ? p2 : p1;
 
         if (activeMode === 'move') {
-            let validMoves = getValidMoves(currP);
+            let validMoves = getValidMoves(currP, oppP);
             if (validMoves.some(m => m.r === r && m.c === c)) {
-                currP.r = r; 
-                currP.c = c;
-
-                if (checkWin(currP)) {
-                    return endGame(currP);
-                }
-
+                currP.r = r; currP.c = c;
+                if (turn === 1 && p1.r === 0) return endGame(true);
+                if (turn === 2 && p2.r === 8) return endGame(false);
                 switchTurn();
             }
         } else {
@@ -1127,14 +1038,6 @@
         }
     }
 
-    function checkWin(p) {
-        if (currentGameMode === 'side_by_side') {
-            return p.r === 0;
-        } else {
-            return p.r === 4 && p.c === 4;
-        }
-    }
-
     function setMode(mode) {
         activeMode = mode;
         document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
@@ -1145,7 +1048,7 @@
     }
 
     function canPlaceWall(r, c, type) {
-        let currP = players[turn];
+        let currP = turn === 1 ? p1 : p2;
         if (currP.walls <= 0) return false;
         if (r < 0 || r >= 8 || c < 0 || c >= 8) return false;
 
@@ -1184,98 +1087,56 @@
     }
 
     function switchTurn() {
-        turn = (turn + 1) % players.length;
+        turn = turn === 1 ? 2 : 1;
         updateUI();
         renderPawns();
 
-        if (players[turn].isBot) {
-            setTimeout(aiTurn, 600);
+        if (currentGameMode === 'vs_bot' && turn === 2) {
+            setTimeout(aiTurn, 500);
         }
     }
 
     function updateUI() {
-        let container = document.getElementById('wall-counters-container');
-        container.innerHTML = '';
-
-        players.forEach((p, idx) => {
-            let pill = document.createElement('div');
-            pill.className = `wall-pill p${idx + 1}-pill`;
-            pill.innerHTML = `<div class="wall-pill-icon"></div><span>${p.walls}</span>`;
-            container.appendChild(pill);
-        });
+        document.getElementById('p1-walls').textContent = p1.walls;
+        document.getElementById('p2-walls').textContent = p2.walls;
 
         let dot = document.getElementById('turn-dot');
         let txt = document.getElementById('turn-text');
-        let currP = players[turn];
 
-        if (currP.id === 1) {
+        if (turn === 1) {
             dot.style.backgroundColor = '#38ef7d';
             dot.style.boxShadow = '0 0 8px #38ef7d';
-        } else if(currP.id === 2) {
+            txt.textContent = 'Sizin növbəniz';
+        } else {
             dot.style.backgroundColor = '#ff5252';
             dot.style.boxShadow = '0 0 8px #ff5252';
-        } else if(currP.id === 3) {
-            dot.style.backgroundColor = '#38bdf8';
-            dot.style.boxShadow = '0 0 8px #38bdf8';
-        } else {
-            dot.style.backgroundColor = '#f59e0b';
-            dot.style.boxShadow = '0 0 8px #f59e0b';
+            txt.textContent = currentGameMode === 'vs_bot' ? 'Rəqibin növbəsi (Bot)' : '2-ci Oyunçunun növbəsi';
         }
-
-        txt.textContent = currP.isBot ? `${currP.name} (Bot)` : `${currP.name}`;
     }
 
     function aiTurn() {
-        let bot = players[turn];
-        let pMoves = getValidMoves(bot);
+        let p2Moves = getValidMoves(p2, p1);
+        let bestMove = p2Moves[Math.floor(Math.random() * p2Moves.length)];
 
-        if (pMoves.length > 0) {
-            let targetR = 4, targetC = 4;
-            let bestMove = pMoves[0];
-            let minDistance = 999;
-
-            pMoves.forEach(m => {
-                let dist = Math.abs(m.r - targetR) + Math.abs(m.c - targetC);
-                if(dist < minDistance) {
-                    minDistance = dist;
-                    bestMove = m;
-                }
-            });
-
-            bot.r = bestMove.r;
-            bot.c = bestMove.c;
-
-            if (checkWin(bot)) return endGame(bot);
+        if (bestMove) {
+            p2.r = bestMove.r;
+            p2.c = bestMove.c;
+            if (p2.r === 8) return endGame(false);
         }
 
         switchTurn();
     }
 
-    function sendEmoji(emojiChar) {
-        let activePawn = document.getElementById(`pawn-player-${turn}`);
-        if(!activePawn) return;
-
-        let popup = document.createElement('div');
-        popup.className = 'emoji-popup';
-        popup.textContent = emojiChar;
-
-        activePawn.appendChild(popup);
-
-        setTimeout(() => {
-            popup.remove();
-        }, 1200);
-    }
-
-    function endGame(winner) {
+    function endGame(isWin) {
         currentUser.games++;
-        if(winner.id === 1) {
+        if(isWin) {
             currentUser.wins++;
             currentUser.score += 50;
             document.getElementById('modal-title').textContent = "Təbriklər! 🎉";
-            document.getElementById('modal-desc').textContent = `${winner.name} qazandı (+50 Xal)!`;
+            document.getElementById('modal-desc').textContent = "Siz qalib gəldiniz (+50 Xal)!";
         } else {
             document.getElementById('modal-title').textContent = "Oyun Bitdi";
-            document.getElementById('modal-desc').textContent = `${winner.name} qazandı!`;
+            document.getElementById('modal-desc').textContent = "Rəqib qalib gəldi.";
         }
         saveUserData();
         updateUserUI();
@@ -1283,38 +1144,14 @@
     }
 
     function restartGame() {
-        turn = 0;
+        p1 = { r: 8, c: 4, walls: 10 };
+        p2 = { r: 0, c: 4, walls: 10 };
+        turn = 1;
         activeMode = 'move';
         hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         document.querySelectorAll('.wall-placed').forEach(w => w.remove());
         document.getElementById('modal').classList.remove('active');
-
-        // Rejimə uyğun oyunçular
-        if(currentGameMode === 'vs_bot') {
-            players = [
-                { id: 1, name: currentUser.name || "Siz", r: 8, c: 4, walls: 10, class: 'pawn-p1', isBot: false },
-                { id: 2, name: 'Bot AI', r: 0, c: 4, walls: 10, class: 'pawn-p2', isBot: true }
-            ];
-        } else if(currentGameMode === 'two_players') {
-            players = [
-                { id: 1, name: '1-ci Oyunçu', r: 8, c: 4, walls: 10, class: 'pawn-p1', isBot: false },
-                { id: 2, name: '2-ci Oyunçu', r: 0, c: 4, walls: 10, class: 'pawn-p2', isBot: false }
-            ];
-        } else if(currentGameMode === 'four_players') {
-            players = [
-                { id: 1, name: 'Mavi', r: 8, c: 4, walls: 5, class: 'pawn-p1', isBot: false },
-                { id: 2, name: 'Qırmızı', r: 0, c: 4, walls: 5, class: 'pawn-p2', isBot: false },
-                { id: 3, name: 'Səma', r: 4, c: 0, walls: 5, class: 'pawn-p3', isBot: false },
-                { id: 4, name: 'Sarı', r: 4, c: 8, walls: 5, class: 'pawn-p4', isBot: false }
-            ];
-        } else if(currentGameMode === 'side_by_side') {
-            players = [
-                { id: 1, name: '1-ci Oyunçu', r: 8, c: 2, walls: 10, class: 'pawn-p1', isBot: false },
-                { id: 2, name: '2-ci Oyunçu', r: 8, c: 6, walls: 10, class: 'pawn-p2', isBot: false }
-            ];
-        }
-
         setMode('move');
         initBoard();
     }
