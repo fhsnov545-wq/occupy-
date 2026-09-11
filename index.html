@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wayblock - Quoridor MultiPlayer</title>
+    <title>Quoridor Game</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,1309 +15,1085 @@
         }
 
         body {
-            background-color: #0b0f17;
-            color: #ffffff;
+            background-color: #0d0f12;
+            color: #e1e6ed;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 12px;
+            overflow: hidden;
         }
 
         .app-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 880px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            justify-content: space-between;
+            padding: 16px;
             position: relative;
         }
 
-        /* Screen Switcher */
-        .screen { display: none; flex-direction: column; gap: 14px; width: 100%; }
-        .screen.active { display: flex; }
-
-        /* Header Navigation Styles */
-        .screen-header {
+        /* Top Header & Controls */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 0;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        .icon-btn-rounded {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #161926;
-            border: 1px solid #23283b;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        /* LOGIN SCREEN STYLES */
-        .login-card {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .username-input {
             width: 100%;
-            padding: 14px;
-            background: #0b0f17;
-            border: 1px solid #23283b;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 14px;
-            text-align: center;
-            outline: none;
-            user-select: auto;
-            -webkit-user-select: auto;
-        }
-
-        .username-input:focus {
-            border-color: #38ef7d;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            border: none;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* MAIN MENU STYLES */
-        .profile-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 0;
-        }
-
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        
-        .avatar-logo {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #23283b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 16px;
-            border: 2px solid #323952;
-            color: #38ef7d;
-            text-transform: uppercase;
-        }
-
-        .user-details { display: flex; flex-direction: column; }
-        .brand-name { font-size: 10px; letter-spacing: 1px; color: #6c757d; font-weight: 700; }
-        .username { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-
-        .menu-card {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 18px;
-            padding: 16px;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-
-        .menu-card:active { transform: scale(0.98); }
-
-        .status-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .badge-online {
-            background: rgba(56, 239, 125, 0.15);
-            color: #38ef7d;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .badge-online::before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            background: #38ef7d;
-            border-radius: 50%;
-        }
-
-        .badge-streak { font-size: 12px; color: #f59e0b; font-weight: 700; }
-
-        .card-main-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
-        .card-sub { font-size: 12px; color: #6c757d; }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .mode-card { display: flex; flex-direction: column; gap: 12px; }
-
-        .mode-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        /* ONLINE LOBBY STYLES */
-        .user-stats-card {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 18px;
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .points-box {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 12px;
-            padding: 8px 16px;
-            text-align: center;
-        }
-
-        .points-value { font-size: 18px; font-weight: 900; color: #f59e0b; }
-        .points-label { font-size: 9px; color: #6c757d; font-weight: 700; letter-spacing: 1px; }
-
-        .lobby-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .btn-action {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 14px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            color: #fff;
-        }
-
-        .btn-action.primary {
-            background: rgba(56, 239, 125, 0.08);
-            border-color: rgba(56, 239, 125, 0.3);
-            color: #38ef7d;
-        }
-
-        .section-label {
-            font-size: 11px;
-            font-weight: 800;
-            color: #f59e0b;
-            letter-spacing: 1px;
-            margin-top: 6px;
-        }
-
-        .room-item {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .room-info { display: flex; align-items: center; gap: 12px; }
-        .room-title { font-size: 14px; font-weight: 700; }
-        .room-host { font-size: 11px; color: #6c757d; }
-
-        .btn-join {
-            background: #23283b;
-            border: 1px solid #323952;
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        /* ACCOUNT STYLES */
-        .account-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .account-item {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 14px;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .account-item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .danger-text { color: #ff5252; }
-
-        /* LEADERBOARD & STATS STYLES */
-        .stats-summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        .stat-box {
-            background: #202538;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .stat-num { font-size: 16px; font-weight: 800; }
-        .stat-lbl { font-size: 9px; color: #6c757d; font-weight: 700; margin-top: 2px; }
-
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 16px;
-            padding: 12px;
-        }
-
-        .lb-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 4px;
-            border-bottom: 1px solid #1f2436;
-        }
-
-        .lb-item:last-child { border-bottom: none; }
-
-        .lb-left { display: flex; align-items: center; gap: 10px; }
-        .lb-rank {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 800;
-            background: #23283b;
-        }
-
-        .lb-rank.top-1 { background: #f59e0b; color: #000; }
-        .lb-user { font-size: 13px; font-weight: 700; }
-        .lb-score { font-size: 13px; font-weight: 800; color: #f59e0b; }
-
-        /* GAME PLAY STYLES */
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
         }
 
         .icon-btn {
-            background: #161926;
-            border: 1px solid #23283b;
-            color: #a0a6b8;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #181c24;
+            border: 1px solid #282e3d;
+            color: #8a94a6;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
         }
 
-        .game-mode-indicator {
-            background: #161926;
-            border: 1px solid #23283b;
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
+        .icon-btn:active {
+            background: #222834;
+        }
+
+        .header-actions {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .card-game-info {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 14px;
-            padding: 12px 16px;
+        /* Scoreboard & Status Card */
+        .status-card {
+            background: #14171f;
+            border: 1px solid #222735;
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-top: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .status-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .turn-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .turn-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 8px #4ade8080;
+        }
+
+        .difficulty-badge {
+            background: #2a1b24;
+            border: 1px solid #4a222e;
+            color: #f87171;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #222735;
+            margin-bottom: 12px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #64748b;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        .wall-counts {
+            display: flex;
+            gap: 8px;
+        }
+
+        .wall-pill {
+            background: #1e2430;
+            border: 1px solid #2d3546;
+            padding: 4px 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             font-size: 13px;
             font-weight: 700;
         }
 
-        .turn-info { display: flex; align-items: center; gap: 8px; }
-        .dot-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #38ef7d;
-            box-shadow: 0 0 8px #38ef7d;
+        .wall-icon {
+            width: 4px;
+            height: 14px;
+            border-radius: 2px;
         }
 
-        .wall-counters { display: flex; gap: 6px; }
-        .wall-pill {
-            background: #1f2436;
-            padding: 3px 8px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            border: 1px solid #2d344b;
-        }
-
-        .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
-        .p1-pill .wall-pill-icon { background: #38ef7d; }
-        .p2-pill .wall-pill-icon { background: #ff5252; }
-        .p3-pill .wall-pill-icon { background: #38bdf8; }
-        .p4-pill .wall-pill-icon { background: #f59e0b; }
+        .wall-pill.p1 .wall-icon { background: #5eead4; }
+        .wall-pill.p2 .wall-icon { background: #f87171; }
 
         /* Board Styling */
-        #board-wrapper {
-            position: relative;
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 16px;
+        .board-wrapper {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #141822;
+            border-radius: 20px;
+            border: 1px solid #232938;
             padding: 10px;
-            display: flex;
-            justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            touch-action: none;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
-        #board {
+        .board {
+            width: 100%;
+            height: 100%;
             display: grid;
             grid-template-columns: repeat(9, 1fr);
             grid-template-rows: repeat(9, 1fr);
-            gap: 10px;
-            width: 340px;
-            height: 340px;
+            gap: 6px;
             position: relative;
         }
 
         .cell {
-            background: #23293e;
+            background: #212736;
             border-radius: 6px;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             cursor: pointer;
+            transition: background 0.15s ease;
         }
 
-        .cell.finish-cell {
-            background: rgba(245, 158, 11, 0.25) !important;
-            border: 2px dashed #f59e0b !important;
+        .cell.highlight-target {
+            background: #1e3a35;
         }
 
-        .cell.finish-cell::before {
-            content: "🏁";
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .cell.valid-move {
-            background: rgba(56, 239, 125, 0.15);
-            border: 1px dashed rgba(56, 239, 125, 0.5);
-        }
-
-        .cell.valid-move::after {
+        .cell.highlight-target::after {
             content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #38ef7d;
-            box-shadow: 0 0 6px #38ef7d;
+            background: #4ade80;
+            box-shadow: 0 0 8px #4ade80;
+        }
+
+        .cell.p2-goal {
+            background: rgba(248, 113, 113, 0.08);
+        }
+
+        .cell.p1-goal {
+            background: rgba(94, 234, 212, 0.08);
         }
 
         .pawn {
-            width: 65%;
-            height: 65%;
+            width: 60%;
+            height: 60%;
             border-radius: 50%;
             position: absolute;
-            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            top: 20%;
+            left: 20%;
             z-index: 5;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .pawn-p1 {
-            background: radial-gradient(circle at 30% 30%, #51f296, #11998e);
-            border: 2px solid #a3ffce;
-            box-shadow: 0 0 12px rgba(56, 239, 125, 0.5);
+        .pawn.p1 {
+            background: radial-gradient(circle at 30% 30%, #5eead4, #0d9488);
+            border: 2px solid #99f6e4;
         }
 
-        .pawn-p2 {
-            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b);
-            border: 2px solid #ffb8b8;
-            box-shadow: 0 0 12px rgba(255, 82, 82, 0.5);
+        .pawn.p2 {
+            background: radial-gradient(circle at 30% 30%, #f87171, #dc2626);
+            border: 2px solid #fca5a5;
         }
 
-        .pawn-p3 {
-            background: radial-gradient(circle at 30% 30%, #38bdf8, #0284c7);
-            border: 2px solid #bae6fd;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-        }
-
-        .pawn-p4 {
-            background: radial-gradient(circle at 30% 30%, #fbbf24, #d97706);
-            border: 2px solid #fef08a;
-            box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
-        }
-
-        .wall-placed {
+        /* Walls Layer */
+        .walls-container {
             position: absolute;
-            background: #e67e22;
-            box-shadow: 0 0 8px rgba(230, 126, 34, 0.6);
-            border-radius: 3px;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            pointer-events: none;
             z-index: 10;
         }
 
-        /* EMOJI BAR & POPUP */
-        .emoji-bar {
-            display: flex;
-            justify-content: space-around;
-            background: #161926;
-            border: 1px solid #23283b;
-            padding: 8px 12px;
-            border-radius: 12px;
-        }
-
-        .emoji-btn {
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .emoji-btn:active { transform: scale(1.4); }
-
-        .emoji-popup {
+        .placed-wall {
             position: absolute;
-            top: -30px;
-            font-size: 24px;
-            animation: floatUp 1.2s ease-out forwards;
-            pointer-events: none;
-            z-index: 20;
+            background: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            border-radius: 3px;
         }
 
-        @keyframes floatUp {
-            0% { opacity: 0; transform: translateY(0) scale(0.5); }
-            30% { opacity: 1; transform: translateY(-15px) scale(1.2); }
-            100% { opacity: 0; transform: translateY(-35px) scale(1); }
+        /* Controls / Wall Selection */
+        .instruction-text {
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            margin-bottom: 8px;
         }
 
-        .controls { display: flex; gap: 10px; width: 100%; }
+        .wall-controls {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+        }
 
-        .btn-mode {
+        .mode-btn {
             flex: 1;
-            padding: 12px;
-            background: #161926;
-            border: 1px solid #23283b;
-            color: #8c96a8;
-            border-radius: 12px;
+            height: 52px;
+            background: #14171f;
+            border: 1px solid #222735;
+            border-radius: 16px;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: #1e2430;
+            border-color: #3b82f6;
+            color: #f8fafc;
+        }
+
+        .wall-icon-btn {
+            width: 20px;
+            height: 4px;
+            background: #94a3b8;
+            border-radius: 2px;
+        }
+
+        .wall-icon-btn.vertical {
+            width: 4px;
+            height: 20px;
+        }
+
+        /* Modal / Game Settings overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(5, 7, 10, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #12151e;
+            border: 1px solid #232938;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 360px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .modal-title-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-subtitle {
+            font-size: 11px;
+            color: #d97706;
             font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .opt-btn {
+            background: #181c27;
+            border: 1px solid #262d3d;
+            border-radius: 12px;
+            padding: 12px;
+            color: #94a3b8;
+            font-weight: 600;
             font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .opt-btn.active {
+            background: #1e293b;
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
+
+        .opt-btn.master.active {
+            background: #2a2015;
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .round-selector {
+            display: flex;
+            background: #181c27;
+            border: 1px solid #262d3d;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+
+        .round-opt {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .round-opt.active {
+            background: #262e3f;
+            color: #f1f5f9;
+        }
+
+        .start-btn {
+            width: 100%;
+            height: 48px;
+            background: #223044;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            color: #cbd5e1;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .start-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Menu Selection Screen */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .menu-item {
+            background: #181c27;
+            border: 1px solid #262d3d;
+            border-radius: 14px;
+            padding: 14px;
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
-        }
-
-        .btn-mode.active {
-            background: #2563eb;
-            color: #ffffff;
-            border-color: #3b82f6;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        /* Modals */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
             display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            justify-content: space-between;
         }
 
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
-        .modal {
-            background: #181b29;
-            border: 1px solid #2a3148;
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-            max-width: 320px;
-            width: 90%;
-        }
-
-        .modal h2 { font-size: 20px; margin-bottom: 10px; }
-        .modal p { color: #a0a6b8; font-size: 14px; margin-bottom: 20px; }
-
-        .modal-btn {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
+        .menu-item:hover {
+            border-color: #38bdf8;
         }
     </style>
 </head>
 <body>
 
-  <div class="app-container">
-
-    <!-- 0. LOGIN / ACCOUNT CREATION SCREEN -->
-    <div id="screen-login" class="screen active">
-      <div style="text-align: center; margin-top: 30px;">
-        <h1 style="font-size: 28px; font-weight: 900; letter-spacing: 2px;">WAYBLOCK</h1>
-        <p style="color: #6c757d; font-size: 13px; margin-top: 4px;">Online Quoridor Multiplayer</p>
-      </div>
-
-      <div class="login-card" style="margin-top: 20px;">
-        <div class="avatar-logo" style="width: 60px; height: 60px; font-size: 24px;">🎮</div>
-        <div>
-          <h2 style="font-size: 18px; font-weight: 800;">Hesab Yaradın</h2>
-          <p style="font-size: 12px; color: #6c757d; margin-top: 4px;">Oyuna daxil olmaq üçün istifadəçi adınızı daxil edin</p>
+<div class="app-container">
+    <!-- Top Bar -->
+    <div class="header">
+        <button class="icon-btn" id="btnBack">←</button>
+        <div class="header-actions">
+            <button class="icon-btn" id="btnSettings">⚙</button>
+            <button class="icon-btn" id="btnReset">↻</button>
         </div>
-
-        <input type="text" id="input-username" class="username-input" placeholder="İstifadəçi adınızı yazın..." maxlength="15">
-
-        <button class="btn-submit" onclick="loginUser()">Oyuna Başla</button>
-        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #23283b;" onclick="loginAsGuest()">Təsadüfi Ad İlə Gir</button>
-      </div>
     </div>
 
-    <!-- 1. MAIN MENU SCREEN -->
-    <div id="screen-menu" class="screen">
-      <div class="profile-header">
-        <div class="user-info">
-          <div class="avatar-logo" id="user-avatar">👤</div>
-          <div class="user-details">
-            <span class="brand-name">WAYBLOCK</span>
-            <span class="username" id="display-username">Oyunçu</span>
-          </div>
-        </div>
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
-      </div>
-
-      <div class="menu-card" style="background: linear-gradient(180deg, #1e293b 0%, #161926 100%);" onclick="navigateTo('screen-lobby')">
-        <div class="status-row">
-          <span class="badge-online">ONLINE</span>
-          <span class="badge-streak" id="user-streak">🔥 Streak: 0</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-          <div>
-            <div class="card-main-title">Play Online</div>
-            <div class="card-sub">Onlayn oyunçularla oyna</div>
-          </div>
-          <div class="icon-btn-rounded">→</div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="menu-card mode-card" onclick="startGame('vs_bot')">
-          <div class="mode-icon">🤖</div>
-          <div>
-            <div class="card-main-title" style="font-size: 15px;">Bot ilə Oyna</div>
-            <div class="card-sub">Mərkəzə Qaçış</div>
-          </div>
-        </div>
-
-        <div class="menu-card mode-card" onclick="startGame('two_players')">
-          <div class="mode-icon">👥</div>
-          <div>
-            <div class="card-main-title" style="font-size: 15px;">2 Oyunçu</div>
-            <div class="card-sub">Mərkəzə Qaçış</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ƏLAVƏ OLUNAN YENİ REJİMLƏR (ƏVVƏLKİ DİZAYNDA) -->
-      <div class="grid-2">
-        <div class="menu-card mode-card" onclick="startGame('four_players')">
-          <div class="mode-icon">🧩</div>
-          <div>
-            <div class="card-main-title" style="font-size: 15px;">4 Oyunçu</div>
-            <div class="card-sub">Mərkəzə Qaçış</div>
-          </div>
-        </div>
-
-        <div class="menu-card mode-card" onclick="startGame('side_by_side')">
-          <div class="mode-icon">🏁</div>
-          <div>
-            <div class="card-main-title" style="font-size: 15px;">Side-by-Side</div>
-            <div class="card-sub">Üst Finişə Qaçış</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screen-stats')">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 18px;">🏆</span>
-          <span style="font-weight: 700; font-size: 15px;">Liderlər Lövhəsi</span>
-        </div>
-        <span style="color: #6c757d;">›</span>
-      </div>
-    </div>
-
-    <!-- 2. ONLINE LOBBY SCREEN -->
-    <div id="screen-lobby" class="screen">
-      <div class="screen-header">
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Online Lobby</div>
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
-      </div>
-
-      <div class="user-stats-card">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo" id="lobby-avatar">👤</div>
-          <div>
-            <div class="username" id="lobby-username">Oyunçu</div>
-            <div class="card-sub" style="margin-top: 2px;">Qələbə Hazırdır</div>
-          </div>
-        </div>
-        <div class="points-box">
-          <div class="points-value" id="lobby-points">0</div>
-          <div class="points-label">POINTS</div>
-        </div>
-      </div>
-
-      <div class="lobby-actions">
-        <button class="btn-action primary" onclick="startGame('two_players')">
-          <span style="font-size: 20px;">⊕</span>
-          <span>Otaq Yarat</span>
-        </button>
-        <button class="btn-action" onclick="startGame('two_players')">
-          <span style="font-size: 20px;">👥</span>
-          <span>Açıq Otaqlar</span>
-        </button>
-      </div>
-
-      <div class="section-label">MÖVCUD OTAQLAR</div>
-
-      <div id="room-list" style="display: flex; flex-direction: column; gap: 8px;">
-        <div class="room-item">
-          <div class="room-info">
-            <div>
-              <div class="room-title">Otaq #101</div>
-              <div class="room-host">Gözlənilir...</div>
+    <!-- Status & Info Box -->
+    <div class="status-card">
+        <div class="status-header">
+            <div class="turn-indicator">
+                <div class="turn-dot" id="turnDot"></div>
+                <span id="turnText">Sizin Növbəniz</span>
             </div>
-          </div>
-          <button class="btn-join" onclick="startGame('two_players')">Qoşul</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. MY ACCOUNT SCREEN -->
-    <div id="screen-account" class="screen">
-      <div class="screen-header">
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Hesabım</div>
-        <div></div>
-      </div>
-
-      <div class="user-stats-card">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo" id="account-avatar">👤</div>
-          <div>
-            <div class="card-sub">İstifadəçi Adı</div>
-            <div class="username" style="font-size: 16px;" id="account-username">Oyunçu</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="account-menu">
-        <div class="account-item" onclick="logout()">
-          <div class="account-item-left danger-text">
-            <span>🚪</span>
-            <span>Hesabdan Çıx</span>
-          </div>
-          <span class="danger-text">›</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. LEADERBOARD & STATS SCREEN -->
-    <div id="screen-stats" class="screen">
-      <div class="screen-header">
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Statistika</div>
-        <div></div>
-      </div>
-
-      <div class="user-stats-card" style="flex-direction: column; align-items: stretch; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo" id="stats-avatar">👤</div>
-          <div>
-            <div class="username" id="stats-username">Oyunçu</div>
-          </div>
-        </div>
-
-        <div class="stats-summary">
-          <div class="stat-box">
-            <div class="stat-num" id="stats-score">0</div>
-            <div class="stat-lbl">XAL</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="stats-games">0</div>
-            <div class="stat-lbl">OYUN</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="stats-wins">0</div>
-            <div class="stat-lbl">QƏLƏBƏ</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="leaderboard-list">
-        <div class="lb-item">
-          <div class="lb-left">
-            <div class="lb-rank top-1">1</div>
-            <div class="avatar-logo" style="width: 28px; height: 28px; font-size: 12px;">★</div>
-            <div>
-              <div class="lb-user" id="lb-current-user">Oyunçu</div>
+            <div class="difficulty-badge" id="diffBadge">
+                🤖 <span id="diffLabel">Hard</span>
             </div>
-          </div>
-          <div class="lb-score" id="lb-current-score">0</div>
         </div>
-      </div>
+        <div class="divider"></div>
+        <div class="stats-row">
+            <div class="stat-group">
+                <div class="stat-item">
+                    <span class="stat-label">ROUND</span>
+                    <span class="stat-value" id="roundText">1 / 3</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">SCORE</span>
+                    <span class="stat-value" id="scoreText">0 - 0</span>
+                </div>
+            </div>
+            <div class="wall-counts">
+                <div class="wall-pill p1">
+                    <div class="wall-icon"></div>
+                    <span id="p1Walls">10</span>
+                </div>
+                <div class="wall-pill p2">
+                    <div class="wall-icon"></div>
+                    <span id="p2Walls">10</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- 5. GAME PLAY SCREEN -->
-    <div id="screen-game" class="screen">
-      <div class="game-header">
-        <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
-        <div class="game-mode-indicator" id="game-mode-title">🤖 vs Bot</div>
-        <button class="icon-btn" onclick="restartGame()">🔄</button>
-      </div>
-
-      <div class="card-game-info">
-        <div class="turn-info">
-          <div class="dot-indicator" id="turn-dot"></div>
-          <span id="turn-text">Sizin növbəniz</span>
-        </div>
-        <div class="wall-counters" id="wall-counters-container">
-          <!-- Dinamik olaraq div-lər əlavə ediləcək -->
-        </div>
-      </div>
-
-      <div id="board-wrapper">
-        <div id="board"></div>
-      </div>
-
-      <!-- EMOJI / SMAILIK PANELİ -->
-      <div class="emoji-bar">
-        <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span>
-        <span class="emoji-btn" onclick="sendEmoji('🤣')">🤣</span>
-        <span class="emoji-btn" onclick="sendEmoji('😡')">😡</span>
-        <span class="emoji-btn" onclick="sendEmoji('😏')">😏</span>
-      </div>
-
-      <div class="controls">
-        <button class="btn-mode active" id="btn-move" onclick="setMode('move')">🏃 Hərəkət</button>
-        <button class="btn-mode" id="btn-h" onclick="setMode('H')">▬ Yatay</button>
-        <button class="btn-mode" id="btn-v" onclick="setMode('V')">❚ Dikey</button>
-      </div>
+    <!-- Main Game Board -->
+    <div class="board-wrapper">
+        <div class="board" id="board"></div>
+        <div class="walls-container" id="wallsContainer"></div>
     </div>
 
-  </div>
+    <!-- Wall Placement Controls -->
+    <div>
+        <div class="instruction-text">✨ Maneəni seçib lövhə üzərinə sürüşdürün və ya klikləyin</div>
+        <div class="wall-controls">
+            <button class="mode-btn active" id="btnHoriz">
+                <div class="wall-icon-btn"></div>
+                Horizontal
+            </button>
+            <button class="mode-btn" id="btnVert">
+                <div class="wall-icon-btn vertical"></div>
+                Vertical
+            </button>
+        </div>
+    </div>
+</div>
 
-  <!-- GAME END MODAL -->
-  <div class="modal-overlay" id="modal">
-      <div class="modal">
-          <h2 id="modal-title">Qələbə!</h2>
-          <p id="modal-desc">Siz qazandınız!</p>
-          <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
-      </div>
-  </div>
+<!-- Game Mode / Settings Modal -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card" id="modalCard">
+        <!-- Content Injected Dynamically -->
+    </div>
+</div>
 
 <script>
-    // USER STATE
-    let currentUser = {
-        name: "",
-        score: 0,
-        games: 0,
-        wins: 0,
-        streak: 0
-    };
+/**
+ * QUORIDOR GAME ENGINE & AI
+ */
+const BOARD_SIZE = 9;
 
-    window.onload = function() {
-        let savedUser = localStorage.getItem('wayblock_user');
-        if(savedUser) {
-            currentUser = JSON.parse(savedUser);
-            updateUserUI();
-            navigateTo('screen-menu');
+// Game State
+let gameState = {
+    mode: 'vsAI', // 'vsAI', 'local2P', 'onlineRoom', 'onlineMatch'
+    difficulty: 'Hard', // 'Easy', 'Medium', 'Hard', 'Master'
+    totalRounds: 3,
+    currentRound: 1,
+    scores: [0, 0],
+    p1: { r: 8, c: 4, walls: 10 },
+    p2: { r: 0, c: 4, walls: 10 },
+    turn: 1, // 1 or 2
+    wallMode: 'horizontal', // 'horizontal' or 'vertical'
+    hWalls: Array(8).fill(0).map(() => Array(8).fill(false)),
+    vWalls: Array(8).fill(0).map(() => Array(8).fill(false)),
+    placedWallsList: []
+};
+
+// UI Elements
+const boardEl = document.getElementById('board');
+const wallsContainer = document.getElementById('wallsContainer');
+const turnDot = document.getElementById('turnDot');
+const turnText = document.getElementById('turnText');
+const diffBadge = document.getElementById('diffBadge');
+const diffLabel = document.getElementById('diffLabel');
+const roundText = document.getElementById('roundText');
+const scoreText = document.getElementById('scoreText');
+const p1WallsText = document.getElementById('p1Walls');
+const p2WallsText = document.getElementById('p2Walls');
+const btnHoriz = document.getElementById('btnHoriz');
+const btnVert = document.getElementById('btnVert');
+const modalOverlay = document.getElementById('modalOverlay');
+const modalCard = document.getElementById('modalCard');
+
+// Initialize Board
+function initBoardUI() {
+    boardEl.innerHTML = '';
+    for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            if (r === 0) cell.classList.add('p2-goal');
+            if (r === 8) cell.classList.add('p1-goal');
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+            cell.addEventListener('click', () => handleCellClick(r, c));
+            boardEl.appendChild(cell);
         }
-    };
+    }
+    renderGame();
+}
 
-    function saveUserData() {
-        localStorage.setItem('wayblock_user', JSON.stringify(currentUser));
+// Render Game Components
+function renderGame() {
+    // Clear dynamic highlights and pawns
+    document.querySelectorAll('.pawn').forEach(el => el.remove());
+    document.querySelectorAll('.cell').forEach(c => c.classList.remove('highlight-target'));
+
+    // Render Pawns
+    const p1Cell = getCellEl(gameState.p1.r, gameState.p1.c);
+    if (p1Cell) {
+        const p1Pawn = document.createElement('div');
+        p1Pawn.className = 'pawn p1';
+        p1Cell.appendChild(p1Pawn);
     }
 
-    function loginUser() {
-        let inputName = document.getElementById('input-username').value.trim();
-        if(inputName.length < 2) {
-            alert("Zəhmət olmasa ən azı 2 hərfdən ibarət ad yazın.");
-            return;
-        }
-        currentUser.name = inputName;
-        saveUserData();
-        updateUserUI();
-        navigateTo('screen-menu');
+    const p2Cell = getCellEl(gameState.p2.r, gameState.p2.c);
+    if (p2Cell) {
+        const p2Pawn = document.createElement('div');
+        p2Pawn.className = 'pawn p2';
+        p2Cell.appendChild(p2Pawn);
     }
 
-    function loginAsGuest() {
-        currentUser.name = "Oyunçu_" + Math.floor(Math.random() * 899 + 100);
-        saveUserData();
-        updateUserUI();
-        navigateTo('screen-menu');
-    }
-
-    function logout() {
-        localStorage.removeItem('wayblock_user');
-        currentUser = { name: "", score: 0, games: 0, wins: 0, streak: 0 };
-        document.getElementById('input-username').value = "";
-        navigateTo('screen-login');
-    }
-
-    function updateUserUI() {
-        const nameEls = ['display-username', 'lobby-username', 'account-username', 'stats-username', 'lb-current-user'];
-        nameEls.forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.textContent = currentUser.name;
-        });
-
-        const avatarEls = ['user-avatar', 'lobby-avatar', 'account-avatar', 'stats-avatar'];
-        avatarEls.forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.textContent = currentUser.name.charAt(0).toUpperCase();
-        });
-
-        document.getElementById('stats-score').textContent = currentUser.score;
-        document.getElementById('stats-games').textContent = currentUser.games;
-        document.getElementById('stats-wins').textContent = currentUser.wins;
-        document.getElementById('lobby-points').textContent = currentUser.score;
-        document.getElementById('lb-current-score').textContent = currentUser.score;
-    }
-
-    // GAME LOGIC & MULTI-MODE
-    const BOARD_SIZE = 9;
-    let players = [];
-    let turn = 0; 
-    let activeMode = 'move';
-    let currentGameMode = 'vs_bot';
-
-    let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-    let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-
-    let boardEl = document.getElementById('board');
-
-    function navigateTo(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-    }
-
-    function startGame(mode) {
-        currentGameMode = mode;
-        navigateTo('screen-game');
-        
-        let titleEl = document.getElementById('game-mode-title');
-        if(mode === 'vs_bot') titleEl.innerHTML = '🤖 vs Bot';
-        else if(mode === 'two_players') titleEl.innerHTML = '🎯 2 Oyunçu (Mərkəz)';
-        else if(mode === 'four_players') titleEl.innerHTML = '🧩 4 Oyunçu (Mərkəz)';
-        else if(mode === 'side_by_side') titleEl.innerHTML = '🏁 Side-by-Side';
-
-        restartGame();
-    }
-
-    function initBoard() {
-        boardEl.innerHTML = '';
-        for (let r = 0; r < BOARD_SIZE; r++) {
-            for (let c = 0; c < BOARD_SIZE; c++) {
-                let cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.dataset.r = r;
-                cell.dataset.c = c;
-
-                // Finiş Xanaları
-                if ((currentGameMode === 'vs_bot' || currentGameMode === 'two_players' || currentGameMode === 'four_players') && r === 4 && c === 4) {
-                    cell.classList.add('finish-cell');
-                }
-                if (currentGameMode === 'side_by_side' && r === 0) {
-                    cell.classList.add('finish-cell');
-                }
-
-                cell.onclick = () => onCellClick(r, c);
-                boardEl.appendChild(cell);
-            }
-        }
-        renderPawns();
-        updateUI();
-    }
-
-    function renderPawns() {
-        document.querySelectorAll('.pawn').forEach(p => p.remove());
-
-        players.forEach((p, idx) => {
-            let cell = getCellEl(p.r, p.c);
-            if(cell) {
-                let pawn = document.createElement('div');
-                pawn.className = `pawn ${p.class}`;
-                pawn.id = `pawn-player-${idx}`;
-                cell.appendChild(pawn);
-            }
-        });
-
-        highlightValidMoves();
-    }
-
-    function getCellEl(r, c) {
-        return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
-    }
-
-    function highlightValidMoves() {
-        document.querySelectorAll('.cell').forEach(c => c.classList.remove('valid-move'));
-        if (players[turn].isBot) return;
-        if (activeMode !== 'move') return;
-
-        let currP = players[turn];
-        let moves = getValidMoves(currP);
-
+    // Highlights
+    if ((gameState.mode === 'vsAI' && gameState.turn === 1) || gameState.mode !== 'vsAI') {
+        const moves = getValidMoves(gameState.turn);
         moves.forEach(m => {
-            let el = getCellEl(m.r, m.c);
-            if (el) el.classList.add('valid-move');
+            const cell = getCellEl(m.r, m.c);
+            if (cell) cell.classList.add('highlight-target');
         });
     }
 
-    function getValidMoves(p) {
-        let moves = [];
-        let dr = [-1, 1, 0, 0];
-        let dc = [0, 0, -1, 1];
+    // Render Placed Walls
+    wallsContainer.innerHTML = '';
+    const rect = boardEl.getBoundingClientRect();
+    const cellWidth = (rect.width - 48) / 9; // gap accounted roughly
 
-        for (let i = 0; i < 4; i++) {
-            let nr = p.r + dr[i];
-            let nc = p.c + dc[i];
+    gameState.placedWallsList.forEach(w => {
+        const wallEl = document.createElement('div');
+        wallEl.className = 'placed-wall';
+        
+        // Calculate coordinates relative to board grid percentage
+        const colPercent = (w.c / 9) * 100;
+        const rowPercent = (w.r / 9) * 100;
 
-            if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
-                if (!isWallBetween(p.r, p.c, nr, nc)) {
-                    let isOccupied = players.some(other => other.r === nr && other.c === nc);
-                    if (!isOccupied) {
-                        moves.push({ r: nr, c: nc });
+        if (w.type === 'horizontal') {
+            wallEl.style.left = `calc(${colPercent}% + 2px)`;
+            wallEl.style.top = `calc(${((w.r + 1) / 9) * 100}% - 4px)`;
+            wallEl.style.width = `calc(${(2 / 9) * 100}% - 4px)`;
+            wallEl.style.height = '8px';
+        } else {
+            wallEl.style.left = `calc(${((w.c + 1) / 9) * 100}% - 4px)`;
+            wallEl.style.top = `calc(${rowPercent}% + 2px)`;
+            wallEl.style.width = '8px';
+            wallEl.style.height = `calc(${(2 / 9) * 100}% - 4px)`;
+        }
+        wallsContainer.appendChild(wallEl);
+    });
+
+    // Score & Turn Text
+    p1WallsText.textContent = gameState.p1.walls;
+    p2WallsText.textContent = gameState.p2.walls;
+    roundText.textContent = `${gameState.currentRound} / ${gameState.totalRounds}`;
+    scoreText.textContent = `${gameState.scores[0]} - ${gameState.scores[1]}`;
+
+    if (gameState.mode === 'vsAI') {
+        diffBadge.style.display = 'flex';
+        diffLabel.textContent = gameState.difficulty;
+        turnText.textContent = gameState.turn === 1 ? 'Sizin Növbəniz' : 'Komputerin Növbəsi';
+        turnDot.style.background = gameState.turn === 1 ? '#4ade80' : '#f87171';
+    } else {
+        diffBadge.style.display = 'none';
+        turnText.textContent = `Oyunçu ${gameState.turn} Növbəsi`;
+        turnDot.style.background = gameState.turn === 1 ? '#5eead4' : '#f87171';
+    }
+}
+
+function getCellEl(r, c) {
+    return document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+}
+
+// Logic: Movement Validation & Pathfinding (BFS)
+function getValidMoves(player) {
+    const cur = player === 1 ? gameState.p1 : gameState.p2;
+    const opp = player === 1 ? gameState.p2 : gameState.p1;
+    const moves = [];
+
+    const dirs = [
+        { dr: -1, dc: 0 }, // Up
+        { dr: 1, dc: 0 },  // Down
+        { dr: 0, dc: -1 }, // Left
+        { dr: 0, dc: 1 }   // Right
+    ];
+
+    dirs.forEach(d => {
+        const nr = cur.r + d.dr;
+        const nc = cur.c + d.dc;
+
+        if (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+            if (!isWallBetween(cur.r, cur.c, nr, nc)) {
+                if (nr === opp.r && nc === opp.c) {
+                    // Jump logic
+                    const jnr = nr + d.dr;
+                    const jnc = nc + d.dc;
+                    if (jnr >= 0 && jnr < 9 && jnc >= 0 && jnc < 9 && !isWallBetween(nr, nc, jnr, jnc)) {
+                        moves.push({ r: jnr, c: jnc });
+                    } else {
+                        // Diagonal jumps if direct jump is blocked
+                        if (d.dr !== 0) {
+                            if (nc - 1 >= 0 && !isWallBetween(nr, nc, nr, nc - 1)) moves.push({ r: nr, c: nc - 1 });
+                            if (nc + 1 < 9 && !isWallBetween(nr, nc, nr, nc + 1)) moves.push({ r: nr, c: nc + 1 });
+                        } else {
+                            if (nr - 1 >= 0 && !isWallBetween(nr, nc, nr - 1, nc)) moves.push({ r: nr - 1, c: nc });
+                            if (nr + 1 < 9 && !isWallBetween(nr, nc, nr + 1, nc)) moves.push({ r: nr + 1, c: nc });
+                        }
                     }
+                } else {
+                    moves.push({ r: nr, c: nc });
                 }
             }
         }
-        return moves;
+    });
+
+    return moves;
+}
+
+function isWallBetween(r1, c1, r2, c2) {
+    if (r1 === r2) { // Horizontal move
+        const minC = Math.min(c1, c2);
+        if (r1 > 0 && gameState.vWalls[r1 - 1][minC]) return true;
+        if (r1 < 8 && gameState.vWalls[r1][minC]) return true;
+    } else if (c1 === c2) { // Vertical move
+        const minR = Math.min(r1, r2);
+        if (c1 > 0 && gameState.hWalls[minR][c1 - 1]) return true;
+        if (c1 < 8 && gameState.hWalls[minR][c1]) return true;
+    }
+    return false;
+}
+
+// Wall Validation
+function canPlaceWall(r, c, type) {
+    if (r < 0 || r >= 8 || c < 0 || c >= 8) return false;
+    if (type === 'horizontal') {
+        if (gameState.hWalls[r][c]) return false;
+        if (c > 0 && gameState.hWalls[r][c - 1]) return false;
+        if (c < 7 && gameState.hWalls[r][c + 1]) return false;
+        if (gameState.vWalls[r][c]) return false; // Overlap cross
+    } else {
+        if (gameState.vWalls[r][c]) return false;
+        if (r > 0 && gameState.vWalls[r - 1][c]) return false;
+        if (r < 7 && gameState.vWalls[r + 1][c]) return false;
+        if (gameState.hWalls[r][c]) return false; // Overlap cross
     }
 
-    function isWallBetween(r1, c1, r2, c2) {
-        if (r1 === r2) {
-            let minC = Math.min(c1, c2);
-            if (r1 > 0 && vWalls[r1 - 1][minC]) return true;
-            if (r1 < 8 && vWalls[r1][minC]) return true;
-        } else if (c1 === c2) {
-            let minR = Math.min(r1, r2);
-            if (c1 > 0 && hWalls[minR][c1 - 1]) return true;
-            if (c1 < 8 && hWalls[minR][c1]) return true;
-        }
-        return false;
-    }
+    // Temporarily place wall to check path existence
+    if (type === 'horizontal') gameState.hWalls[r][c] = true;
+    else gameState.vWalls[r][c] = true;
 
-    function onCellClick(r, c) {
-        if (players[turn].isBot) return;
+    const p1Path = getShortestPath(gameState.p1, 0);
+    const p2Path = getShortestPath(gameState.p2, 8);
 
-        let currP = players[turn];
+    // Revert
+    if (type === 'horizontal') gameState.hWalls[r][c] = false;
+    else gameState.vWalls[r][c] = false;
 
-        if (activeMode === 'move') {
-            let validMoves = getValidMoves(currP);
-            if (validMoves.some(m => m.r === r && m.c === c)) {
-                currP.r = r; 
-                currP.c = c;
+    return p1Path !== null && p2Path !== null;
+}
 
-                if (checkWin(currP)) {
-                    return endGame(currP);
+// Shortest Path Finder (BFS)
+function getShortestPath(start, goalRow) {
+    const queue = [{ r: start.r, c: start.c, dist: 0 }];
+    const visited = Array(9).fill(0).map(() => Array(9).fill(false));
+    visited[start.r][start.c] = true;
+
+    while (queue.length > 0) {
+        const cur = queue.shift();
+        if (cur.r === goalRow) return cur.dist;
+
+        const dirs = [{ dr: -1, dc: 0 }, { dr: 1, dc: 0 }, { dr: 0, dc: -1 }, { dr: 0, dc: 1 }];
+        for (let d of dirs) {
+            const nr = cur.r + d.dr;
+            const nc = cur.c + d.dc;
+            if (nr >= 0 && nr < 9 && nc >= 0 && nc < 9 && !visited[nr][nc]) {
+                if (!isWallBetween(cur.r, cur.c, nr, nc)) {
+                    visited[nr][nc] = true;
+                    queue.push({ r: nr, c: nc, dist: cur.dist + 1 });
                 }
-
-                switchTurn();
-            }
-        } else {
-            let wr = r < 8 ? r : 7;
-            let wc = c < 8 ? c : 7;
-            
-            if (canPlaceWall(wr, wc, activeMode)) {
-                placeWall(wr, wc, activeMode);
-                currP.walls--;
-                setMode('move');
-                switchTurn();
             }
         }
     }
+    return null;
+}
 
-    function checkWin(p) {
-        if (currentGameMode === 'side_by_side') {
-            return p.r === 0;
-        } else {
-            return p.r === 4 && p.c === 4;
+// Click Handlers
+function handleCellClick(r, c) {
+    if (gameState.mode === 'vsAI' && gameState.turn === 2) return;
+
+    const validMoves = getValidMoves(gameState.turn);
+    const isMove = validMoves.some(m => m.r === r && m.c === c);
+
+    if (isMove) {
+        makeMove(gameState.turn, r, c);
+    } else {
+        // Try placing wall if cell corner is clicked
+        const pWalls = gameState.turn === 1 ? gameState.p1.walls : gameState.p2.walls;
+        if (pWalls > 0 && r < 8 && c < 8) {
+            if (canPlaceWall(r, c, gameState.wallMode)) {
+                placeWall(gameState.turn, r, c, gameState.wallMode);
+            }
         }
     }
+}
 
-    function setMode(mode) {
-        activeMode = mode;
-        document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
-        if (mode === 'move') document.getElementById('btn-move').classList.add('active');
-        if (mode === 'H') document.getElementById('btn-h').classList.add('active');
-        if (mode === 'V') document.getElementById('btn-v').classList.add('active');
-        highlightValidMoves();
+function makeMove(player, r, c) {
+    if (player === 1) {
+        gameState.p1.r = r;
+        gameState.p1.c = c;
+    } else {
+        gameState.p2.r = r;
+        gameState.p2.c = c;
     }
 
-    function canPlaceWall(r, c, type) {
-        let currP = players[turn];
-        if (currP.walls <= 0) return false;
-        if (r < 0 || r >= 8 || c < 0 || c >= 8) return false;
+    if (checkWin()) return;
 
-        if (type === 'H') {
-            if (hWalls[r][c] || (c > 0 && hWalls[r][c - 1]) || (c < 7 && hWalls[r][c + 1]) || vWalls[r][c]) return false;
-        } else {
-            if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
-        }
+    gameState.turn = gameState.turn === 1 ? 2 : 1;
+    renderGame();
 
+    if (gameState.mode === 'vsAI' && gameState.turn === 2) {
+        setTimeout(aiTurn, 400);
+    }
+}
+
+function placeWall(player, r, c, type) {
+    if (type === 'horizontal') gameState.hWalls[r][c] = true;
+    else gameState.vWalls[r][c] = true;
+
+    gameState.placedWallsList.push({ r, c, type });
+    if (player === 1) gameState.p1.walls--;
+    else gameState.p2.walls--;
+
+    gameState.turn = gameState.turn === 1 ? 2 : 1;
+    renderGame();
+
+    if (gameState.mode === 'vsAI' && gameState.turn === 2) {
+        setTimeout(aiTurn, 400);
+    }
+}
+
+function checkWin() {
+    if (gameState.p1.r === 0) {
+        gameState.scores[0]++;
+        showWinnerAlert("Təbrik edirik! Siz qalib gəldiniz!");
         return true;
     }
+    if (gameState.p2.r === 8) {
+        gameState.scores[1]++;
+        showWinnerAlert(gameState.mode === 'vsAI' ? "Komputer qalib gəldi!" : "Oyunçu 2 qalib gəldi!");
+        return true;
+    }
+    return false;
+}
 
-    function placeWall(r, c, type) {
-        if (type === 'H') hWalls[r][c] = true;
-        else vWalls[r][c] = true;
-
-        let wallEl = document.createElement('div');
-        wallEl.className = 'wall-placed';
-        
-        let cellW = (340 - 80) / 9;
-        let gap = 10;
-
-        if (type === 'H') {
-            wallEl.style.width = `${cellW * 2 + gap}px`;
-            wallEl.style.height = `8px`;
-            wallEl.style.left = `${10 + c * (cellW + gap)}px`;
-            wallEl.style.top = `${10 + (r + 1) * cellW + r * gap + 1}px`;
+function showWinnerAlert(msg) {
+    setTimeout(() => {
+        alert(msg);
+        if (gameState.currentRound < gameState.totalRounds) {
+            gameState.currentRound++;
+            resetRound();
         } else {
-            wallEl.style.width = `8px`;
-            wallEl.style.height = `${cellW * 2 + gap}px`;
-            wallEl.style.left = `${10 + (c + 1) * cellW + c * gap + 1}px`;
-            wallEl.style.top = `${10 + r * (cellW + gap)}px`;
+            alert(`Oyun bitdi! Yekun Hesab: ${gameState.scores[0]} - ${gameState.scores[1]}`);
+            openMainMenu();
         }
+    }, 100);
+}
 
-        boardEl.appendChild(wallEl);
+function resetRound() {
+    gameState.p1 = { r: 8, c: 4, walls: 10 };
+    gameState.p2 = { r: 0, c: 4, walls: 10 };
+    gameState.turn = 1;
+    gameState.hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+    gameState.vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+    gameState.placedWallsList = [];
+    renderGame();
+}
+
+// ADVANCED AI ENGINE (Smart, Master Mode & Wall Blocking)
+function aiTurn() {
+    const p1Dist = getShortestPath(gameState.p1, 0);
+    const p2Dist = getShortestPath(gameState.p2, 8);
+
+    // Master/Hard logic: If P1 is closer to winning, attempt blocking wall
+    if ((gameState.difficulty === 'Hard' || gameState.difficulty === 'Master') && gameState.p2.walls > 0) {
+        if (p1Dist <= p2Dist || gameState.difficulty === 'Master') {
+            const bestWall = findBestBlockingWall();
+            if (bestWall) {
+                placeWall(2, bestWall.r, bestWall.c, bestWall.type);
+                return;
+            }
+        }
     }
 
-    function switchTurn() {
-        turn = (turn + 1) % players.length;
-        updateUI();
-        renderPawns();
-
-        if (players[turn].isBot) {
-            setTimeout(aiTurn, 600);
-        }
+    // Easy AI: Random move
+    if (gameState.difficulty === 'Easy') {
+        const validMoves = getValidMoves(2);
+        const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+        makeMove(2, randomMove.r, randomMove.c);
+        return;
     }
 
-    function updateUI() {
-        let container = document.getElementById('wall-counters-container');
-        container.innerHTML = '';
+    // Default/Optimal Move using Pathfinding
+    const validMoves = getValidMoves(2);
+    let bestMove = validMoves[0];
+    let minPath = 999;
 
-        players.forEach((p, idx) => {
-            let pill = document.createElement('div');
-            pill.className = `wall-pill p${idx + 1}-pill`;
-            pill.innerHTML = `<div class="wall-pill-icon"></div><span>${p.walls}</span>`;
-            container.appendChild(pill);
-        });
+    validMoves.forEach(m => {
+        const oldP2 = { ...gameState.p2 };
+        gameState.p2.r = m.r;
+        gameState.p2.c = m.c;
+        const d = getShortestPath(gameState.p2, 8);
+        gameState.p2 = oldP2;
 
-        let dot = document.getElementById('turn-dot');
-        let txt = document.getElementById('turn-text');
-        let currP = players[turn];
-
-        if (currP.id === 1) {
-            dot.style.backgroundColor = '#38ef7d';
-            dot.style.boxShadow = '0 0 8px #38ef7d';
-        } else if(currP.id === 2) {
-            dot.style.backgroundColor = '#ff5252';
-            dot.style.boxShadow = '0 0 8px #ff5252';
-        } else if(currP.id === 3) {
-            dot.style.backgroundColor = '#38bdf8';
-            dot.style.boxShadow = '0 0 8px #38bdf8';
-        } else {
-            dot.style.backgroundColor = '#f59e0b';
-            dot.style.boxShadow = '0 0 8px #f59e0b';
+        if (d !== null && d < minPath) {
+            minPath = d;
+            bestMove = m;
         }
+    });
 
-        txt.textContent = currP.isBot ? `${currP.name} (Bot)` : `${currP.name}`;
-    }
+    makeMove(2, bestMove.r, bestMove.c);
+}
 
-    function aiTurn() {
-        let bot = players[turn];
-        let pMoves = getValidMoves(bot);
+function findBestBlockingWall() {
+    const currentP1Path = getShortestPath(gameState.p1, 0);
+    let maxDelay = 0;
+    let bestWall = null;
 
-        if (pMoves.length > 0) {
-            let targetR = 4, targetC = 4;
-            let bestMove = pMoves[0];
-            let minDistance = 999;
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            ['horizontal', 'vertical'].forEach(type => {
+                if (canPlaceWall(r, c, type)) {
+                    if (type === 'horizontal') gameState.hWalls[r][c] = true;
+                    else gameState.vWalls[r][c] = true;
 
-            pMoves.forEach(m => {
-                let dist = Math.abs(m.r - targetR) + Math.abs(m.c - targetC);
-                if(dist < minDistance) {
-                    minDistance = dist;
-                    bestMove = m;
+                    const newP1Path = getShortestPath(gameState.p1, 0);
+                    const newP2Path = getShortestPath(gameState.p2, 8);
+
+                    if (type === 'horizontal') gameState.hWalls[r][c] = false;
+                    else gameState.vWalls[r][c] = false;
+
+                    if (newP1Path !== null && newP2Path !== null) {
+                        const delay = newP1Path - currentP1Path;
+                        if (delay > maxDelay) {
+                            maxDelay = delay;
+                            bestWall = { r, c, type };
+                        }
+                    }
                 }
             });
-
-            bot.r = bestMove.r;
-            bot.c = bestMove.c;
-
-            if (checkWin(bot)) return endGame(bot);
         }
-
-        switchTurn();
     }
+    return bestWall;
+}
 
-    function sendEmoji(emojiChar) {
-        let activePawn = document.getElementById(`pawn-player-${turn}`);
-        if(!activePawn) return;
+// Modal Screen Views
+function openMainMenu() {
+    modalCard.innerHTML = `
+        <div class="modal-header">
+            <div class="modal-title-group">
+                <span class="modal-subtitle">QUORIDOR</span>
+                <span class="modal-title">Oyun Rejimini Seçin</span>
+            </div>
+        </div>
+        <div class="menu-list">
+            <div class="menu-item" onclick="openGameSettings('vsAI')">
+                <span>🤖 Komputerə Qarşı</span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="openGameSettings('local2P')">
+                <span>📱 1 Telefonda 2 Nəfər</span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="openGameSettings('onlineRoom')">
+                <span>🏠 Onlayn Otaq (Dostla)</span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="openGameSettings('onlineMatch')">
+                <span>🌐 Xarici Rəqiblə Onlayn</span>
+                <span>→</span>
+            </div>
+        </div>
+    `;
+    modalOverlay.classList.add('active');
+}
 
-        let popup = document.createElement('div');
-        popup.className = 'emoji-popup';
-        popup.textContent = emojiChar;
+function openGameSettings(mode) {
+    gameState.mode = mode;
+    const isAI = mode === 'vsAI';
 
-        activePawn.appendChild(popup);
+    modalCard.innerHTML = `
+        <div class="modal-header">
+            <button class="icon-btn" onclick="openMainMenu()" style="width:32px;height:32px;">←</button>
+            <div class="modal-title-group" style="margin-left:8px;">
+                <span class="modal-subtitle">${mode.toUpperCase()}</span>
+                <span class="modal-title">Oyun Tənzimləmələri</span>
+            </div>
+        </div>
 
-        setTimeout(() => {
-            popup.remove();
-        }, 1200);
-    }
+        ${isAI ? `
+            <div class="section-label">⚡ ÇƏTİNLİK DƏRƏCƏSİ</div>
+            <div class="grid-2x2">
+                <button class="opt-btn ${gameState.difficulty === 'Easy' ? 'active' : ''}" onclick="setDiff('Easy')">Easy</button>
+                <button class="opt-btn ${gameState.difficulty === 'Medium' ? 'active' : ''}" onclick="setDiff('Medium')">Medium</button>
+                <button class="opt-btn ${gameState.difficulty === 'Hard' ? 'active' : ''}" onclick="setDiff('Hard')">Hard</button>
+                <button class="opt-btn master ${gameState.difficulty === 'Master' ? 'active' : ''}" onclick="setDiff('Master')">⭐ Master</button>
+            </div>
+        ` : ''}
 
-    function endGame(winner) {
-        currentUser.games++;
-        if(winner.id === 1) {
-            currentUser.wins++;
-            currentUser.score += 50;
-            document.getElementById('modal-title').textContent = "Təbriklər! 🎉";
-            document.getElementById('modal-desc').textContent = `${winner.name} qazandı (+50 Xal)!`;
-        } else {
-            document.getElementById('modal-title').textContent = "Oyun Bitdi";
-            document.getElementById('modal-desc').textContent = `${winner.name} qazandı!`;
-        }
-        saveUserData();
-        updateUserUI();
-        document.getElementById('modal').classList.add('active');
-    }
+        <div class="section-label">🔄 RAUND SAYI</div>
+        <div class="round-selector">
+            <div class="round-opt ${gameState.totalRounds === 1 ? 'active' : ''}" onclick="setRounds(1)">1</div>
+            <div class="round-opt ${gameState.totalRounds === 3 ? 'active' : ''}" onclick="setRounds(3)">3</div>
+            <div class="round-opt ${gameState.totalRounds === 5 ? 'active' : ''}" onclick="setRounds(5)">5</div>
+        </div>
 
-    function restartGame() {
-        turn = 0;
-        activeMode = 'move';
-        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        document.querySelectorAll('.wall-placed').forEach(w => w.remove());
-        document.getElementById('modal').classList.remove('active');
+        <button class="start-btn" onclick="startGame()">▶ Oyuna Başla</button>
+    `;
+}
 
-        // Rejimə uyğun oyunçular
-        if(currentGameMode === 'vs_bot') {
-            players = [
-                { id: 1, name: currentUser.name || "Siz", r: 8, c: 4, walls: 10, class: 'pawn-p1', isBot: false },
-                { id: 2, name: 'Bot AI', r: 0, c: 4, walls: 10, class: 'pawn-p2', isBot: true }
-            ];
-        } else if(currentGameMode === 'two_players') {
-            players = [
-                { id: 1, name: '1-ci Oyunçu', r: 8, c: 4, walls: 10, class: 'pawn-p1', isBot: false },
-                { id: 2, name: '2-ci Oyunçu', r: 0, c: 4, walls: 10, class: 'pawn-p2', isBot: false }
-            ];
-        } else if(currentGameMode === 'four_players') {
-            players = [
-                { id: 1, name: 'Mavi', r: 8, c: 4, walls: 5, class: 'pawn-p1', isBot: false },
-                { id: 2, name: 'Qırmızı', r: 0, c: 4, walls: 5, class: 'pawn-p2', isBot: false },
-                { id: 3, name: 'Səma', r: 4, c: 0, walls: 5, class: 'pawn-p3', isBot: false },
-                { id: 4, name: 'Sarı', r: 4, c: 8, walls: 5, class: 'pawn-p4', isBot: false }
-            ];
-        } else if(currentGameMode === 'side_by_side') {
-            players = [
-                { id: 1, name: '1-ci Oyunçu', r: 8, c: 2, walls: 10, class: 'pawn-p1', isBot: false },
-                { id: 2, name: '2-ci Oyunçu', r: 8, c: 6, walls: 10, class: 'pawn-p2', isBot: false }
-            ];
-        }
+function setDiff(diff) {
+    gameState.difficulty = diff;
+    openGameSettings(gameState.mode);
+}
 
-        setMode('move');
-        initBoard();
-    }
+function setRounds(r) {
+    gameState.totalRounds = r;
+    openGameSettings(gameState.mode);
+}
+
+function startGame() {
+    modalOverlay.classList.remove('active');
+    gameState.scores = [0, 0];
+    gameState.currentRound = 1;
+    resetRound();
+}
+
+// Wall Toggle Buttons
+btnHoriz.addEventListener('click', () => {
+    gameState.wallMode = 'horizontal';
+    btnHoriz.classList.add('active');
+    btnVert.classList.remove('active');
+});
+
+btnVert.addEventListener('click', () => {
+    gameState.wallMode = 'vertical';
+    btnVert.classList.add('active');
+    btnHoriz.classList.remove('active');
+});
+
+// Event Listeners for Header
+document.getElementById('btnBack').addEventListener('click', openMainMenu);
+document.getElementById('btnSettings').addEventListener('click', () => openGameSettings(gameState.mode));
+document.getElementById('btnReset').addEventListener('click', resetRound);
+
+// Boot
+initBoardUI();
+openMainMenu();
 </script>
 </body>
 </html>
