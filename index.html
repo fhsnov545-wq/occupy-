@@ -34,9 +34,11 @@
             position: relative;
         }
 
+        /* Screen Switcher */
         .screen { display: none; flex-direction: column; gap: 14px; width: 100%; }
         .screen.active { display: flex; }
 
+        /* Header Navigation Styles */
         .screen-header {
             display: flex;
             justify-content: space-between;
@@ -44,7 +46,10 @@
             padding: 4px 0;
         }
 
-        .header-title { font-size: 18px; font-weight: 800; }
+        .header-title {
+            font-size: 18px;
+            font-weight: 800;
+        }
 
         .icon-btn-rounded {
             width: 38px;
@@ -57,8 +62,10 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            position: relative;
         }
 
+        /* LOGIN SCREEN STYLES */
         .login-card {
             background: #161926;
             border: 1px solid #23283b;
@@ -85,7 +92,9 @@
             -webkit-user-select: auto;
         }
 
-        .username-input:focus { border-color: #38ef7d; }
+        .username-input:focus {
+            border-color: #38ef7d;
+        }
 
         .btn-submit {
             width: 100%;
@@ -99,6 +108,7 @@
             cursor: pointer;
         }
 
+        /* MAIN MENU STYLES */
         .profile-header {
             display: flex;
             justify-content: space-between;
@@ -166,6 +176,7 @@
         }
 
         .badge-streak { font-size: 12px; color: #f59e0b; font-weight: 700; }
+
         .card-main-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
         .card-sub { font-size: 12px; color: #6c757d; }
 
@@ -188,38 +199,8 @@
             font-size: 18px;
         }
 
-        /* DIFFICULTY STYLES */
-        .diff-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 14px;
-            padding: 6px;
-        }
-
-        .diff-btn {
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid transparent;
-            background: #0b0f17;
-            color: #8c96a8;
-            font-weight: 800;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .diff-btn.active[data-diff="easy"] { background: rgba(56, 239, 125, 0.15); color: #38ef7d; border-color: #38ef7d; }
-        .diff-btn.active[data-diff="medium"] { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: #f59e0b; }
-        .diff-btn.active[data-diff="hard"] { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: #ef4444; }
-        .diff-btn.active[data-diff="master"] { background: rgba(168, 85, 247, 0.15); color: #a855f7; border-color: #a855f7; }
-
-        .mode-toggle-container, .player-count-container {
+        /* PASS & PLAY SETUP STYLES */
+        .mode-toggle-container {
             display: flex;
             background: #161926;
             border: 1px solid #23283b;
@@ -228,7 +209,7 @@
             gap: 4px;
         }
 
-        .mode-toggle-btn, .player-count-btn {
+        .mode-toggle-btn {
             flex: 1;
             padding: 8px 4px;
             border-radius: 10px;
@@ -242,17 +223,78 @@
             align-items: center;
             justify-content: center;
             gap: 4px;
+            transition: all 0.2s ease;
         }
 
         .mode-toggle-btn.active {
             background: #23283b;
             color: #f59e0b;
             border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .player-count-container {
+            display: flex;
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .player-count-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: #6c757d;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .player-count-btn.active {
             background: #38ef7d;
             color: #0b0f17;
+            box-shadow: 0 4px 12px rgba(56, 239, 125, 0.3);
+        }
+
+        /* DIFFICULTY STYLES (yeni) */
+        .diff-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .diff-btn {
+            padding: 10px;
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 12px;
+            color: #8c96a8;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .diff-btn.active {
+            border-color: #38ef7d;
+            color: #ffffff;
+            background: rgba(56, 239, 125, 0.1);
+        }
+
+        .diff-btn.master.active {
+            border-color: #f59e0b;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
         }
 
         .player-setup-card {
@@ -265,20 +307,212 @@
             gap: 10px;
         }
 
-        .player-setup-header { display: flex; justify-content: space-between; align-items: center; }
-        .player-badge {
-            width: 26px; height: 26px; border-radius: 50%;
-            background: #23283b; display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 12px;
+        .player-setup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .color-palette { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+        .player-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #23283b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
         .color-circle {
-            width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.15s ease, border 0.15s ease;
             border: 2px solid transparent;
         }
-        .color-circle.selected { transform: scale(1.15); border-color: #ffffff; }
 
+        .color-circle.selected {
+            transform: scale(1.15);
+            border-color: #ffffff;
+            box-shadow: 0 0 8px rgba(255,255,255,0.4);
+        }
+
+        /* ONLINE LOBBY STYLES */
+        .user-stats-card {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .points-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 8px 16px;
+            text-align: center;
+        }
+
+        .points-value { font-size: 18px; font-weight: 900; color: #f59e0b; }
+        .points-label { font-size: 9px; color: #6c757d; font-weight: 700; letter-spacing: 1px; }
+
+        .lobby-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-action {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .btn-action.primary {
+            background: rgba(56, 239, 125, 0.08);
+            border-color: rgba(56, 239, 125, 0.3);
+            color: #38ef7d;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #f59e0b;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        .room-item {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .room-info { display: flex; align-items: center; gap: 12px; }
+        .room-title { font-size: 14px; font-weight: 700; }
+        .room-host { font-size: 11px; color: #6c757d; }
+
+        .btn-join {
+            background: #23283b;
+            border: 1px solid #323952;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* ACCOUNT STYLES */
+        .account-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .account-item {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .account-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .danger-text { color: #ff5252; }
+
+        /* LEADERBOARD & STATS STYLES */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .stat-box {
+            background: #202538;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-num { font-size: 16px; font-weight: 800; }
+        .stat-lbl { font-size: 9px; color: #6c757d; font-weight: 700; margin-top: 2px; }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 16px;
+            padding: 12px;
+        }
+
+        .lb-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 4px;
+            border-bottom: 1px solid #1f2436;
+        }
+
+        .lb-item:last-child { border-bottom: none; }
+
+        .lb-left { display: flex; align-items: center; gap: 10px; }
+        .lb-rank {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            background: #23283b;
+        }
+
+        .lb-rank.top-1 { background: #f59e0b; color: #000; }
+        .lb-user { font-size: 13px; font-weight: 700; }
+        .lb-score { font-size: 13px; font-weight: 800; color: #f59e0b; }
+
+        /* GAME PLAY STYLES */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -290,10 +524,14 @@
             background: #161926;
             border: 1px solid #23283b;
             color: #a0a6b8;
-            width: 38px; height: 38px;
+            width: 38px;
+            height: 38px;
             border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
         }
 
         .game-mode-indicator {
@@ -301,8 +539,11 @@
             border: 1px solid #23283b;
             padding: 8px 16px;
             border-radius: 10px;
-            font-size: 13px; font-weight: 700;
-            display: flex; align-items: center; gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .card-game-info {
@@ -310,39 +551,63 @@
             border: 1px solid #23283b;
             border-radius: 14px;
             padding: 10px 14px;
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 13px; font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .turn-info { display: flex; align-items: center; gap: 8px; }
         .dot-indicator {
-            width: 10px; height: 10px; border-radius: 50%;
-            background-color: #38ef7d; box-shadow: 0 0 8px #38ef7d;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #38ef7d;
+            box-shadow: 0 0 8px #38ef7d;
         }
 
         .wall-counters { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
         .wall-pill {
-            background: #1f2436; padding: 2px 6px; border-radius: 6px;
-            display: flex; align-items: center; gap: 4px; font-size: 11px;
+            background: #1f2436;
+            padding: 2px 6px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
             border: 1px solid #2d344b;
         }
 
         .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
 
+        /* Board Styling */
         #board-wrapper {
             position: relative;
             background: #161926;
             border: 1px solid #23283b;
             border-radius: 16px;
             padding: 10px;
-            display: flex; flex-direction: column; align-items: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             touch-action: none;
         }
 
         .finish-banner {
-            display: none; width: 340px; text-align: center; padding: 6px; margin-bottom: 8px;
-            background: rgba(56, 239, 125, 0.1); border: 1px dashed #38ef7d;
-            border-radius: 8px; font-size: 12px; font-weight: 800; color: #38ef7d; letter-spacing: 2px;
+            display: none;
+            width: 340px;
+            text-align: center;
+            padding: 6px;
+            margin-bottom: 8px;
+            background: rgba(56, 239, 125, 0.1);
+            border: 1px dashed #38ef7d;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #38ef7d;
+            letter-spacing: 2px;
         }
 
         #board {
@@ -350,17 +615,31 @@
             grid-template-columns: repeat(9, 1fr);
             grid-template-rows: repeat(9, 1fr);
             gap: 10px;
-            width: 340px; height: 340px;
+            width: 340px;
+            height: 340px;
             position: relative;
         }
 
         .cell {
-            background: #23293e; border-radius: 6px; position: relative;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            background: #23293e;
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
 
-        .cell.center-cell::before { content: "👑"; font-size: 16px; opacity: 0.8; }
-        .cell.finish-cell { background: rgba(56, 239, 125, 0.12); border: 1px dashed #38ef7d; }
+        .cell.center-cell::before {
+            content: "👑";
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .cell.finish-cell {
+            background: rgba(56, 239, 125, 0.12);
+            border: 1px dashed #38ef7d;
+        }
 
         .cell.valid-move {
             background: rgba(56, 239, 125, 0.15);
@@ -368,55 +647,94 @@
         }
 
         .cell.valid-move::after {
-            content: ''; width: 8px; height: 8px; border-radius: 50%;
-            background: #38ef7d; box-shadow: 0 0 6px #38ef7d;
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #38ef7d;
+            box-shadow: 0 0 6px #38ef7d;
         }
 
         .pawn {
-            width: 65%; height: 65%; border-radius: 50%;
-            position: absolute; transition: all 0.25s ease; z-index: 5;
+            width: 65%;
+            height: 65%;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5;
         }
 
         .wall-placed {
-            position: absolute; border-radius: 3px; z-index: 10;
+            position: absolute;
             box-shadow: 0 0 8px rgba(230, 126, 34, 0.6);
+            border-radius: 3px;
+            z-index: 10;
         }
 
         .controls { display: flex; gap: 10px; width: 100%; }
 
         .btn-mode {
-            flex: 1; padding: 12px; background: #161926; border: 1px solid #23283b;
-            color: #8c96a8; border-radius: 12px; font-weight: 700; font-size: 13px;
-            display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+            flex: 1;
+            padding: 12px;
+            background: #161926;
+            border: 1px solid #23283b;
+            color: #8c96a8;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
         }
 
         .btn-mode.active {
-            background: #2563eb; color: #ffffff; border-color: #3b82f6;
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #3b82f6;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
+        /* Modals */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8); display: flex; align-items: center;
-            justify-content: center; z-index: 100; opacity: 0; pointer-events: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal {
-            background: #181b29; border: 1px solid #2a3148;
-            border-radius: 20px; padding: 24px; text-align: center;
-            max-width: 320px; width: 90%;
+            background: #181b29;
+            border: 1px solid #2a3148;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
         }
 
         .modal h2 { font-size: 20px; margin-bottom: 10px; }
         .modal p { color: #a0a6b8; font-size: 14px; margin-bottom: 20px; }
 
         .modal-btn {
-            background: linear-gradient(135deg, #11998e, #38ef7d); color: #fff;
-            border: none; padding: 12px 24px; border-radius: 10px;
-            font-weight: 700; font-size: 14px; cursor: pointer; width: 100%;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
         }
     </style>
 </head>
@@ -424,21 +742,28 @@
 
   <div class="app-container">
 
-    <!-- LOGIN SCREEN -->
+    <!-- 0. LOGIN / ACCOUNT CREATION SCREEN -->
     <div id="screen-login" class="screen active">
       <div style="text-align: center; margin-top: 30px;">
         <h1 style="font-size: 28px; font-weight: 900; letter-spacing: 2px;">WAYBLOCK</h1>
-        <p style="color: #6c757d; font-size: 13px; margin-top: 4px;">Quoridor Game</p>
+        <p style="color: #6c757d; font-size: 13px; margin-top: 4px;">Online Quoridor Multiplayer</p>
       </div>
 
       <div class="login-card" style="margin-top: 20px;">
         <div class="avatar-logo" style="width: 60px; height: 60px; font-size: 24px;">🎮</div>
+        <div>
+          <h2 style="font-size: 18px; font-weight: 800;">Hesab Yaradın</h2>
+          <p style="font-size: 12px; color: #6c757d; margin-top: 4px;">Oyuna daxil olmaq üçün istifadəçi adınızı daxil edin</p>
+        </div>
+
         <input type="text" id="input-username" class="username-input" placeholder="İstifadəçi adınızı yazın..." maxlength="15">
+
         <button class="btn-submit" onclick="loginUser()">Oyuna Başla</button>
+        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #23283b;" onclick="loginAsGuest()">Təsadüfi Ad İlə Gir</button>
       </div>
     </div>
 
-    <!-- MAIN MENU -->
+    <!-- 1. MAIN MENU SCREEN -->
     <div id="screen-menu" class="screen">
       <div class="profile-header">
         <div class="user-info">
@@ -448,9 +773,24 @@
             <span class="username" id="display-username">Oyunçu</span>
           </div>
         </div>
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
       </div>
 
-      <div class="grid-2" style="margin-top: 10px;">
+      <div class="menu-card" style="background: linear-gradient(180deg, #1e293b 0%, #161926 100%);" onclick="navigateTo('screen-lobby')">
+        <div class="status-row">
+          <span class="badge-online">ONLINE</span>
+          <span class="badge-streak" id="user-streak">🔥 Streak: 0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+          <div>
+            <div class="card-main-title">Play Online</div>
+            <div class="card-sub">Onlayn oyunçularla oyna</div>
+          </div>
+          <div class="icon-btn-rounded">→</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
         <div class="menu-card mode-card" onclick="openSetup('vs_bot')">
           <div class="mode-icon">🤖</div>
           <div>
@@ -463,31 +803,29 @@
           <div class="mode-icon">👥</div>
           <div>
             <div class="card-main-title" style="font-size: 15px;">Çox Oyunçu</div>
-            <div class="card-sub">2-4 Oyunçu</div>
+            <div class="card-sub">2, 3 və ya 4 Oyunçu</div>
           </div>
         </div>
       </div>
+
+      <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screen-stats')">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 18px;">🏆</span>
+          <span style="font-weight: 700; font-size: 15px;">Liderlər Lövhəsi</span>
+        </div>
+        <span style="color: #6c757d;">›</span>
+      </div>
     </div>
 
-    <!-- SETUP SCREEN -->
+    <!-- 1.5 SETUP SCREEN (BOT & MULTI PLAYERS) -->
     <div id="screen-pass-setup" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
         <div style="text-align: center;">
-            <div class="header-title" id="setup-title">Oyun Tənzimləmələri</div>
+            <div class="header-title" id="setup-title">Game Settings</div>
+            <div style="font-size: 11px; color: #6c757d;">Rejim və ayarları seçin</div>
         </div>
         <div></div>
-      </div>
-
-      <!-- BOT DIFFICULTY SELECTOR -->
-      <div id="diff-box-wrapper" style="display: none;">
-        <div style="font-size: 11px; color: #6c757d; font-weight: 800; margin-bottom: 4px;">ÇƏTİNLİK DƏRƏCƏSİ</div>
-        <div class="diff-container">
-            <button class="diff-btn active" data-diff="easy" onclick="setBotDiff('easy')">📊 Easy</button>
-            <button class="diff-btn" data-diff="medium" onclick="setBotDiff('medium')">📊 Medium</button>
-            <button class="diff-btn" data-diff="hard" onclick="setBotDiff('hard')">📊 Hard</button>
-            <button class="diff-btn" data-diff="master" onclick="setBotDiff('master')">👑 Master</button>
-        </div>
       </div>
 
       <!-- Player Count Selector -->
@@ -499,17 +837,160 @@
 
       <!-- Mode Selector -->
       <div class="mode-toggle-container">
-        <button class="mode-toggle-btn active" id="btn-mode-classic" onclick="setGameRule('classic')">🚩 Classic</button>
-        <button class="mode-toggle-btn" id="btn-mode-center" onclick="setGameRule('center_race')">👑 Center</button>
-        <button class="mode-toggle-btn" id="btn-mode-finish" onclick="setGameRule('finish_race')">🏁 Finish</button>
+        <button class="mode-toggle-btn active" id="btn-mode-classic" onclick="setGameRule('classic')">
+            <span>🚩</span> Classic
+        </button>
+        <button class="mode-toggle-btn" id="btn-mode-center" onclick="setGameRule('center_race')">
+            <span>👑</span> Center
+        </button>
+        <button class="mode-toggle-btn" id="btn-mode-finish" onclick="setGameRule('finish_race')">
+            <span>🏁</span> Finish
+        </button>
       </div>
 
-      <div id="players-config-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto;"></div>
+      <!-- Bot Difficulty Selector (yalnız Bot rejimində görünür) -->
+      <div id="bot-difficulty-box" style="display: none; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;">DIFFICULTY</div>
+        <div class="diff-grid">
+            <button class="diff-btn" id="btn-diff-easy" onclick="setDifficulty('easy')">📊 Easy</button>
+            <button class="diff-btn active" id="btn-diff-medium" onclick="setDifficulty('medium')">📊 Medium</button>
+            <button class="diff-btn" id="btn-diff-hard" onclick="setDifficulty('hard')">📊 Hard</button>
+            <button class="diff-btn master" id="btn-diff-master" onclick="setDifficulty('master')">🎗️ Master</button>
+        </div>
+      </div>
+
+      <!-- Player Config Container -->
+      <div id="players-config-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto;">
+        <!-- Dynamic Player Cards Will Render Here -->
+      </div>
 
       <button class="btn-submit" style="margin-top: 6px;" onclick="confirmAndStartGame()">Oyuna Başla</button>
     </div>
 
-    <!-- GAME SCREEN -->
+    <!-- 2. ONLINE LOBBY SCREEN -->
+    <div id="screen-lobby" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Online Lobby</div>
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
+      </div>
+
+      <div class="user-stats-card">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="avatar-logo" id="lobby-avatar">👤</div>
+          <div>
+            <div class="username" id="lobby-username">Oyunçu</div>
+            <div class="card-sub" style="margin-top: 2px;">Qələbə Hazırdır</div>
+          </div>
+        </div>
+        <div class="points-box">
+          <div class="points-value" id="lobby-points">0</div>
+          <div class="points-label">POINTS</div>
+        </div>
+      </div>
+
+      <div class="lobby-actions">
+        <button class="btn-action primary" onclick="startGame('multi_players')">
+          <span style="font-size: 20px;">⊕</span>
+          <span>Otaq Yarat</span>
+        </button>
+        <button class="btn-action" onclick="startGame('multi_players')">
+          <span style="font-size: 20px;">👥</span>
+          <span>Açıq Otaqlar</span>
+        </button>
+      </div>
+
+      <div class="section-label">MÖVCUD OTAQLAR</div>
+
+      <div id="room-list" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="room-item">
+          <div class="room-info">
+            <div>
+              <div class="room-title">Otaq #101</div>
+              <div class="room-host">Gözlənilir...</div>
+            </div>
+          </div>
+          <button class="btn-join" onclick="startGame('multi_players')">Qoşul</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MY ACCOUNT SCREEN -->
+    <div id="screen-account" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Hesabım</div>
+        <div></div>
+      </div>
+
+      <div class="user-stats-card">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="avatar-logo" id="account-avatar">👤</div>
+          <div>
+            <div class="card-sub">İstifadəçi Adı</div>
+            <div class="username" style="font-size: 16px;" id="account-username">Oyunçu</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="account-menu">
+        <div class="account-item" onclick="logout()">
+          <div class="account-item-left danger-text">
+            <span>🚪</span>
+            <span>Hesabdan Çıx</span>
+          </div>
+          <span class="danger-text">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. LEADERBOARD & STATS SCREEN -->
+    <div id="screen-stats" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Statistika</div>
+        <div></div>
+      </div>
+
+      <div class="user-stats-card" style="flex-direction: column; align-items: stretch; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="avatar-logo" id="stats-avatar">👤</div>
+          <div>
+            <div class="username" id="stats-username">Oyunçu</div>
+          </div>
+        </div>
+
+        <div class="stats-summary">
+          <div class="stat-box">
+            <div class="stat-num" id="stats-score">0</div>
+            <div class="stat-lbl">XAL</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="stats-games">0</div>
+            <div class="stat-lbl">OYUN</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="stats-wins">0</div>
+            <div class="stat-lbl">QƏLƏBƏ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="leaderboard-list">
+        <div class="lb-item">
+          <div class="lb-left">
+            <div class="lb-rank top-1">1</div>
+            <div class="avatar-logo" style="width: 28px; height: 28px; font-size: 12px;">★</div>
+            <div>
+              <div class="lb-user" id="lb-current-user">Oyunçu</div>
+            </div>
+          </div>
+          <div class="lb-score" id="lb-current-score">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. GAME PLAY SCREEN -->
     <div id="screen-game" class="screen">
       <div class="game-header">
         <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
@@ -522,7 +1003,9 @@
           <div class="dot-indicator" id="turn-dot"></div>
           <span id="turn-text">Sizin növbəniz</span>
         </div>
-        <div class="wall-counters" id="wall-counters-container"></div>
+        <div class="wall-counters" id="wall-counters-container">
+          <!-- Dynamic Wall Counters -->
+        </div>
       </div>
 
       <div id="board-wrapper">
@@ -539,7 +1022,7 @@
 
   </div>
 
-  <!-- MODAL -->
+  <!-- GAME END MODAL -->
   <div class="modal-overlay" id="modal">
       <div class="modal">
           <h2 id="modal-title">Qələbə!</h2>
@@ -549,54 +1032,163 @@
   </div>
 
 <script>
-    let currentUser = { name: "Oyunçu" };
+    // USER STATE
+    let currentUser = {
+        name: "",
+        score: 0,
+        games: 0,
+        wins: 0,
+        streak: 0
+    };
 
-    const COLOR_OPTIONS = ['#5865F2', '#E74C3C', '#2ECC71', '#F1C40F', '#E91E63', '#00BCD4'];
+    // SETUP STATE
+    const COLOR_OPTIONS = [
+        '#5865F2', '#E74C3C', '#2ECC71', '#F1C40F', 
+        '#E91E63', '#00BCD4', '#FFFFFF', '#8BC34A', 
+        '#9B59B6', '#1ABC9C'
+    ];
 
     let gameSetup = {
-        mode: 'vs_bot',
-        botDiff: 'easy', // 'easy', 'medium', 'hard', 'master'
-        playerCount: 2,
-        rule: 'classic',
+        mode: 'multi_players', // 'vs_bot' or 'multi_players'
+        playerCount: 2,       // 2, 3, or 4
+        rule: 'classic',      // 'classic', 'center_race', or 'finish_race'
+        difficulty: 'medium', // 'easy', 'medium', 'hard', 'master'
         players: [
-            { name: 'Oyunçu 1', color: '#5865F2' },
-            { name: 'Bot', color: '#E74C3C' },
-            { name: 'Oyunçu 3', color: '#2ECC71' },
-            { name: 'Oyunçu 4', color: '#F1C40F' }
+            { name: 'Player 1', color: '#5865F2' },
+            { name: 'Player 2', color: '#E74C3C' },
+            { name: 'Player 3', color: '#2ECC71' },
+            { name: 'Player 4', color: '#F1C40F' }
         ]
     };
 
+    // Auto load user if saved before
     window.onload = function() {
-        let saved = localStorage.getItem('wayblock_user');
-        if(saved) currentUser = JSON.parse(saved);
-        document.getElementById('display-username').textContent = currentUser.name;
-        navigateTo('screen-menu');
+        let savedUser = localStorage.getItem('wayblock_user');
+        if(savedUser) {
+            currentUser = JSON.parse(savedUser);
+            updateUserUI();
+            navigateTo('screen-menu');
+        }
     };
 
-    function loginUser() {
-        let name = document.getElementById('input-username').value.trim();
-        if(name) currentUser.name = name;
+    function saveUserData() {
         localStorage.setItem('wayblock_user', JSON.stringify(currentUser));
-        document.getElementById('display-username').textContent = currentUser.name;
+    }
+
+    function loginUser() {
+        let inputName = document.getElementById('input-username').value.trim();
+        if(inputName.length < 2) {
+            alert("Zəhmət olmasa ən azı 2 hərfdən ibarət ad yazın.");
+            return;
+        }
+        currentUser.name = inputName;
+        saveUserData();
+        updateUserUI();
         navigateTo('screen-menu');
+    }
+
+    function loginAsGuest() {
+        currentUser.name = "Oyunçu_" + Math.floor(Math.random() * 899 + 100);
+        saveUserData();
+        updateUserUI();
+        navigateTo('screen-menu');
+    }
+
+    function logout() {
+        localStorage.removeItem('wayblock_user');
+        currentUser = { name: "", score: 0, games: 0, wins: 0, streak: 0 };
+        document.getElementById('input-username').value = "";
+        navigateTo('screen-login');
+    }
+
+    function updateUserUI() {
+        const nameEls = ['display-username', 'lobby-username', 'account-username', 'stats-username', 'lb-current-user'];
+        nameEls.forEach(id => {
+            let el = document.getElementById(id);
+            if(el) el.textContent = currentUser.name;
+        });
+
+        const avatarEls = ['user-avatar', 'lobby-avatar', 'account-avatar', 'stats-avatar'];
+        avatarEls.forEach(id => {
+            let el = document.getElementById(id);
+            if(el) el.textContent = currentUser.name.charAt(0).toUpperCase();
+        });
+
+        document.getElementById('stats-score').textContent = currentUser.score;
+        document.getElementById('stats-games').textContent = currentUser.games;
+        document.getElementById('stats-wins').textContent = currentUser.wins;
+        document.getElementById('lobby-points').textContent = currentUser.score;
+        document.getElementById('lb-current-score').textContent = currentUser.score;
+    }
+
+    // SETUP FUNCTIONS FOR BOTH BOT AND MULTI PLAYERS
+    function renderPlayersSetupUI() {
+        const container = document.getElementById('players-config-list');
+        container.innerHTML = '';
+
+        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
+
+        for (let i = 0; i < count; i++) {
+            let p = gameSetup.players[i];
+            let isBot = (gameSetup.mode === 'vs_bot' && i === 1);
+
+            let card = document.createElement('div');
+            card.className = 'player-setup-card';
+            card.innerHTML = `
+                <div class="player-setup-header">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="player-badge" style="background: ${p.color}; color: #fff;">${i + 1}</div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 800;">${isBot ? 'Bot (' + gameSetup.difficulty.toUpperCase() + ')' : 'Oyunçu ' + (i + 1)}</div>
+                        </div>
+                    </div>
+                    <div id="p-preview-${i}" style="width: 14px; height: 14px; border-radius: 50%; background: ${p.color};"></div>
+                </div>
+                <div>
+                    <input type="text" id="p-name-input-${i}" class="username-input" style="text-align: left; padding: 8px 12px; font-size: 12px;" 
+                           value="${isBot ? 'Bot (' + gameSetup.difficulty.toUpperCase() + ')' : p.name}" ${isBot ? 'disabled' : ''}>
+                </div>
+                <div>
+                    <div style="font-size: 9px; color: #6c757d; font-weight: 800; margin-bottom: 4px;">RƏNG SEÇİMİ</div>
+                    <div class="color-palette" id="p-palette-${i}"></div>
+                </div>
+            `;
+            container.appendChild(card);
+
+            // Palette Circles
+            let pal = card.querySelector(`#p-palette-${i}`);
+            COLOR_OPTIONS.forEach(color => {
+                let c = document.createElement('div');
+                c.className = `color-circle ${color === p.color ? 'selected' : ''}`;
+                c.style.background = color;
+                c.onclick = () => selectColorForPlayer(i, color);
+                pal.appendChild(c);
+            });
+        }
     }
 
     function openSetup(mode) {
         gameSetup.mode = mode;
-        gameSetup.players[0].name = currentUser.name;
+        if(currentUser.name) {
+            gameSetup.players[0].name = currentUser.name;
+        }
 
-        document.getElementById('diff-box-wrapper').style.display = mode === 'vs_bot' ? 'block' : 'none';
-        document.getElementById('player-count-box').style.display = mode === 'vs_bot' ? 'none' : 'flex';
+        let titleEl = document.getElementById('setup-title');
+        let countBox = document.getElementById('player-count-box');
+        let diffBox = document.getElementById('bot-difficulty-box');
+
+        if(mode === 'vs_bot') {
+            titleEl.textContent = "Bot Oyun Parametrləri";
+            countBox.style.display = 'none';
+            diffBox.style.display = 'flex';
+        } else {
+            titleEl.textContent = "Çox Oyunçulu Rejim";
+            countBox.style.display = 'flex';
+            diffBox.style.display = 'none';
+        }
 
         renderPlayersSetupUI();
         navigateTo('screen-pass-setup');
-    }
-
-    function setBotDiff(diff) {
-        gameSetup.botDiff = diff;
-        document.querySelectorAll('.diff-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.diff === diff);
-        });
     }
 
     function setPlayerCount(count) {
@@ -614,45 +1206,33 @@
         document.getElementById('btn-mode-finish').classList.toggle('active', rule === 'finish_race');
     }
 
-    function renderPlayersSetupUI() {
-        const container = document.getElementById('players-config-list');
-        container.innerHTML = '';
+    function setDifficulty(diff) {
+        gameSetup.difficulty = diff;
+        document.querySelectorAll('.diff-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-diff-${diff}`).classList.add('active');
+        renderPlayersSetupUI();
+    }
 
-        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
-
-        for (let i = 0; i < count; i++) {
-            let p = gameSetup.players[i];
-            let isBot = (gameSetup.mode === 'vs_bot' && i === 1);
-
-            let card = document.createElement('div');
-            card.className = 'player-setup-card';
-            card.innerHTML = `
-                <div class="player-setup-header">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div class="player-badge" style="background: ${p.color}; color: #fff;">${i + 1}</div>
-                        <div style="font-size: 13px; font-weight: 800;">${isBot ? 'Bot (' + gameSetup.botDiff.toUpperCase() + ')' : 'Oyunçu ' + (i + 1)}</div>
-                    </div>
-                </div>
-                <input type="text" id="p-name-input-${i}" class="username-input" style="text-align: left; padding: 6px 10px; font-size: 12px;" 
-                       value="${isBot ? 'Bot' : p.name}" ${isBot ? 'disabled' : ''}>
-            `;
-            container.appendChild(card);
-        }
+    function selectColorForPlayer(index, color) {
+        gameSetup.players[index].color = color;
+        renderPlayersSetupUI();
     }
 
     function confirmAndStartGame() {
         let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
         for (let i = 0; i < count; i++) {
             let inp = document.getElementById(`p-name-input-${i}`);
-            if (inp && inp.value.trim()) gameSetup.players[i].name = inp.value.trim();
+            if (inp && inp.value.trim()) {
+                gameSetup.players[i].name = inp.value.trim();
+            }
         }
         startGame(gameSetup.mode);
     }
 
-    // GAME ENGINE
+    // GAME LOGIC
     const BOARD_SIZE = 9;
     let players = [];
-    let turnIndex = 0;
+    let turnIndex = 0; 
     let activeMode = 'move';
     let currentGameMode = 'vs_bot';
 
@@ -669,21 +1249,49 @@
     function startGame(mode) {
         currentGameMode = mode;
         navigateTo('screen-game');
-        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? `🤖 Bot (${gameSetup.botDiff.toUpperCase()})` : '👥 Çok Oyunçu';
+
+        let icon = '🚩';
+        let modeText = 'Classic';
+
+        if (gameSetup.rule === 'center_race') {
+            icon = '👑';
+            modeText = 'Center Race';
+        } else if (gameSetup.rule === 'finish_race') {
+            icon = '🏁';
+            modeText = 'Finish Race';
+        } else if (mode === 'vs_bot') {
+            icon = '🤖';
+            modeText = `vs Bot (${gameSetup.difficulty.toUpperCase()})`;
+        }
+
+        document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
+
         restartGame();
     }
 
     function initBoard() {
         boardEl.innerHTML = '';
-        document.getElementById('finish-banner').style.display = (gameSetup.rule === 'finish_race') ? 'block' : 'none';
+        let finishBanner = document.getElementById('finish-banner');
+        if (gameSetup.rule === 'finish_race') {
+            finishBanner.style.display = 'block';
+        } else {
+            finishBanner.style.display = 'none';
+        }
 
         for (let r = 0; r < BOARD_SIZE; r++) {
             for (let c = 0; c < BOARD_SIZE; c++) {
                 let cell = document.createElement('div');
                 cell.className = 'cell';
-                if(gameSetup.rule === 'center_race' && r === 4 && c === 4) cell.classList.add('center-cell');
-                if(gameSetup.rule === 'finish_race' && r === 0) cell.classList.add('finish-cell');
-                cell.dataset.r = r; cell.dataset.c = c;
+                
+                if(gameSetup.rule === 'center_race' && r === 4 && c === 4) {
+                    cell.classList.add('center-cell');
+                }
+                if(gameSetup.rule === 'finish_race' && r === 0) {
+                    cell.classList.add('finish-cell');
+                }
+
+                cell.dataset.r = r;
+                cell.dataset.c = c;
                 cell.onclick = () => onCellClick(r, c);
                 boardEl.appendChild(cell);
             }
@@ -694,33 +1302,40 @@
 
     function renderPawns() {
         document.querySelectorAll('.pawn').forEach(p => p.remove());
+        
         players.forEach(p => {
             let cell = getCellEl(p.r, p.c);
             if (cell) {
                 let pawn = document.createElement('div');
                 pawn.className = 'pawn';
                 pawn.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${p.color})`;
+                pawn.style.border = `2px solid ${p.color}`;
+                pawn.style.boxShadow = `0 0 10px ${p.color}`;
                 cell.appendChild(pawn);
             }
         });
+
         highlightValidMoves();
     }
 
-    function getCellEl(r, c) { return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`); }
+    function getCellEl(r, c) {
+        return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+    }
 
     function highlightValidMoves() {
         document.querySelectorAll('.cell').forEach(c => c.classList.remove('valid-move'));
         if (currentGameMode === 'vs_bot' && turnIndex !== 0) return;
         if (activeMode !== 'move') return;
 
-        let moves = getValidMoves(players[turnIndex], hWalls, vWalls, players);
+        let currP = players[turnIndex];
+        let moves = getValidMoves(currP);
         moves.forEach(m => {
             let el = getCellEl(m.r, m.c);
             if (el) el.classList.add('valid-move');
         });
     }
 
-    function getValidMoves(p, currentHWalls, currentVWalls, currentPlayers) {
+    function getValidMoves(p) {
         let moves = [];
         let dr = [-1, 1, 0, 0];
         let dc = [0, 0, -1, 1];
@@ -730,12 +1345,12 @@
             let nc = p.c + dc[i];
 
             if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
-                if (!isWallBetween(p.r, p.c, nr, nc, currentHWalls, currentVWalls)) {
-                    let occupied = currentPlayers.find(other => other.r === nr && other.c === nc);
-                    if (occupied) {
+                if (!isWallBetween(p.r, p.c, nr, nc)) {
+                    let occupiedP = players.find(other => other.r === nr && other.c === nc);
+                    if (occupiedP) {
                         let jx = nr + dr[i];
                         let jy = nc + dc[i];
-                        if (jx >= 0 && jx < BOARD_SIZE && jy >= 0 && jy < BOARD_SIZE && !isWallBetween(nr, nc, jx, jy, currentHWalls, currentVWalls)) {
+                        if (jx >= 0 && jx < BOARD_SIZE && jy >= 0 && jy < BOARD_SIZE && !isWallBetween(nr, nc, jx, jy)) {
                             moves.push({ r: jx, c: jy });
                         }
                     } else {
@@ -747,15 +1362,15 @@
         return moves;
     }
 
-    function isWallBetween(r1, c1, r2, c2, hw, vw) {
+    function isWallBetween(r1, c1, r2, c2) {
         if (r1 === r2) {
             let minC = Math.min(c1, c2);
-            if (r1 > 0 && vw[r1 - 1][minC]) return true;
-            if (r1 < 8 && vw[r1][minC]) return true;
+            if (r1 > 0 && vWalls[r1 - 1][minC]) return true;
+            if (r1 < 8 && vWalls[r1][minC]) return true;
         } else if (c1 === c2) {
             let minR = Math.min(r1, r2);
-            if (c1 > 0 && hw[minR][c1 - 1]) return true;
-            if (c1 < 8 && hw[minR][c1]) return true;
+            if (c1 > 0 && hWalls[minR][c1 - 1]) return true;
+            if (c1 < 8 && hWalls[minR][c1]) return true;
         }
         return false;
     }
@@ -766,20 +1381,30 @@
         let currP = players[turnIndex];
 
         if (activeMode === 'move') {
-            let moves = getValidMoves(currP, hWalls, vWalls, players);
-            if (moves.some(m => m.r === r && m.c === c)) {
+            let validMoves = getValidMoves(currP);
+            if (validMoves.some(m => m.r === r && m.c === c)) {
                 currP.r = r; currP.c = c;
-                if (checkWin(currP)) return endGame(currP);
+                
+                // WIN CONDITIONS
+                if(gameSetup.rule === 'center_race') {
+                    if (currP.r === 4 && currP.c === 4) return endGame(currP);
+                } else if(gameSetup.rule === 'finish_race') {
+                    if (currP.r === 0) return endGame(currP);
+                } else {
+                    if (currP.targetSide === 'top' && currP.r === 0) return endGame(currP);
+                    if (currP.targetSide === 'bottom' && currP.r === 8) return endGame(currP);
+                    if (currP.targetSide === 'right' && currP.c === 8) return endGame(currP);
+                    if (currP.targetSide === 'left' && currP.c === 0) return endGame(currP);
+                }
+
                 switchTurn();
             }
         } else {
             let wr = r < 8 ? r : 7;
             let wc = c < 8 ? c : 7;
-            if (canPlaceWall(wr, wc, activeMode, hWalls, vWalls, currP)) {
-                placeWallUI(wr, wc, activeMode, currP.color);
-                if (activeMode === 'H') hWalls[wr][wc] = true;
-                else vWalls[wr][wc] = true;
-
+            
+            if (canPlaceWall(wr, wc, activeMode)) {
+                placeWall(wr, wc, activeMode);
                 currP.walls--;
                 setMode('move');
                 switchTurn();
@@ -787,48 +1412,53 @@
         }
     }
 
-    function checkWin(p) {
-        if (gameSetup.rule === 'center_race') return p.r === 4 && p.c === 4;
-        if (gameSetup.rule === 'finish_race') return p.r === 0;
-        if (p.targetSide === 'top') return p.r === 0;
-        if (p.targetSide === 'bottom') return p.r === 8;
-        return false;
-    }
-
     function setMode(mode) {
         activeMode = mode;
         document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
-        document.getElementById(`btn-${mode.toLowerCase()}`).classList.add('active');
+        if (mode === 'move') document.getElementById('btn-move').classList.add('active');
+        if (mode === 'H') document.getElementById('btn-h').classList.add('active');
+        if (mode === 'V') document.getElementById('btn-v').classList.add('active');
         highlightValidMoves();
     }
 
-    function canPlaceWall(r, c, type, hw, vw, player) {
-        if (player.walls <= 0) return false;
+    function canPlaceWall(r, c, type) {
+        let currP = players[turnIndex];
+        if (currP.walls <= 0) return false;
         if (r < 0 || r >= 8 || c < 0 || c >= 8) return false;
 
         if (type === 'H') {
-            if (hw[r][c] || (c > 0 && hw[r][c - 1]) || (c < 7 && hw[r][c + 1]) || vw[r][c]) return false;
+            if (hWalls[r][c] || (c > 0 && hWalls[r][c - 1]) || (c < 7 && hWalls[r][c + 1]) || vWalls[r][c]) return false;
         } else {
-            if (vw[r][c] || (r > 0 && vw[r - 1][c]) || (r < 7 && vw[r + 1][c]) || hw[r][c]) return false;
+            if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
         }
 
-        // BFS path check (Path trapping prevention)
-        let tempHW = hw.map(row => [...row]);
-        let tempVW = vw.map(row => [...row]);
-        if (type === 'H') tempHW[r][c] = true;
-        else tempVW[r][c] = true;
+        // Divar qoyarkən heç bir oyunçunun yolunu tam kəsməməlidir
+        if (type === 'H') hWalls[r][c] = true;
+        else vWalls[r][c] = true;
 
+        let pathBlocked = false;
         for (let p of players) {
-            if (getShortestPathLength(p, tempHW, tempVW) === Infinity) return false;
+            if (getShortestPathLength(p) === Infinity) {
+                pathBlocked = true;
+                break;
+            }
         }
 
-        return true;
+        // Geri qaytarırıq
+        if (type === 'H') hWalls[r][c] = false;
+        else vWalls[r][c] = false;
+
+        return !pathBlocked;
     }
 
-    function placeWallUI(r, c, type, color) {
+    function placeWall(r, c, type) {
+        if (type === 'H') hWalls[r][c] = true;
+        else vWalls[r][c] = true;
+
+        let currP = players[turnIndex];
         let wallEl = document.createElement('div');
         wallEl.className = 'wall-placed';
-        wallEl.style.background = color;
+        wallEl.style.background = currP.color;
         
         let cellW = (340 - 80) / 9;
         let gap = 10;
@@ -854,7 +1484,7 @@
         renderPawns();
 
         if (currentGameMode === 'vs_bot' && turnIndex === 1) {
-            setTimeout(executeAITurn, 350);
+            setTimeout(aiTurn, 350);
         }
     }
 
@@ -864,130 +1494,227 @@
         players.forEach((p) => {
             let pill = document.createElement('div');
             pill.className = 'wall-pill';
-            pill.innerHTML = `<div class="wall-pill-icon" style="background: ${p.color}"></div><span>${p.walls}</span>`;
+            pill.innerHTML = `
+                <div class="wall-pill-icon" style="background: ${p.color}"></div>
+                <span>${p.walls}</span>
+            `;
             wallContainer.appendChild(pill);
         });
 
         let currP = players[turnIndex];
         let dot = document.getElementById('turn-dot');
+        let txt = document.getElementById('turn-text');
+
         dot.style.backgroundColor = currP.color;
-        document.getElementById('turn-text').textContent = `${currP.name} Sırası`;
+        dot.style.boxShadow = `0 0 8px ${currP.color}`;
+        txt.textContent = `${currP.name} Sırası`;
     }
 
-    /* AI ALGORITHMS (BFS / SMART STRATEGY) */
-    function getShortestPathLength(player, hw, vw) {
-        let queue = [{ r: player.r, c: player.c, dist: 0 }];
+    // ==========================================
+    // AKILLI BOT ALQORİTMİ (BFS - Pathfinding)
+    // ==========================================
+
+    function getShortestPathLength(p) {
+        let queue = [{ r: p.r, c: p.c, dist: 0 }];
         let visited = Array(9).fill(0).map(() => Array(9).fill(false));
-        visited[player.r][player.c] = true;
+        visited[p.r][p.c] = true;
+
+        let dr = [-1, 1, 0, 0];
+        let dc = [0, 0, -1, 1];
 
         while (queue.length > 0) {
             let curr = queue.shift();
 
+            // Win condition check
             if (gameSetup.rule === 'center_race' && curr.r === 4 && curr.c === 4) return curr.dist;
             if (gameSetup.rule === 'finish_race' && curr.r === 0) return curr.dist;
             if (gameSetup.rule === 'classic') {
-                if (player.targetSide === 'bottom' && curr.r === 8) return curr.dist;
-                if (player.targetSide === 'top' && curr.r === 0) return curr.dist;
+                if (p.targetSide === 'top' && curr.r === 0) return curr.dist;
+                if (p.targetSide === 'bottom' && curr.r === 8) return curr.dist;
+                if (p.targetSide === 'right' && curr.c === 8) return curr.dist;
+                if (p.targetSide === 'left' && curr.c === 0) return curr.dist;
             }
 
-            let tempP = { r: curr.r, c: curr.c };
-            let moves = getValidMoves(tempP, hw, vw, []);
+            for (let i = 0; i < 4; i++) {
+                let nr = curr.r + dr[i];
+                let nc = curr.c + dc[i];
 
-            for (let m of moves) {
-                if (!visited[m.r][m.c]) {
-                    visited[m.r][m.c] = true;
-                    queue.push({ r: m.r, c: m.c, dist: curr.dist + 1 });
+                if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && !visited[nr][nc]) {
+                    if (!isWallBetween(curr.r, curr.c, nr, nc)) {
+                        visited[nr][nc] = true;
+                        queue.push({ r: nr, c: nc, dist: curr.dist + 1 });
+                    }
                 }
             }
         }
-
         return Infinity;
     }
 
-    function executeAITurn() {
-        let bot = players[1];
-        let human = players[0];
-        let diff = gameSetup.botDiff;
+    function aiTurn() {
+        let botP = players[1];
+        let humanP = players[0];
+        let diff = gameSetup.difficulty;
 
-        let botDist = getShortestPathLength(bot, hWalls, vWalls);
-        let humanDist = getShortestPathLength(human, hWalls, vWalls);
+        let botDist = getShortestPathLength(botP);
+        let humanDist = getShortestPathLength(humanP);
 
-        let shouldPlaceWall = false;
-
+        // 1. EASY MODE
         if (diff === 'easy') {
-            shouldPlaceWall = (bot.walls > 0 && Math.random() < 0.25);
-        } else if (diff === 'medium') {
-            shouldPlaceWall = (bot.walls > 0 && (humanDist < botDist || Math.random() < 0.35));
-        } else if (diff === 'hard' || diff === 'master') {
-            shouldPlaceWall = (bot.walls > 0 && (humanDist <= botDist || humanDist <= 3));
+            if (Math.random() < 0.3 && botP.walls > 0) {
+                if (tryRandomWall(botP)) return;
+            }
+            makeBestMove(botP);
+            return;
         }
 
+        // 2. MEDIUM MODE (Sadə Ən Qısa Yol)
+        if (diff === 'medium') {
+            if (humanDist < botDist && botP.walls > 0 && Math.random() < 0.4) {
+                if (tryBlockingWall(botP, humanP)) return;
+            }
+            makeBestMove(botP);
+            return;
+        }
+
+        // 3. HARD MODE (Strategiya + Maneə Kəsmə)
+        if (diff === 'hard') {
+            if (humanDist <= botDist && botP.walls > 0) {
+                if (tryBlockingWall(botP, humanP)) return;
+            }
+            makeBestMove(botP);
+            return;
+        }
+
+        // 4. MASTER MODE (Müəssisəvi Təhlil & Mükəmməl Min-Maks)
+        if (diff === 'master') {
+            // Əgər insan udmaq üzrədisə, nə olursa olsun divar qoy
+            if (humanDist <= 2 && botP.walls > 0) {
+                if (tryBlockingWall(botP, humanP)) return;
+            }
+            
+            // Divar qoymaq insan yolunu uzadacaqsa və öz yolumuz çox uzanmayacaqsa divar qoy
+            if (botP.walls > 0) {
+                let bestWall = findBestMasterWall(botP, humanP);
+                if (bestWall) {
+                    placeWall(bestWall.r, bestWall.c, bestWall.type);
+                    botP.walls--;
+                    setMode('move');
+                    switchTurn();
+                    return;
+                }
+            }
+            makeBestMove(botP);
+        }
+    }
+
+    function makeBestMove(botP) {
+        let moves = getValidMoves(botP);
+        if (!moves || moves.length === 0) return;
+
+        let bestMove = moves[0];
+        let minDistance = Infinity;
+
+        for (let m of moves) {
+            let tempP = { ...botP, r: m.r, c: m.c };
+            let dist = getShortestPathLength(tempP);
+            if (dist < minDistance) {
+                minDistance = dist;
+                bestMove = m;
+            }
+        }
+
+        botP.r = bestMove.r;
+        botP.c = bestMove.c;
+
+        if (gameSetup.rule === 'center_race' && botP.r === 4 && botP.c === 4) return endGame(botP);
+        if (gameSetup.rule === 'finish_race' && botP.r === 0) return endGame(botP);
+        if (gameSetup.rule === 'classic' && botP.r === 8) return endGame(botP);
+
+        switchTurn();
+    }
+
+    function tryBlockingWall(botP, humanP) {
+        let bestWall = findBestMasterWall(botP, humanP);
+        if (bestWall) {
+            placeWall(bestWall.r, bestWall.c, bestWall.type);
+            botP.walls--;
+            setMode('move');
+            switchTurn();
+            return true;
+        }
+        return false;
+    }
+
+    function tryRandomWall(botP) {
+        let types = ['H', 'V'];
+        for (let attempt = 0; attempt < 10; attempt++) {
+            let r = Math.floor(Math.random() * 8);
+            let c = Math.floor(Math.random() * 8);
+            let type = types[Math.floor(Math.random() * 2)];
+
+            if (canPlaceWall(r, c, type)) {
+                placeWall(r, c, type);
+                botP.walls--;
+                setMode('move');
+                switchTurn();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function findBestMasterWall(botP, humanP) {
+        let currentHumanDist = getShortestPathLength(humanP);
+        let currentBotDist = getShortestPathLength(botP);
+
         let bestWall = null;
+        let maxHumanDistIncrease = 0;
 
-        if (shouldPlaceWall) {
-            let maxDelay = -99;
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                for (let type of ['H', 'V']) {
+                    if (canPlaceWall(r, c, type)) {
+                        // Test divarı qoyuruq
+                        if (type === 'H') hWalls[r][c] = true;
+                        else vWalls[r][c] = true;
 
-            for (let r = 0; r < 8; r++) {
-                for (let c = 0; c < 8; c++) {
-                    for (let type of ['H', 'V']) {
-                        if (canPlaceWall(r, c, type, hWalls, vWalls, bot)) {
-                            let tempHW = hWalls.map(row => [...row]);
-                            let tempVW = vWalls.map(row => [...row]);
-                            if (type === 'H') tempHW[r][c] = true;
-                            else tempVW[r][c] = true;
+                        let newHumanDist = getShortestPathLength(humanP);
+                        let newBotDist = getShortestPathLength(botP);
 
-                            let newHumanDist = getShortestPathLength(human, tempHW, tempVW);
-                            let newBotDist = getShortestPathLength(bot, tempHW, tempVW);
+                        // Divarı götürürük
+                        if (type === 'H') hWalls[r][c] = false;
+                        else vWalls[r][c] = false;
 
-                            if (newHumanDist !== Infinity && newBotDist !== Infinity) {
-                                let impact = (newHumanDist - humanDist) - (newBotDist - botDist);
+                        let humanDistIncrease = newHumanDist - currentHumanDist;
+                        let botDistIncrease = newBotDist - currentBotDist;
 
-                                if (impact > maxDelay && newHumanDist > humanDist) {
-                                    maxDelay = impact;
-                                    bestWall = { r, c, type };
-                                }
-                            }
+                        // İnsanın yolunu azı +2 uzadırsa və botun yolunu insaninkindən çox uzatmırsa
+                        if (humanDistIncrease > maxHumanDistIncrease && botDistIncrease <= 1) {
+                            maxHumanDistIncrease = humanDistIncrease;
+                            bestWall = { r, c, type };
                         }
                     }
                 }
             }
         }
 
-        if (bestWall && (diff === 'master' || maxDelay > 0)) {
-            placeWallUI(bestWall.r, bestWall.c, bestWall.type, bot.color);
-            if (bestWall.type === 'H') hWalls[bestWall.r][bestWall.c] = true;
-            else vWalls[bestWall.r][bestWall.c] = true;
-            bot.walls--;
-            switchTurn();
-            return;
-        }
-
-        // MOVE LOGIC (BFS BEST MOVE)
-        let moves = getValidMoves(bot, hWalls, vWalls, players);
-        let bestMove = null;
-        let minMoveDist = Infinity;
-
-        for (let m of moves) {
-            let tempBot = { ...bot, r: m.r, c: m.c };
-            let dist = getShortestPathLength(tempBot, hWalls, vWalls);
-            if (dist < minMoveDist) {
-                minMoveDist = dist;
-                bestMove = m;
-            }
-        }
-
-        if (bestMove) {
-            bot.r = bestMove.r;
-            bot.c = bestMove.c;
-            if (checkWin(bot)) return endGame(bot);
-        }
-
-        switchTurn();
+        return bestWall;
     }
 
-    function endGame(winner) {
-        document.getElementById('modal-title').textContent = "Qələbə! 🎉";
-        document.getElementById('modal-desc').textContent = `${winner.name} qazandı!`;
+    function endGame(winnerP) {
+        currentUser.games++;
+        let isP1Win = (winnerP.id === 0);
+
+        if(isP1Win) {
+            currentUser.wins++;
+            currentUser.score += 50;
+        }
+
+        document.getElementById('modal-title').textContent = "Təbriklər! 🎉";
+        document.getElementById('modal-desc').textContent = `${winnerP.name} qalib gəldi!`;
+
+        saveUserData();
+        updateUserUI();
         document.getElementById('modal').classList.add('active');
     }
 
@@ -998,15 +1725,33 @@
         players = [];
 
         if (gameSetup.rule === 'finish_race') {
-            let startCols = count === 2 ? [2, 6] : (count === 3 ? [2, 4, 6] : [1, 3, 5, 7]);
+            let startCols = [1, 3, 5, 7];
+            if (count === 2) startCols = [2, 6];
+            else if (count === 3) startCols = [2, 4, 6];
+
             for (let i = 0; i < count; i++) {
-                players.push({ id: i, r: 8, c: startCols[i], walls: initialWalls, name: gameSetup.players[i].name, color: gameSetup.players[i].color, targetSide: 'top' });
+                players.push({
+                    id: i,
+                    r: 8,
+                    c: startCols[i],
+                    walls: initialWalls,
+                    name: gameSetup.players[i].name,
+                    color: gameSetup.players[i].color,
+                    targetSide: 'top'
+                });
             }
         } else {
             players.push({ id: 0, r: 8, c: 4, walls: initialWalls, name: gameSetup.players[0].name, color: gameSetup.players[0].color, targetSide: 'top' });
-            players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
-            if (count >= 3) players.push({ id: 2, r: 4, c: 0, walls: initialWalls, name: gameSetup.players[2].name, color: gameSetup.players[2].color, targetSide: 'right' });
-            if (count === 4) players.push({ id: 3, r: 4, c: 8, walls: initialWalls, name: gameSetup.players[3].name, color: gameSetup.players[3].color, targetSide: 'left' });
+
+            if (count === 2) {
+                players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
+            } else {
+                players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
+                players.push({ id: 2, r: 4, c: 0, walls: initialWalls, name: gameSetup.players[2].name, color: gameSetup.players[2].color, targetSide: 'right' });
+                if (count === 4) {
+                    players.push({ id: 3, r: 4, c: 8, walls: initialWalls, name: gameSetup.players[3].name, color: gameSetup.players[3].color, targetSide: 'left' });
+                }
+            }
         }
 
         turnIndex = 0;
