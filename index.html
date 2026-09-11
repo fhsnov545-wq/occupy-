@@ -1766,3 +1766,96 @@
 </script>
 </body>
 </html>
+// --- ONLAYN OYUNÇULAR VƏ DƏVƏT SİSTEMİ MəNTİQİ ---
+
+// 1. Onlayn olan oyunçuları dinləmək və UI-da göstərmək
+function listenToOnlinePlayers(currentUserId, updatePlayersUI) {
+  const playersRef = firebase.database().ref('users');
+  
+  playersRef.on('value', (snapshot) => {
+    const players = [];
+    snapshot.forEach((child) => {
+      const data = child.val();
+      if (child.key !== currentUserId && data.isOnline) {
+        players.push({
+          uid: child.key,
+          username: data.username,
+          status: data.status || 'Online', // 'Online' və ya 'In game'
+          country: data.country
+        });
+      }
+    });
+    updatePlayersUI(players);
+  });
+}
+
+// 2. Başqa bir oyunçuya dəvət göndərmək
+function sendGameInvite(senderUser, receiverId) {
+  const inviteRef = firebase.database().ref(`invites/${receiverId}`).push();
+  
+  const inviteData = {
+    inviteId: inviteRef.key,
+    senderId: senderUser.uid,
+    senderName: senderUser.username,
+    senderWinRate: senderUser.winRate,
+    senderTotalGames: senderUser.totalGames,
+    status: 'pending', // pending, accepted, declined
+    timestamp: Date.now()
+  };
+
+  inviteRef.set(inviteData);
+
+  // Göndərən tərəfdə dəvətin cavabını dinləmək
+  inviteRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (data && data.status === 'accepted') {
+      // Dəvət qəbul edildi -> Otaq yaradın və oyuna yönləndirin
+      inviteRef.off();
+      startMatchWithPlayer(data.roomId);
+    } else if (data && data.status === 'declined') {
+      alert('Dəvət rədd edildi.');
+      inviteRef.off();
+    }
+  });
+}
+
+// 3. Daxil olan dəvətləri dinləmək (Modalı açmaq üçün)
+function listenForIncomingInvites(currentUserId, showInviteModal) {
+  const myInvitesRef = firebase.database().ref(`invites/${currentUserId}`);
+  
+  myInvitesRef.on('child_added', (snapshot) => {
+    const invite = snapshot.val();
+    if (invite && invite.status === 'pending') {
+      showInviteModal(invite);
+    }
+  });
+}
+
+// 4. Dəvəti qəbul etmək və ya rədd etmək
+function respondToInvite(invite, isAccepted) {
+  const inviteRef = firebase.database().ref(`invites/${invite.receiverId}/${invite.inviteId}`);
+  
+  if (isAccepted) {
+    // Yeni otaq İD-si yaradılır
+    const newRoomId = 'room_' + Date.now();
+    
+    // Dəvət statusunu yenilə
+    inviteRef.update({
+      status: 'accepted',
+      roomId: newRoomId
+    });
+
+    // Qəbul edən şəxsi də həmin otağa yönləndir
+    startMatchWithPlayer(newRoomId);
+  } else {
+    inviteRef.update({
+      status: 'declined'
+    });
+  }
+}
+
+// Otağa keçid funksiyası
+function startMatchWithPlayer(roomId) {
+  console.log("Oyuna başlanılır! Otaq ID:", roomId);
+  // Burada mövcud otağa daxil olma və ya oyunu başlatma funksiyanızı çağırın
+}
