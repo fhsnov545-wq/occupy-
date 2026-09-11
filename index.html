@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wayblock - Quoridor AI & MultiPlayer</title>
+    <title>Wayblock - Quoridor MultiPlayer</title>
     <style>
         * {
             box-sizing: border-box;
@@ -373,7 +373,7 @@
     <div id="screen-login" class="screen active">
       <div style="text-align: center; margin-top: 20px;">
         <h1 style="font-size: 28px; font-weight: 900; letter-spacing: 1px;">WAYBLOCK</h1>
-        <p style="color: #6c757d; font-size: 12px; margin-top: 4px;">AI Bot, Local & Online MultiPlayer</p>
+        <p style="color: #6c757d; font-size: 12px; margin-top: 4px;">Multiplayer Quoridor & Strategy</p>
       </div>
       <div class="login-card">
         <input type="text" id="input-username" class="username-input" placeholder="İstifadəçi adı daxil edin..." maxlength="12">
@@ -399,21 +399,21 @@
 
       <div style="font-size: 11px; font-weight: 800; color: #f59e0b; margin-top: 6px;">OYUN REJİMLƏRİ</div>
 
-      <!-- BOT REJİMİ -->
+      <!-- BOT AI REJİMİ -->
       <div class="menu-card" onclick="startGame('vs_bot')">
         <div style="font-weight: 800; font-size: 14px; color: #ec4899;">🤖 Kompüterə Qarşı (Bot AI)</div>
         <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Ağıllı robota qarşı təkbaşına mübarizə aparın</div>
       </div>
 
-      <!-- LOKAL DOSTLARLA -->
+      <!-- DOSTLAR İLƏ (LOKAL) -->
       <div class="menu-card" onclick="startGame('2p_center')">
         <div style="font-weight: 800; font-size: 14px; color: #38ef7d;">🎯 2 Oyunçu (Mərkəzə Qaçış)</div>
-        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Dostunla qarşı-qarşıya mərkəzə yarışın</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Qarşı-qarşıya başlayıb mərkəzə ilk çatan qalib gəlir</div>
       </div>
 
       <div class="menu-card" onclick="startGame('4p_center')">
         <div style="font-weight: 800; font-size: 14px; color: #f59e0b;">🧩 4 Oyunçu (Mərkəzə Qaçış)</div>
-        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">4 dost eyni cihazda mərkəzə çatın</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">4 tərəfdən başlayıb mərkəzdəki finişə çatın</div>
       </div>
 
       <div class="menu-card" onclick="startGame('2p_side_finish')">
@@ -421,10 +421,10 @@
         <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Aşağıda yan-yana başlayıb yuxarı finişə çatın</div>
       </div>
 
-      <!-- ONLAYN LOBBİ -->
+      <!-- ONLAYN OYUN (ONLAYN LOBBİ) -->
       <div class="menu-card" onclick="navigateTo('screen-lobby')">
         <div style="font-weight: 800; font-size: 14px; color: #a78bfa;">🌐 Onlayn Lobbi (Digər İnsanlar)</div>
-        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Otaq kodu yaradıb onlayn rəqiblərlə oynayın</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Otaq yaradın və ya dostlarınızın oyununa qoşulun</div>
       </div>
     </div>
 
@@ -574,7 +574,6 @@
     let turn = 0;
     let activeMode = 'move';
     let gameMode = '2p_center';
-    let isBotTurn = false;
 
     let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
     let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
@@ -606,7 +605,6 @@
     function restartGame() {
         turn = 0;
         activeMode = 'move';
-        isBotTurn = false;
         hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         document.querySelectorAll('.wall-placed').forEach(w => w.remove());
@@ -824,7 +822,7 @@
         }
     }
 
-    // BOT AI LOGICS (PATHFINDING)
+    // BOT AI LOGICS
     function playBotTurn() {
         let bot = players[turn];
         let targetR = 4, targetC = 4;
@@ -832,7 +830,6 @@
         let moves = getValidMoves(bot);
         if(moves.length === 0) { switchTurn(); return; }
 
-        // Mərkəzə ən yaxın addımı hesablayır
         let bestMove = moves[0];
         let minDistance = 999;
 
@@ -847,7 +844,6 @@
         bot.r = bestMove.r;
         bot.c = bestMove.c;
 
-        // Bot Smailik atır (20% ehtimalla)
         if(Math.random() < 0.25) {
             sendEmoji('😏');
         }
