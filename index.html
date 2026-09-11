@@ -23,11 +23,12 @@
             justify-content: center;
             min-height: 100vh;
             padding: 12px;
+            overflow-x: hidden;
         }
 
         .app-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -57,9 +58,10 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            font-size: 16px;
         }
 
-        /* LOGIN */
+        /* LOGIN SCREEN */
         .login-card {
             background: #161926;
             border: 1px solid #23283b;
@@ -96,25 +98,25 @@
             cursor: pointer;
         }
 
-        /* MENU */
+        /* MAIN MENU & PROFILE HEADER */
         .profile-header { display: flex; justify-content: space-between; align-items: center; }
         .user-info { display: flex; align-items: center; gap: 10px; }
         .avatar-logo {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: #23283b;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 18px;
             border: 2px solid #323952;
             color: #38ef7d;
         }
 
         .username { font-size: 15px; font-weight: 700; }
-        .brand-name { font-size: 10px; color: #6c757d; font-weight: 700; }
+        .brand-name { font-size: 10px; color: #6c757d; font-weight: 700; letter-spacing: 1px; }
 
         .menu-card {
             background: #161926;
@@ -122,11 +124,41 @@
             border-radius: 16px;
             padding: 14px;
             cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s;
         }
+
+        .menu-card:active { transform: scale(0.98); }
+        .menu-card:hover { border-color: #38ef7d; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* GAME BOARD */
+        /* PROFILE & STATS */
+        .stat-box {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-val { font-size: 20px; font-weight: 800; color: #38ef7d; }
+        .stat-lbl { font-size: 11px; color: #6c757d; margin-top: 2px; }
+
+        /* LEADERBOARD LIST */
+        .lb-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+        }
+
+        .lb-rank { font-weight: 800; width: 24px; color: #f59e0b; }
+
+        /* GAME BOARD & INTERACTION */
         .game-header { display: flex; justify-content: space-between; align-items: center; }
         .icon-btn {
             background: #161926;
@@ -148,20 +180,20 @@
             border-radius: 10px;
             font-size: 12px;
             font-weight: 700;
+            color: #38ef7d;
         }
 
         #finish-banner {
             width: 100%;
             text-align: center;
-            padding: 6px;
-            background: rgba(56, 239, 125, 0.1);
-            border: 1px solid rgba(56, 239, 125, 0.3);
-            border-radius: 8px;
+            padding: 8px;
+            background: rgba(56, 239, 125, 0.08);
+            border: 1px solid rgba(56, 239, 125, 0.25);
+            border-radius: 10px;
             font-size: 11px;
             font-weight: 800;
             color: #38ef7d;
-            letter-spacing: 2px;
-            display: none;
+            letter-spacing: 1px;
         }
 
         #board-wrapper {
@@ -196,14 +228,14 @@
         }
 
         .cell.finish-cell {
-            background: rgba(245, 158, 11, 0.25) !important;
+            background: rgba(245, 158, 11, 0.2) !important;
             border: 2px dashed #f59e0b !important;
         }
 
         .cell.finish-cell::before {
             content: "🏁";
             font-size: 12px;
-            opacity: 0.6;
+            opacity: 0.7;
         }
 
         .cell.valid-move {
@@ -242,26 +274,23 @@
             z-index: 10;
         }
 
-        /* EMOJI BAR & POPUP */
+        /* EMOJI BAR & ANIMATION */
         .emoji-bar {
             display: flex;
-            justify-content: center;
-            gap: 12px;
+            justify-content: space-around;
             background: #161926;
             border: 1px solid #23283b;
-            padding: 8px;
+            padding: 8px 12px;
             border-radius: 12px;
         }
 
         .emoji-btn {
-            font-size: 20px;
+            font-size: 22px;
             cursor: pointer;
-            padding: 4px;
-            border-radius: 8px;
             transition: transform 0.1s;
         }
 
-        .emoji-btn:active { transform: scale(1.3); }
+        .emoji-btn:active { transform: scale(1.4); }
 
         .emoji-popup {
             position: absolute;
@@ -282,7 +311,7 @@
         .controls { display: flex; gap: 8px; width: 100%; }
         .btn-mode {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             background: #161926;
             border: 1px solid #23283b;
             color: #8c96a8;
@@ -298,6 +327,7 @@
             border-color: #3b82f6;
         }
 
+        /* MODAL OVERLAY */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -316,9 +346,9 @@
             background: #181b29;
             border: 1px solid #2a3148;
             border-radius: 20px;
-            padding: 20px;
+            padding: 24px;
             text-align: center;
-            max-width: 300px;
+            max-width: 320px;
             width: 85%;
         }
 
@@ -326,12 +356,12 @@
             background: linear-gradient(135deg, #11998e, #38ef7d);
             color: #fff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-top: 14px;
+            margin-top: 16px;
         }
     </style>
 </head>
@@ -342,12 +372,12 @@
     <!-- LOGIN SCREEN -->
     <div id="screen-login" class="screen active">
       <div style="text-align: center; margin-top: 20px;">
-        <h1 style="font-size: 26px; font-weight: 900;">WAYBLOCK</h1>
-        <p style="color: #6c757d; font-size: 12px;">Multiplayer Quoridor Game</p>
+        <h1 style="font-size: 28px; font-weight: 900; letter-spacing: 1px;">WAYBLOCK</h1>
+        <p style="color: #6c757d; font-size: 12px; margin-top: 4px;">Multiplayer Quoridor & Strategy</p>
       </div>
       <div class="login-card">
-        <input type="text" id="input-username" class="username-input" placeholder="İstifadəçi adı..." maxlength="12">
-        <button class="btn-submit" onclick="loginUser()">Daxil Ol</button>
+        <input type="text" id="input-username" class="username-input" placeholder="İstifadəçi adı daxil edin..." maxlength="12">
+        <button class="btn-submit" onclick="loginUser()">Oyuna Daxil Ol</button>
       </div>
     </div>
 
@@ -361,23 +391,83 @@
             <div class="username" id="display-username">Oyunçu</div>
           </div>
         </div>
+        <div style="display: flex; gap: 6px;">
+            <button class="icon-btn-rounded" onclick="navigateTo('screen-leaderboard')">🏆</button>
+            <button class="icon-btn-rounded" onclick="navigateTo('screen-profile')">⚙️</button>
+        </div>
       </div>
 
-      <div style="font-size: 11px; font-weight: 800; color: #f59e0b; margin-top: 4px;">OYUN REJİMLƏRİ</div>
+      <div style="font-size: 11px; font-weight: 800; color: #f59e0b; margin-top: 6px;">OYUN REJİMLƏRİ</div>
 
       <div class="menu-card" onclick="startGame('2p_center')">
-        <div style="font-weight: 800; font-size: 14px;">🎯 2 Oyunçu (Mərkəzə Qaçış)</div>
-        <div style="font-size: 11px; color: #6c757d;">Qarşı-qarşıya başlayıb mərkəzə çatın</div>
+        <div style="font-weight: 800; font-size: 14px; color: #38ef7d;">🎯 2 Oyunçu (Mərkəzə Qaçış)</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Qarşı-qarşıya başlayıb mərkəzə ilk çatan qalib gəlir</div>
       </div>
 
       <div class="menu-card" onclick="startGame('4p_center')">
-        <div style="font-weight: 800; font-size: 14px;">🧩 4 Oyunçu (Mərkəzə Qaçış)</div>
-        <div style="font-size: 11px; color: #6c757d;">4 tərəfdən başlayıb mərkəzə ilk çatan qazanır</div>
+        <div style="font-weight: 800; font-size: 14px; color: #f59e0b;">🧩 4 Oyunçu (Mərkəzə Qaçış)</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">4 tərəfdən başlayıb mərkəzdəki finişə çatın</div>
       </div>
 
       <div class="menu-card" onclick="startGame('2p_side_finish')">
-        <div style="font-weight: 800; font-size: 14px;">🏁 Side-by-Side (Son Yer Finiş)</div>
-        <div style="font-size: 11px; color: #6c757d;">Aşağıda yan-yana başlayıb yuxarı finişə çatın</div>
+        <div style="font-weight: 800; font-size: 14px; color: #60a5fa;">🏁 Side-by-Side (Son Yer Finiş)</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Aşağıda yan-yana başlayıb yuxarı finişə çatın</div>
+      </div>
+
+      <div class="menu-card" onclick="navigateTo('screen-lobby')">
+        <div style="font-weight: 800; font-size: 14px; color: #a78bfa;">🌐 Onlayn Lobbi</div>
+        <div style="font-size: 11px; color: #6c757d; margin-top: 2px;">Otaq yaradın və ya dostlarınızın oyununa qoşulun</div>
+      </div>
+    </div>
+
+    <!-- ONLINE LOBBY SCREEN -->
+    <div id="screen-lobby" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Onlayn Lobbi</div>
+        <div style="width:38px;"></div>
+      </div>
+      <div class="login-card">
+        <div style="font-size: 13px; color: #a0a6b8;">Otaq Kodu daxil edin:</div>
+        <input type="text" id="room-code-input" class="username-input" placeholder="Məs: 4829" maxlength="6">
+        <button class="btn-submit" onclick="startGame('2p_center')">Otağa Qoşul</button>
+        <button class="btn-submit" style="background: #23283b;" onclick="startGame('2p_center')">Yeni Otaq Yarat</button>
+      </div>
+    </div>
+
+    <!-- LEADERBOARD SCREEN -->
+    <div id="screen-leaderboard" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Liderlər Lövhəsi</div>
+        <div style="width:38px;"></div>
+      </div>
+      
+      <div id="lb-list">
+        <div class="lb-item"><span class="lb-rank">1</span><span>Əli_Pro</span><span style="color:#38ef7d; font-weight:700;">1420 XP</span></div>
+        <div class="lb-item"><span class="lb-rank">2</span><span>Elvin_07</span><span style="color:#38ef7d; font-weight:700;">1280 XP</span></div>
+        <div class="lb-item"><span class="lb-rank">3</span><span>Leyla_M</span><span style="color:#38ef7d; font-weight:700;">1150 XP</span></div>
+        <div class="lb-item"><span class="lb-rank">4</span><span id="lb-current-user">Oyunçu</span><span style="color:#38ef7d; font-weight:700;">1000 XP</span></div>
+      </div>
+    </div>
+
+    <!-- PROFILE SCREEN -->
+    <div id="screen-profile" class="screen">
+      <div class="screen-header">
+        <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
+        <div class="header-title">Hesabım</div>
+        <div style="width:38px;"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="stat-box"><div class="stat-val" id="profile-wins">0</div><div class="stat-lbl">Qələbə</div></div>
+        <div class="stat-box"><div class="stat-val" id="profile-games">0</div><div class="stat-lbl">Oyun Sayı</div></div>
+      </div>
+
+      <div class="login-card">
+        <div style="font-size: 12px; color: #6c757d;">İstifadəçi Adını Dəyişdir</div>
+        <input type="text" id="edit-username" class="username-input" placeholder="Yeni ad...">
+        <button class="btn-submit" onclick="updateUsername()">Yadda Saxla</button>
       </div>
     </div>
 
@@ -389,13 +479,13 @@
         <button class="icon-btn" onclick="restartGame()">🔄</button>
       </div>
 
-      <div id="finish-banner">🏁 FINISH: MƏRKƏZƏ ÇATIN 🏁</div>
+      <div id="finish-banner">FINISH: MƏRKƏZƏ ÇATIN</div>
 
       <div id="board-wrapper">
         <div id="board"></div>
       </div>
 
-      <!-- Emoji/Smailik Bar -->
+      <!-- Emoji/Smailik Göndərmə Paneli -->
       <div class="emoji-bar">
         <span class="emoji-btn" onclick="sendEmoji('😭')">😭</span>
         <span class="emoji-btn" onclick="sendEmoji('🤣')">🤣</span>
@@ -412,19 +502,20 @@
 
   </div>
 
+  <!-- VICTORY MODAL -->
   <div class="modal-overlay" id="modal">
       <div class="modal">
-          <h2 id="modal-title">Qələbə!</h2>
+          <h2 id="modal-title">Qələbə! 🎉</h2>
           <p id="modal-desc" style="color: #a0a6b8; font-size: 13px; margin-top: 6px;">Siz qazandınız!</p>
           <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
       </div>
   </div>
 
 <script>
-    let currentUser = { name: "Oyunçu" };
+    let currentUser = { name: "Oyunçu", wins: 0, games: 0 };
 
     window.onload = function() {
-        let saved = localStorage.getItem('wayblock_user');
+        let saved = localStorage.getItem('wayblock_user_data');
         if(saved) {
             currentUser = JSON.parse(saved);
             updateUserUI();
@@ -436,15 +527,32 @@
         let name = document.getElementById('input-username').value.trim();
         if(name.length >= 2) {
             currentUser.name = name;
-            localStorage.setItem('wayblock_user', JSON.stringify(currentUser));
+            saveUserData();
             updateUserUI();
             navigateTo('screen-menu');
         }
     }
 
+    function updateUsername() {
+        let newName = document.getElementById('edit-username').value.trim();
+        if(newName.length >= 2) {
+            currentUser.name = newName;
+            saveUserData();
+            updateUserUI();
+            alert("İstifadəçi adı yeniləndi!");
+        }
+    }
+
+    function saveUserData() {
+        localStorage.setItem('wayblock_user_data', JSON.stringify(currentUser));
+    }
+
     function updateUserUI() {
         document.getElementById('display-username').textContent = currentUser.name;
         document.getElementById('user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+        document.getElementById('lb-current-user').textContent = currentUser.name;
+        document.getElementById('profile-wins').textContent = currentUser.wins;
+        document.getElementById('profile-games').textContent = currentUser.games;
     }
 
     function navigateTo(id) {
@@ -452,7 +560,7 @@
         document.getElementById(id).classList.add('active');
     }
 
-    // GAME VARIABLES
+    // OYUN DƏYİŞƏNLƏRİ VƏ SİSTEMİ
     const BOARD_SIZE = 9;
     let players = [];
     let turn = 0;
@@ -471,15 +579,12 @@
 
         if(mode === '2p_center') {
             titleEl.textContent = '🎯 2P Mərkəz';
-            bannerEl.style.display = 'block';
             bannerEl.textContent = '🏁 MƏRKƏZƏ İLK ÇATAN QAZANIR 🏁';
         } else if(mode === '4p_center') {
             titleEl.textContent = '🧩 4P Mərkəz';
-            bannerEl.style.display = 'block';
             bannerEl.textContent = '🏁 MƏRKƏZƏ İLK ÇATAN QAZANIR 🏁';
         } else {
             titleEl.textContent = '🏁 Side-by-Side';
-            bannerEl.style.display = 'block';
             bannerEl.textContent = '🏁 YUXARI FİNİŞ XƏTTİNƏ ÇATIN 🏁';
         }
 
@@ -494,7 +599,7 @@
         document.querySelectorAll('.wall-placed').forEach(w => w.remove());
         document.getElementById('modal').classList.remove('active');
 
-        // Setup Player Positions
+        // Oyunçu Mövqeləri
         if(gameMode === '2p_center') {
             players = [
                 { id: 1, r: 8, c: 4, walls: 10, class: 'pawn-p1' },
@@ -502,10 +607,10 @@
             ];
         } else if(gameMode === '4p_center') {
             players = [
-                { id: 1, r: 8, c: 4, walls: 5, class: 'pawn-p1' }, // Aşağı (Mavi)
-                { id: 2, r: 0, c: 4, walls: 5, class: 'pawn-p2' }, // Yuxarı (Qırmızı)
-                { id: 3, r: 4, c: 0, walls: 5, class: 'pawn-p3' }, // Sol (Yaşıl)
-                { id: 4, r: 4, c: 8, walls: 5, class: 'pawn-p4' }  // Sağ (Sarı)
+                { id: 1, r: 8, c: 4, walls: 5, class: 'pawn-p1' },
+                { id: 2, r: 0, c: 4, walls: 5, class: 'pawn-p2' },
+                { id: 3, r: 4, c: 0, walls: 5, class: 'pawn-p3' },
+                { id: 4, r: 4, c: 8, walls: 5, class: 'pawn-p4' }
             ];
         } else if(gameMode === '2p_side_finish') {
             players = [
@@ -528,12 +633,11 @@
                 cell.dataset.r = r;
                 cell.dataset.c = c;
 
-                // Center finish marking
+                // Finiş Xənəsi Təyini
                 if((gameMode === '2p_center' || gameMode === '4p_center') && r === 4 && c === 4) {
                     cell.classList.add('finish-cell');
                 }
 
-                // Top finish marking
                 if(gameMode === '2p_side_finish' && r === 0) {
                     cell.classList.add('finish-cell');
                 }
@@ -696,7 +800,7 @@
         renderPawns();
     }
 
-    // EMOJI / SMAILIK ATMAQ
+    // SMAILİK / EMOJI ANİMASİYASI
     function sendEmoji(emojiChar) {
         let activePawn = document.getElementById(`pawn-player-${turn}`);
         if(!activePawn) return;
@@ -713,8 +817,13 @@
     }
 
     function endGame(winner) {
+        currentUser.games++;
+        if(winner.id === 1) currentUser.wins++;
+        saveUserData();
+        updateUserUI();
+
         document.getElementById('modal-title').textContent = "QƏLƏBƏ! 🎉";
-        document.getElementById('modal-desc').textContent = `${winner.id}-ci Oyunçu finişə çatdı və qalib gəldi!`;
+        document.getElementById('modal-desc').textContent = `${winner.id}-ci Oyunçu finiş xəttinə çatdı və qalib gəldi!`;
         document.getElementById('modal').classList.add('active');
     }
 </script>
