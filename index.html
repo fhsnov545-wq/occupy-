@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wayblock - Quoridor</title>
+    <title>Wayblock - Quoridor MultiPlayer</title>
+    <!-- Google Identity Services Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         * {
             box-sizing: border-box;
@@ -76,6 +78,26 @@
             border: 2px solid #0b0f17;
         }
 
+        /* LOGIN SCREEN STYLES */
+        .login-card {
+            background: #161926;
+            border: 1px solid #23283b;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .google-btn-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
         /* --- 1. MAIN MENU STYLES --- */
         .profile-header {
             display: flex;
@@ -90,14 +112,21 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            background: #23283b;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
-            font-size: 13px;
-            border: 2px solid #38ef7d;
+            font-size: 14px;
+            border: 2px solid #323952;
             color: #fff;
+            overflow: hidden;
+        }
+
+        .avatar-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .user-details { display: flex; flex-direction: column; }
@@ -214,6 +243,7 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
+            color: #fff;
         }
 
         .btn-action.primary {
@@ -241,7 +271,6 @@
         }
 
         .room-info { display: flex; align-items: center; gap: 12px; }
-        .flag-icon { font-size: 20px; }
         .room-title { font-size: 14px; font-weight: 700; }
         .room-host { font-size: 11px; color: #6c757d; }
 
@@ -385,7 +414,6 @@
         .lb-rank.top-3 { background: #d97706; color: #fff; }
 
         .lb-user { font-size: 13px; font-weight: 700; }
-        .lb-country { font-size: 10px; color: #6c757d; }
         .lb-score { font-size: 13px; font-weight: 800; color: #f59e0b; }
 
         /* --- 5. GAME PLAY STYLES --- */
@@ -560,7 +588,7 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        /* Modal Base */
+        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -600,53 +628,46 @@
             cursor: pointer;
             width: 100%;
         }
-
-        /* Daily Rewards Modal Specific */
-        .reward-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 16px 0;
-            max-height: 240px;
-            overflow-y: auto;
-        }
-
-        .reward-day-item {
-            background: #161926;
-            border: 1px solid #23283b;
-            border-radius: 10px;
-            padding: 10px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        .reward-day-item.active {
-            border-color: #f59e0b;
-            background: rgba(245, 158, 11, 0.05);
-        }
-
-        .reward-day-item.grand {
-            border-color: #f59e0b;
-            background: linear-gradient(90deg, #2a1f0d 0%, #161926 100%);
-            font-weight: 800;
-            color: #f59e0b;
-        }
     </style>
 </head>
 <body>
 
   <div class="app-container">
 
+    <!-- 0. LOGIN SCREEN -->
+    <div id="screen-login" class="screen active">
+      <div style="text-align: center; margin-top: 40px;">
+        <h1 style="font-size: 28px; font-weight: 900; letter-spacing: 2px;">WAYBLOCK</h1>
+        <p style="color: #6c757d; font-size: 13px; margin-top: 4px;">Online Quoridor Multiplayer</p>
+      </div>
+
+      <div class="login-card" style="margin-top: 20px;">
+        <div class="avatar-logo" style="width: 60px; height: 60px; font-size: 24px;">👤</div>
+        <div>
+          <h2 style="font-size: 18px; font-weight: 800;">Daxil olun</h2>
+          <p style="font-size: 12px; color: #6c757d; margin-top: 4px;">Oynamaq və xallarınızı saxlamaq üçün Google hesabınızla daxil olun.</p>
+        </div>
+
+        <div class="google-btn-wrapper">
+            <div id="g_id_onload"
+                data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="dark"></div>
+        </div>
+
+        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #23283b;" onclick="loginAsGuest()">Qonaq Kimi Davam Et</button>
+      </div>
+    </div>
+
     <!-- 1. MAIN MENU SCREEN -->
-    <div id="screen-menu" class="screen active">
+    <div id="screen-menu" class="screen">
       <div class="profile-header">
         <div class="user-info">
-          <div class="avatar-logo">FH</div>
+          <div class="avatar-logo" id="user-avatar">👤</div>
           <div class="user-details">
             <span class="brand-name">WAYBLOCK</span>
-            <span class="username">fhsnov545 🇦🇿</span>
+            <span class="username" id="display-username">Oyunçu</span>
           </div>
         </div>
         <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
@@ -655,42 +676,31 @@
       <div class="menu-card" style="background: linear-gradient(180deg, #1e293b 0%, #161926 100%);" onclick="navigateTo('screen-lobby')">
         <div class="status-row">
           <span class="badge-online">ONLINE</span>
-          <span class="badge-streak">🔥 Best Streak: 3</span>
+          <span class="badge-streak" id="user-streak">🔥 Streak: 0</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
           <div>
             <div class="card-main-title">Play Online</div>
-            <div class="card-sub">Ranked matches</div>
+            <div class="card-sub">Onlayn oyunçularla oyna</div>
           </div>
           <div class="icon-btn-rounded">→</div>
         </div>
-      </div>
-
-      <div class="menu-card reward-card" onclick="openRewardModal()">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <span style="font-size: 22px;">🎁</span>
-          <div>
-            <div style="font-size: 13px; font-weight: 700; color: #f59e0b;">Daily reward ready +50</div>
-            <div style="font-size: 10px; color: #6c757d; margin-top: 2px;">● ◌ ◌ ◌ ◌ ◌ ◌ &nbsp; 1/7</div>
-          </div>
-        </div>
-        <span style="color: #f59e0b; font-size: 16px;">›</span>
       </div>
 
       <div class="grid-2">
         <div class="menu-card mode-card" onclick="startGame('vs_bot')">
           <div class="mode-icon">🤖</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">Play vs Computer</div>
-            <div class="card-sub">Single Player</div>
+            <div class="card-main-title" style="font-size: 15px;">Bot ilə Oyna</div>
+            <div class="card-sub">Tək Oyunçu</div>
           </div>
         </div>
 
         <div class="menu-card mode-card" onclick="startGame('two_players')">
           <div class="mode-icon">👥</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">Two Players</div>
-            <div class="card-sub">Same Device</div>
+            <div class="card-main-title" style="font-size: 15px;">İki Oyunçu</div>
+            <div class="card-sub">Eyni Cihazda</div>
           </div>
         </div>
       </div>
@@ -698,7 +708,7 @@
       <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screen-stats')">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 18px;">🏆</span>
-          <span style="font-weight: 700; font-size: 15px;">Leaderboard</span>
+          <span style="font-weight: 700; font-size: 15px;">Liderlər Lövhəsi</span>
         </div>
         <span style="color: #6c757d;">›</span>
       </div>
@@ -714,47 +724,41 @@
 
       <div class="user-stats-card">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo">FH</div>
+          <div class="avatar-logo" id="lobby-avatar">👤</div>
           <div>
-            <div class="username">fhsnov545 🇦🇿</div>
-            <div class="card-sub" style="margin-top: 2px;">Win Rate 43%</div>
+            <div class="username" id="lobby-username">Oyunçu</div>
+            <div class="card-sub" style="margin-top: 2px;" id="lobby-winrate">Qələbə: 0%</div>
           </div>
         </div>
         <div class="points-box">
-          <div class="points-value">485</div>
+          <div class="points-value" id="lobby-points">0</div>
           <div class="points-label">POINTS</div>
         </div>
       </div>
 
-      <div class="menu-card" style="padding: 12px 16px;" onclick="navigateTo('screen-stats')">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 12px; font-weight: 800; color: #f59e0b;">🏆 LEADERBOARD</span>
-          <span style="color: #6c757d; font-size: 14px;">›</span>
-        </div>
-      </div>
-
       <div class="lobby-actions">
-        <button class="btn-action primary">
+        <button class="btn-action primary" onclick="createRoom()">
           <span style="font-size: 20px;">⊕</span>
-          <span>Create Room</span>
+          <span>Otaq Yarat</span>
         </button>
         <button class="btn-action">
           <span style="font-size: 20px;">👥</span>
-          <span>Online Players</span>
+          <span>Açıq Otaqlar</span>
         </button>
       </div>
 
-      <div class="section-label">AVAILABLE ROOMS</div>
+      <div class="section-label">MÖVCUD OTAQLAR</div>
 
-      <div class="room-item">
-        <div class="room-info">
-          <span class="flag-icon">🇷🇺</span>
-          <div>
-            <div class="room-title">Комната honl1k</div>
-            <div class="room-host">honl1k</div>
+      <div id="room-list" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="room-item">
+          <div class="room-info">
+            <div>
+              <div class="room-title">Otaq #102</div>
+              <div class="room-host">Gözlənilir...</div>
+            </div>
           </div>
+          <button class="btn-join" onclick="startGame('two_players')">Qoşul</button>
         </div>
-        <button class="btn-join" onclick="startGame('two_players')">Join</button>
       </div>
     </div>
 
@@ -762,19 +766,16 @@
     <div id="screen-account" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">My Account</div>
-        <button class="icon-btn-rounded" onclick="openRewardModal()">
-            🎁
-            <div class="reward-badge-icon"></div>
-        </button>
+        <div class="header-title">Hesabım</div>
+        <div></div>
       </div>
 
       <div class="user-stats-card">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo" style="background: #23283b; border-color: #323952;">👤</div>
+          <div class="avatar-logo" id="account-avatar">👤</div>
           <div>
-            <div class="card-sub">Username</div>
-            <div class="username" style="font-size: 16px;">fhsnov545 🇦🇿</div>
+            <div class="card-sub">İstifadəçi Adı</div>
+            <div class="username" style="font-size: 16px;" id="account-username">Oyunçu</div>
           </div>
         </div>
       </div>
@@ -782,40 +783,8 @@
       <div class="account-menu">
         <div class="account-item">
           <div class="account-item-left">
-            <span>👥</span>
-            <span>Friends</span>
-          </div>
-          <span style="color: #6c757d;">›</span>
-        </div>
-
-        <div class="account-item">
-          <div class="account-item-left">
-            <span>📖</span>
-            <span>How to Play</span>
-          </div>
-          <span style="color: #6c757d;">›</span>
-        </div>
-
-        <div class="account-item">
-          <div class="account-item-left">
-            <span>🌐</span>
-            <span>Select Language</span>
-          </div>
-          <span style="color: #6c757d; font-size: 12px;">Language ›</span>
-        </div>
-
-        <div class="account-item">
-          <div class="account-item-left">
-            <span>🎨</span>
-            <span>Wall / Pawn Color</span>
-          </div>
-          <div style="width: 18px; height: 18px; border-radius: 50%; background: #a3e635;"></div>
-        </div>
-
-        <div class="account-item">
-          <div class="account-item-left">
             <span>🔊</span>
-            <span>Sound Effects</span>
+            <span>Səs Effektləri</span>
           </div>
           <div class="toggle-switch"></div>
         </div>
@@ -823,22 +792,18 @@
         <div class="account-item">
           <div class="account-item-left">
             <span>📳</span>
-            <span>Vibration</span>
+            <span>Vibrasiya</span>
           </div>
           <div class="toggle-switch"></div>
         </div>
 
-        <div class="account-item" onclick="navigateTo('screen-menu')">
+        <div class="account-item" onclick="logout()">
           <div class="account-item-left danger-text">
             <span>🚪</span>
-            <span>Log Out</span>
+            <span>Çıxış Et</span>
           </div>
           <span class="danger-text">›</span>
         </div>
-      </div>
-
-      <div style="text-align: center; margin-top: 10px;">
-        <span style="color: #ef4444; font-size: 12px; font-weight: 600; cursor: pointer;">Delete Account</span>
       </div>
     </div>
 
@@ -846,100 +811,44 @@
     <div id="screen-stats" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Stats</div>
-        <button class="icon-btn-rounded" onclick="openRewardModal()">🎁</button>
+        <div class="header-title">Statistika</div>
+        <div></div>
       </div>
 
       <div class="user-stats-card" style="flex-direction: column; align-items: stretch; gap: 12px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo">FH</div>
+          <div class="avatar-logo" id="stats-avatar">👤</div>
           <div>
-            <div class="username">fhsnov545 🇦🇿</div>
-            <div style="font-size: 11px; color: #f59e0b; font-weight: 700; margin-top: 2px;">🔥 Best Streak: 3</div>
+            <div class="username" id="stats-username">Oyunçu</div>
           </div>
         </div>
 
         <div class="stats-summary">
           <div class="stat-box">
-            <div class="stat-num">535</div>
-            <div class="stat-lbl">SCORE</div>
+            <div class="stat-num" id="stats-score">0</div>
+            <div class="stat-lbl">XAL</div>
           </div>
           <div class="stat-box">
-            <div class="stat-num">7</div>
-            <div class="stat-lbl">GAMES</div>
+            <div class="stat-num" id="stats-games">0</div>
+            <div class="stat-lbl">OYUN</div>
           </div>
           <div class="stat-box">
-            <div class="stat-num">3</div>
-            <div class="stat-lbl">WINS</div>
+            <div class="stat-num" id="stats-wins">0</div>
+            <div class="stat-lbl">QƏLƏBƏ</div>
           </div>
         </div>
-      </div>
-
-      <div class="tab-group">
-        <div class="tab-btn">Countries</div>
-        <div class="tab-btn active">Weekly</div>
-        <div class="tab-btn">Monthly</div>
       </div>
 
       <div class="leaderboard-list">
         <div class="lb-item">
           <div class="lb-left">
             <div class="lb-rank top-1">1</div>
-            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px;">GH</div>
+            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px;">?</div>
             <div>
-              <div class="lb-user">ghalib</div>
-              <div class="lb-country">🇾🇪 Yemen</div>
+              <div class="lb-user">Oyunçu 1</div>
             </div>
           </div>
-          <div class="lb-score">28.9K</div>
-        </div>
-
-        <div class="lb-item">
-          <div class="lb-left">
-            <div class="lb-rank top-2">2</div>
-            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #3b82f6;">ER</div>
-            <div>
-              <div class="lb-user">erla</div>
-              <div class="lb-country">🇰🇿 Kazakhstan</div>
-            </div>
-          </div>
-          <div class="lb-score">21.7K</div>
-        </div>
-
-        <div class="lb-item">
-          <div class="lb-left">
-            <div class="lb-rank top-3">3</div>
-            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #ec4899;">PA</div>
-            <div>
-              <div class="lb-user">papatya81</div>
-              <div class="lb-country">🇹🇷 Turkey</div>
-            </div>
-          </div>
-          <div class="lb-score">19.4K</div>
-        </div>
-
-        <div class="lb-item">
-          <div class="lb-left">
-            <div class="lb-rank">4</div>
-            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #10b981;">WE</div>
-            <div>
-              <div class="lb-user">wesley18081</div>
-              <div class="lb-country">🇧🇪 Belgium</div>
-            </div>
-          </div>
-          <div class="lb-score">15.5K</div>
-        </div>
-
-        <div class="lb-item">
-          <div class="lb-left">
-            <div class="lb-rank">5</div>
-            <div class="avatar-logo" style="width: 32px; height: 32px; font-size: 10px; background: #8b5cf6;">BA</div>
-            <div>
-              <div class="lb-user">baobao</div>
-              <div class="lb-country">🇻🇳 Vietnam</div>
-            </div>
-          </div>
-          <div class="lb-score">15.1K</div>
+          <div class="lb-score">0</div>
         </div>
       </div>
     </div>
@@ -948,7 +857,7 @@
     <div id="screen-game" class="screen">
       <div class="game-header">
         <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
-        <div class="game-mode-indicator" id="game-mode-title">🤖 vs Kompüter</div>
+        <div class="game-mode-indicator" id="game-mode-title">🤖 vs Bot</div>
         <button class="icon-btn" onclick="restartGame()">🔄</button>
       </div>
 
@@ -957,7 +866,6 @@
           <div class="dot-indicator" id="turn-dot"></div>
           <span id="turn-text">Sizin növbəniz</span>
         </div>
-        <div>HESAB <span id="score-text">0 - 0</span></div>
         <div class="wall-counters">
           <div class="wall-pill p1-pill">
             <div class="wall-pill-icon"></div>
@@ -992,48 +900,73 @@
       </div>
   </div>
 
-  <!-- DAILY REWARDS MODAL -->
-  <div class="modal-overlay" id="reward-modal">
-      <div class="modal" style="max-width: 340px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 11px; font-weight: 800; color: #f59e0b;">🔥 7-Day Reward Path</span>
-            <span style="font-size: 11px; color: #6c757d;">0/7 days completed</span>
-          </div>
-          <div class="reward-list">
-            <div class="reward-day-item active">
-              <span>Day 1</span>
-              <span style="font-weight: 800; color: #f59e0b;">+50</span>
-            </div>
-            <div class="reward-day-item">
-              <span>Day 2</span>
-              <span style="font-weight: 800; color: #6c757d;">+100</span>
-            </div>
-            <div class="reward-day-item">
-              <span>Day 3</span>
-              <span style="font-weight: 800; color: #6c757d;">+150</span>
-            </div>
-            <div class="reward-day-item">
-              <span>Day 4</span>
-              <span style="font-weight: 800; color: #6c757d;">+200</span>
-            </div>
-            <div class="reward-day-item">
-              <span>Day 5</span>
-              <span style="font-weight: 800; color: #6c757d;">+300</span>
-            </div>
-            <div class="reward-day-item">
-              <span>Day 6</span>
-              <span style="font-weight: 800; color: #6c757d;">+400</span>
-            </div>
-            <div class="reward-day-item grand">
-              <span>DAY 7 · GRAND REWARD</span>
-              <span>+600</span>
-            </div>
-          </div>
-          <button class="modal-btn" onclick="claimReward()">🎁 Claim Reward (+50 Pts)</button>
-      </div>
-  </div>
-
 <script>
+    // USER STATE
+    let currentUser = {
+        name: "Qonaq",
+        picture: "",
+        score: 0,
+        games: 0,
+        wins: 0,
+        streak: 0
+    };
+
+    // JWT Decoder for Google Login
+    function parseJwt (token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+
+    function handleCredentialResponse(response) {
+        const responsePayload = parseJwt(response.credential);
+        currentUser.name = responsePayload.name;
+        currentUser.picture = responsePayload.picture;
+        updateUserUI();
+        navigateTo('screen-menu');
+    }
+
+    function loginAsGuest() {
+        currentUser.name = "Qonaq_" + Math.floor(Math.random() * 8999 + 1000);
+        currentUser.picture = "";
+        updateUserUI();
+        navigateTo('screen-menu');
+    }
+
+    function logout() {
+        currentUser = { name: "Qonaq", picture: "", score: 0, games: 0, wins: 0, streak: 0 };
+        navigateTo('screen-login');
+    }
+
+    function updateUserUI() {
+        const nameEls = ['display-username', 'lobby-username', 'account-username', 'stats-username'];
+        nameEls.forEach(id => {
+            let el = document.getElementById(id);
+            if(el) el.textContent = currentUser.name;
+        });
+
+        const avatarEls = ['user-avatar', 'lobby-avatar', 'account-avatar', 'stats-avatar'];
+        avatarEls.forEach(id => {
+            let el = document.getElementById(id);
+            if(el) {
+                if(currentUser.picture) {
+                    el.innerHTML = `<img src="${currentUser.picture}" alt="Avatar">`;
+                } else {
+                    el.innerHTML = currentUser.name.charAt(0).toUpperCase();
+                }
+            }
+        });
+
+        document.getElementById('stats-score').textContent = currentUser.score;
+        document.getElementById('stats-games').textContent = currentUser.games;
+        document.getElementById('stats-wins').textContent = currentUser.wins;
+        document.getElementById('lobby-points').textContent = currentUser.score;
+    }
+
+    // GAME LOGIC
     const BOARD_SIZE = 9;
     let p1 = { r: 8, c: 4, walls: 10 };
     let p2 = { r: 0, c: 4, walls: 10 };
@@ -1046,25 +979,15 @@
 
     let boardEl = document.getElementById('board');
 
-    // Navigation System
     function navigateTo(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
     }
 
-    function openRewardModal() {
-        document.getElementById('reward-modal').classList.add('active');
-    }
-
-    function claimReward() {
-        document.getElementById('reward-modal').classList.remove('active');
-        alert("50 Xal təbrik üçün hesabınıza əlavə olundu!");
-    }
-
     function startGame(mode) {
         currentGameMode = mode;
         navigateTo('screen-game');
-        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? '🤖 vs Kompüter' : '👥 2 Nəfərlik';
+        document.getElementById('game-mode-title').innerHTML = mode === 'vs_bot' ? '🤖 vs Bot' : '👥 2 Oyunçu';
         restartGame();
     }
 
@@ -1168,8 +1091,8 @@
             let validMoves = getValidMoves(currP, oppP);
             if (validMoves.some(m => m.r === r && m.c === c)) {
                 currP.r = r; currP.c = c;
-                if (turn === 1 && p1.r === 0) return endGame("Siz qazandınız!");
-                if (turn === 2 && p2.r === 8) return endGame("2-ci oyunçu qazandı!");
+                if (turn === 1 && p1.r === 0) return endGame(true);
+                if (turn === 2 && p2.r === 8) return endGame(false);
                 switchTurn();
             }
         } else {
@@ -1205,16 +1128,7 @@
             if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
         }
 
-        if (type === 'H') hWalls[r][c] = true;
-        else vWalls[r][c] = true;
-
-        let p1HasPath = hasPath(p1, 0);
-        let p2HasPath = hasPath(p2, 8);
-
-        if (type === 'H') hWalls[r][c] = false;
-        else vWalls[r][c] = false;
-
-        return p1HasPath && p2HasPath;
+        return true;
     }
 
     function placeWall(r, c, type) {
@@ -1242,33 +1156,6 @@
         boardEl.appendChild(wallEl);
     }
 
-    function hasPath(p, targetRow) {
-        let queue = [{ r: p.r, c: p.c }];
-        let visited = Array(9).fill(0).map(() => Array(9).fill(false));
-        visited[p.r][p.c] = true;
-
-        while (queue.length > 0) {
-            let curr = queue.shift();
-            if (curr.r === targetRow) return true;
-
-            let dr = [-1, 1, 0, 0];
-            let dc = [0, 0, -1, 1];
-
-            for (let i = 0; i < 4; i++) {
-                let nr = curr.r + dr[i];
-                let nc = curr.c + dc[i];
-
-                if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && !visited[nr][nc]) {
-                    if (!isWallBetween(curr.r, curr.c, nr, nc)) {
-                        visited[nr][nc] = true;
-                        queue.push({ r: nr, c: nc });
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     function switchTurn() {
         turn = turn === 1 ? 2 : 1;
         updateUI();
@@ -1293,99 +1180,35 @@
         } else {
             dot.style.backgroundColor = '#ff5252';
             dot.style.boxShadow = '0 0 8px #ff5252';
-            txt.textContent = currentGameMode === 'vs_bot' ? 'Rəqibin növbəsi (AI)' : '2-ci Oyunçunun növbəsi';
+            txt.textContent = currentGameMode === 'vs_bot' ? 'Rəqibin növbəsi (Bot)' : '2-ci Oyunçunun növbəsi';
         }
     }
 
     function aiTurn() {
         let p2Moves = getValidMoves(p2, p1);
-        let p2Dist = getShortestDistance(p2, 8);
-        let p1Dist = getShortestDistance(p1, 0);
-
-        if (p1Dist <= p2Dist && p2.walls > 0 && Math.random() < 0.7) {
-            let bestWall = null;
-            let maxP1Dist = p1Dist;
-
-            for (let r = 0; r < 8; r++) {
-                for (let c = 0; c < 8; c++) {
-                    for (let type of ['H', 'V']) {
-                        if (canPlaceWall(r, c, type)) {
-                            if (type === 'H') hWalls[r][c] = true;
-                            else vWalls[r][c] = true;
-
-                            let newP1Dist = getShortestDistance(p1, 0);
-                            let newP2Dist = getShortestDistance(p2, 8);
-
-                            if (newP1Dist > maxP1Dist && newP2Dist === p2Dist) {
-                                maxP1Dist = newP1Dist;
-                                bestWall = { r, c, type };
-                            }
-
-                            if (type === 'H') hWalls[r][c] = false;
-                            else vWalls[r][c] = false;
-                        }
-                    }
-                }
-            }
-
-            if (bestWall) {
-                placeWall(bestWall.r, bestWall.c, bestWall.type);
-                p2.walls--;
-                switchTurn();
-                return;
-            }
-        }
-
-        let bestMove = p2Moves[0];
-        let minDist = 999;
-
-        p2Moves.forEach(m => {
-            let dist = getShortestDistance({ r: m.r, c: m.c }, 8);
-            if (dist < minDist) {
-                minDist = dist;
-                bestMove = m;
-            }
-        });
+        let bestMove = p2Moves[Math.floor(Math.random() * p2Moves.length)];
 
         if (bestMove) {
             p2.r = bestMove.r;
             p2.c = bestMove.c;
-            if (p2.r === 8) return endGame("Rəqib (AI) qazandı!");
+            if (p2.r === 8) return endGame(false);
         }
 
         switchTurn();
     }
 
-    function getShortestDistance(p, targetRow) {
-        let queue = [{ r: p.r, c: p.c, dist: 0 }];
-        let visited = Array(9).fill(0).map(() => Array(9).fill(false));
-        visited[p.r][p.c] = true;
-
-        while (queue.length > 0) {
-            let curr = queue.shift();
-            if (curr.r === targetRow) return curr.dist;
-
-            let dr = [-1, 1, 0, 0];
-            let dc = [0, 0, -1, 1];
-
-            for (let i = 0; i < 4; i++) {
-                let nr = curr.r + dr[i];
-                let nc = curr.c + dc[i];
-
-                if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && !visited[nr][nc]) {
-                    if (!isWallBetween(curr.r, curr.c, nr, nc)) {
-                        visited[nr][nc] = true;
-                        queue.push({ r: nr, c: nc, dist: curr.dist + 1 });
-                    }
-                }
-            }
+    function endGame(isWin) {
+        currentUser.games++;
+        if(isWin) {
+            currentUser.wins++;
+            currentUser.score += 50;
+            document.getElementById('modal-title').textContent = "Təbriklər! 🎉";
+            document.getElementById('modal-desc').textContent = "Siz qalib gəldiniz (+50 Xal)!";
+        } else {
+            document.getElementById('modal-title').textContent = "Oyun Bitdi";
+            document.getElementById('modal-desc').textContent = "Rəqib qalib gəldi.";
         }
-        return 999;
-    }
-
-    function endGame(msg) {
-        document.getElementById('modal-title').textContent = msg.includes("Siz") ? "Təbriklər! 🎉" : "Oyun Bitdi!";
-        document.getElementById('modal-desc').textContent = msg;
+        updateUserUI();
         document.getElementById('modal').classList.add('active');
     }
 
