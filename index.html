@@ -211,18 +211,18 @@
 
         .mode-toggle-btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px 6px;
             border-radius: 10px;
             border: none;
             background: transparent;
             color: #6c757d;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 11px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
             transition: all 0.2s ease;
         }
 
@@ -533,9 +533,25 @@
             border-radius: 16px;
             padding: 10px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             touch-action: none;
+        }
+
+        .finish-banner {
+            display: none;
+            width: 340px;
+            text-align: center;
+            padding: 6px;
+            margin-bottom: 8px;
+            background: rgba(56, 239, 125, 0.1);
+            border: 1px dashed #38ef7d;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #38ef7d;
+            letter-spacing: 2px;
         }
 
         #board {
@@ -562,6 +578,11 @@
             content: "👑";
             font-size: 16px;
             opacity: 0.8;
+        }
+
+        .cell.finish-cell {
+            background: rgba(56, 239, 125, 0.08);
+            border-top: 2px solid #38ef7d;
         }
 
         .cell.valid-move {
@@ -756,7 +777,10 @@
             <span>🚩</span> Classic
         </button>
         <button class="mode-toggle-btn" id="btn-mode-center" onclick="setGameRule('center_race')">
-            <span>👑</span> Center Race
+            <span>👑</span> Center
+        </button>
+        <button class="mode-toggle-btn" id="btn-mode-finish" onclick="setGameRule('finish_race')">
+            <span>🏁</span> Finish
         </button>
       </div>
 
@@ -958,6 +982,7 @@
       </div>
 
       <div id="board-wrapper">
+        <div class="finish-banner" id="finish-banner">🏁 FINISH 🏁</div>
         <div id="board"></div>
       </div>
 
@@ -998,7 +1023,7 @@
 
     let gameSetup = {
         mode: 'two_players', // 'vs_bot' or 'two_players'
-        rule: 'classic',    // 'classic' or 'center_race'
+        rule: 'classic',    // 'classic', 'center_race', or 'finish_race'
         p1Name: 'Player 1',
         p1Color: '#5865F2',
         p2Name: 'Player 2',
@@ -1125,6 +1150,7 @@
         gameSetup.rule = rule;
         document.getElementById('btn-mode-classic').classList.toggle('active', rule === 'classic');
         document.getElementById('btn-mode-center').classList.toggle('active', rule === 'center_race');
+        document.getElementById('btn-mode-finish').classList.toggle('active', rule === 'finish_race');
     }
 
     function selectColor(player, color) {
@@ -1174,8 +1200,20 @@
         p2.name = gameSetup.p2Name;
         p2.color = gameSetup.p2Color;
 
-        let icon = gameSetup.rule === 'center_race' ? '👑' : (mode === 'vs_bot' ? '🤖' : '🚩');
-        let modeText = gameSetup.rule === 'center_race' ? 'Center Race' : (mode === 'vs_bot' ? 'vs Bot' : 'Classic');
+        let icon = '🚩';
+        let modeText = 'Classic';
+
+        if (gameSetup.rule === 'center_race') {
+            icon = '👑';
+            modeText = 'Center Race';
+        } else if (gameSetup.rule === 'finish_race') {
+            icon = '🏁';
+            modeText = 'Finish Race';
+        } else if (mode === 'vs_bot') {
+            icon = '🤖';
+            modeText = 'vs Bot';
+        }
+
         document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
 
         restartGame();
@@ -1183,13 +1221,25 @@
 
     function initBoard() {
         boardEl.innerHTML = '';
+        let finishBanner = document.getElementById('finish-banner');
+        if (gameSetup.rule === 'finish_race') {
+            finishBanner.style.display = 'block';
+        } else {
+            finishBanner.style.display = 'none';
+        }
+
         for (let r = 0; r < BOARD_SIZE; r++) {
             for (let c = 0; c < BOARD_SIZE; c++) {
                 let cell = document.createElement('div');
                 cell.className = 'cell';
+                
                 if(gameSetup.rule === 'center_race' && r === 4 && c === 4) {
                     cell.classList.add('center-cell');
                 }
+                if(gameSetup.rule === 'finish_race' && r === 0) {
+                    cell.classList.add('finish-cell');
+                }
+
                 cell.dataset.r = r;
                 cell.dataset.c = c;
                 cell.onclick = () => onCellClick(r, c);
@@ -1209,7 +1259,7 @@
         pawn1.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${p1.color})`;
         pawn1.style.border = `2px solid ${p1.color}`;
         pawn1.style.boxShadow = `0 0 12px ${p1.color}`;
-        cell1.appendChild(pawn1);
+        if(cell1) cell1.appendChild(pawn1);
 
         let cell2 = getCellEl(p2.r, p2.c);
         let pawn2 = document.createElement('div');
@@ -1217,7 +1267,7 @@
         pawn2.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${p2.color})`;
         pawn2.style.border = `2px solid ${p2.color}`;
         pawn2.style.boxShadow = `0 0 12px ${p2.color}`;
-        cell2.appendChild(pawn2);
+        if(cell2) cell2.appendChild(pawn2);
 
         highlightValidMoves();
     }
@@ -1294,6 +1344,8 @@
                 // WIN CONDITIONS
                 if(gameSetup.rule === 'center_race') {
                     if (currP.r === 4 && currP.c === 4) return endGame(turn === 1);
+                } else if(gameSetup.rule === 'finish_race') {
+                    if (currP.r === 0) return endGame(turn === 1);
                 } else {
                     if (turn === 1 && p1.r === 0) return endGame(true);
                     if (turn === 2 && p2.r === 8) return endGame(false);
@@ -1399,8 +1451,16 @@
         let p2Moves = getValidMoves(p2, p1);
         if (!p2Moves || p2Moves.length === 0) return;
 
-        let targetR = gameSetup.rule === 'center_race' ? 4 : 8;
-        let targetC = gameSetup.rule === 'center_race' ? 4 : p2.c;
+        let targetR = 8;
+        let targetC = p2.c;
+
+        if (gameSetup.rule === 'center_race') {
+            targetR = 4;
+            targetC = 4;
+        } else if (gameSetup.rule === 'finish_race') {
+            targetR = 0;
+            targetC = p2.c;
+        }
 
         // Bot target logic
         p2Moves.sort((a, b) => {
@@ -1417,6 +1477,8 @@
             
             if(gameSetup.rule === 'center_race') {
                 if (p2.r === 4 && p2.c === 4) return endGame(false);
+            } else if(gameSetup.rule === 'finish_race') {
+                if (p2.r === 0) return endGame(false);
             } else {
                 if (p2.r === 8) return endGame(false);
             }
@@ -1443,8 +1505,14 @@
     }
 
     function restartGame() {
-        p1.r = 8; p1.c = 4; p1.walls = 10;
-        p2.r = 0; p2.c = 4; p2.walls = 10;
+        if (gameSetup.rule === 'finish_race') {
+            p1.r = 8; p1.c = 2; p1.walls = 10;
+            p2.r = 8; p2.c = 6; p2.walls = 10;
+        } else {
+            p1.r = 8; p1.c = 4; p1.walls = 10;
+            p2.r = 0; p2.c = 4; p2.walls = 10;
+        }
+
         turn = 1;
         activeMode = 'move';
         hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
