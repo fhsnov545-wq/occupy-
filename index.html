@@ -1766,84 +1766,164 @@
 </script>
 </body>
 </html>
-<script>
-  // Onlayn oyunçular və dəvət sistemi məntiqi
-  function listenToOnlinePlayers(currentUserId, updatePlayersUI) {
-    const playersRef = firebase.database().ref('users');
+<!-- 1. DƏVƏT VƏ ONLAYN PƏNCƏRƏLƏRİNİN HTML STRUKTURU -->
+<div id="onlinePlayersModal" class="custom-modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span>🟢 Online Players (<span id="playerCount">0</span>)</span>
+      <button onclick="closePlayersModal()" class="close-btn">&times;</button>
+    </div>
+    <div id="playersListContainer" class="players-list">
+      <!-- Oyunçular JS vasitəsilə bura yüklənəcək -->
+    </div>
+    <button onclick="refreshPlayers()" class="refresh-btn">🔄 Refresh</button>
+  </div>
+</div>
+
+<div id="gameInviteModal" class="custom-modal" style="display:none;">
+  <div class="modal-content invite-card">
+    <div class="invite-badge">📩 INVITE</div>
+    <h3>Game Invite</h3>
+    <p><b id="inviterName">Player</b> wants to play an online match with you. Do you want to join?</p>
     
+    <div class="player-stat-card">
+      <div id="inviterAvatar" class="avatar">FH</div>
+      <div class="player-info">
+        <span id="inviterTitle">player_name</span>
+        <small id="inviterStats">0W / 0 Games</small>
+      </div>
+      <div class="win-rate-circle" id="inviterWinRate">50%</div>
+    </div>
+
+    <div class="modal-actions">
+      <button onclick="declineInvite()" class="btn-decline">Decline</button>
+      <button onclick="acceptInvite()" class="btn-join">Join</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. NÜMUNƏ DİZAYN (CSS) -->
+<style>
+  .custom-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); display: flex; align-items: center;
+    justify-content: center; z-index: 9999;
+  }
+  .modal-content {
+    background: #18191c; border-radius: 16px; width: 90%; max-width: 400px;
+    padding: 20px; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+  .close-btn { background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
+  .players-list { max-height: 300px; overflow-y: auto; margin-bottom: 15px; }
+  .player-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #2a2b2e; }
+  .btn-invite { background: #32353b; color: #fff; border: none; padding: 6px 16px; border-radius: 20px; cursor: pointer; }
+  .btn-in-game { background: #26211b; color: #d97706; border: none; padding: 6px 16px; border-radius: 20px; }
+  .refresh-btn { width: 100%; padding: 10px; background: #222428; color: #ccc; border: none; border-radius: 10px; cursor: pointer; }
+  
+  .invite-card { text-align: center; }
+  .invite-badge { color: #5eead4; font-size: 12px; letter-spacing: 1px; font-weight: bold; }
+  .player-stat-card { background: #222428; border-radius: 12px; padding: 12px; display: flex; align-items: center; margin: 15px 0; }
+  .avatar { width: 40px; height: 40px; background: #374151; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px; }
+  .player-info { text-align: left; flex-grow: 1; }
+  .player-info small { display: block; color: #9ca3af; }
+  .win-rate-circle { width: 40px; height: 40px; border: 2px solid #eab308; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-decline { flex: 1; padding: 10px; background: #2b1d1d; color: #f87171; border: none; border-radius: 10px; cursor: pointer; }
+  .btn-join { flex: 1; padding: 10px; background: #374151; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+</style>
+
+<!-- 3. MƏNTİQ VƏ FIREBASE BİRLƏŞMƏSİ (JAVASCRIPT) -->
+<script>
+  let currentActiveInvite = null;
+
+  // Onlayn olan oyunçuları gətirmək
+  function loadOnlinePlayers(currentUserId) {
+    const playersRef = firebase.database().ref('users');
     playersRef.on('value', (snapshot) => {
-      const players = [];
+      const container = document.getElementById('playersListContainer');
+      container.innerHTML = '';
+      let count = 0;
+
       snapshot.forEach((child) => {
         const data = child.val();
         if (child.key !== currentUserId && data.isOnline) {
-          players.push({
-            uid: child.key,
-            username: data.username,
-            status: data.status || 'Online',
-            country: data.country
-          });
+          count++;
+          const row = document.createElement('div');
+          row.className = 'player-row';
+          
+          const isInGame = data.status === 'In game';
+          const btnHtml = isInGame 
+            ? `<button class="btn-in-game" disabled>In game</button>`
+            : `<button class="btn-invite" onclick="sendInvite('${currentUserId}', '${child.key}')">Invite</button>`;
+
+          row.innerHTML = `
+            <div>
+              <strong>${data.username || 'Player'}</strong>
+              <div style="font-size:12px; color:#888;">${data.status || 'Online'}</div>
+            </div>
+            ${btnHtml}
+          `;
+          container.appendChild(row);
         }
       });
-      updatePlayersUI(players);
+      document.getElementById('playerCount').innerText = count;
     });
   }
 
-  function sendGameInvite(senderUser, receiverId) {
+  // Dəvət Göndərmək
+  function sendInvite(senderId, receiverId) {
     const inviteRef = firebase.database().ref(`invites/${receiverId}`).push();
-    
-    const inviteData = {
+    inviteRef.set({
       inviteId: inviteRef.key,
-      senderId: senderUser.uid,
-      senderName: senderUser.username,
-      senderWinRate: senderUser.winRate,
-      senderTotalGames: senderUser.totalGames,
+      senderId: senderId,
       status: 'pending',
       timestamp: Date.now()
-    };
-
-    inviteRef.set(inviteData);
+    });
 
     inviteRef.on('value', (snapshot) => {
-      const data = snapshot.val();
-      if (data && data.status === 'accepted') {
+      const val = snapshot.val();
+      if (val && val.status === 'accepted') {
+        alert('Dəvət qəbul edildi! Oyuna başlanılır...');
         inviteRef.off();
-        startMatchWithPlayer(data.roomId);
-      } else if (data && data.status === 'declined') {
-        alert('Dəvət rədd edildi.');
+        // Mövcud otağa daxil olma funksiyanızı buraya yazın
+      } else if (val && val.status === 'declined') {
+        alert('Oyunçu dəvəti rədd etdi.');
         inviteRef.off();
       }
     });
   }
 
-  function listenForIncomingInvites(currentUserId, showInviteModal) {
+  // Daxil olan dəvətləri dinləmək
+  function initInviteListener(currentUserId) {
     const myInvitesRef = firebase.database().ref(`invites/${currentUserId}`);
-    
     myInvitesRef.on('child_added', (snapshot) => {
       const invite = snapshot.val();
       if (invite && invite.status === 'pending') {
-        showInviteModal(invite);
+        currentActiveInvite = invite;
+        document.getElementById('inviterName').innerText = invite.senderId;
+        document.getElementById('gameInviteModal').style.display = 'flex';
       }
     });
   }
 
-  function respondToInvite(invite, isAccepted) {
-    const inviteRef = firebase.database().ref(`invites/${invite.receiverId}/${invite.inviteId}`);
-    
-    if (isAccepted) {
-      const newRoomId = 'room_' + Date.now();
-      inviteRef.update({
-        status: 'accepted',
-        roomId: newRoomId
-      });
-      startMatchWithPlayer(newRoomId);
-    } else {
-      inviteRef.update({
-        status: 'declined'
-      });
-    }
+  function acceptInvite() {
+    if (!currentActiveInvite) return;
+    firebase.database().ref(`invites/${currentActiveInvite.senderId}/${currentActiveInvite.inviteId}`).update({
+      status: 'accepted'
+    });
+    document.getElementById('gameInviteModal').style.display = 'none';
   }
 
-  function startMatchWithPlayer(roomId) {
-    console.log("Oyuna başlanılır! Otaq ID:", roomId);
+  function declineInvite() {
+    if (!currentActiveInvite) return;
+    firebase.database().ref(`invites/${currentActiveInvite.senderId}/${currentActiveInvite.inviteId}`).update({
+      status: 'declined'
+    });
+    document.getElementById('gameInviteModal').style.display = 'none';
+  }
+
+  function closePlayersModal() {
+    document.getElementById('onlinePlayersModal').style.display = 'none';
   }
 </script>
