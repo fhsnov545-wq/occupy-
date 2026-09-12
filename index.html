@@ -25,6 +25,7 @@
             justify-content: center;
             min-height: 100vh;
             padding: 12px;
+            overflow-x: hidden;
         }
 
         .app-container {
@@ -695,6 +696,23 @@
             z-index: 10;
         }
 
+        /* DRAGGABLE WALL PREVIEW */
+        .draggable-wall-ghost {
+            position: absolute;
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+            border: 1px solid #fef08a;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.8);
+            border-radius: 3px;
+            z-index: 20;
+            pointer-events: auto;
+            cursor: grab;
+            display: none;
+        }
+
+        .draggable-wall-ghost:active {
+            cursor: grabbing;
+        }
+
         .controls { display: flex; gap: 10px; width: 100%; }
 
         .btn-mode {
@@ -711,6 +729,7 @@
             justify-content: center;
             gap: 6px;
             cursor: pointer;
+            touch-action: none;
         }
 
         .btn-mode.active {
@@ -770,10 +789,13 @@
     <div id="screen-login" class="screen active">
       <div style="display: flex; justify-content: flex-end; width: 100%;">
         <select class="lang-select-dropdown" onchange="changeLanguage(this.value)">
-            <option value="az">AZ</option>
-            <option value="en">EN</option>
-            <option value="tr">TR</option>
-            <option value="ru">RU</option>
+            <option value="az">🇦🇿 AZ</option>
+            <option value="en">🇬🇧 EN</option>
+            <option value="tr">🇹🇷 TR</option>
+            <option value="ru">🇷🇺 RU</option>
+            <option value="es">🇪🇸 ES</option>
+            <option value="de">🇩🇪 DE</option>
+            <option value="fr">🇫🇷 FR</option>
         </select>
       </div>
       <div style="text-align: center; margin-top: 10px;">
@@ -807,10 +829,13 @@
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
           <select class="lang-select-dropdown" onchange="changeLanguage(this.value)">
-              <option value="az">AZ</option>
-              <option value="en">EN</option>
-              <option value="tr">TR</option>
-              <option value="ru">RU</option>
+              <option value="az">🇦🇿 AZ</option>
+              <option value="en">🇬🇧 EN</option>
+              <option value="tr">🇹🇷 TR</option>
+              <option value="ru">🇷🇺 RU</option>
+              <option value="es">🇪🇸 ES</option>
+              <option value="de">🇩🇪 DE</option>
+              <option value="fr">🇫🇷 FR</option>
           </select>
           <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
         </div>
@@ -1051,6 +1076,8 @@
       <div id="board-wrapper">
         <div class="finish-banner" id="finish-banner" data-i18n="finish_banner">🚪 ÇIXIŞ QAPISI 🚪</div>
         <div id="board"></div>
+        <!-- Sürütlənə bilən Barrikada Kölgəsi (Interactive Drag Ghost) -->
+        <div id="draggable-wall-ghost" class="draggable-wall-ghost"></div>
       </div>
 
       <div class="controls">
@@ -1072,7 +1099,7 @@
   </div>
 
 <script>
-    // TRANSLATION DICTIONARY
+    // TRANSLATION DICTIONARY FOR ALL 7 LANGUAGES
     const i18nData = {
         az: {
             login_title: "Zindana Daxil Olun",
@@ -1211,7 +1238,7 @@
         tr: {
             login_title: "Zindana Giriş Yap",
             login_desc: "Oyuna başlamak için takma adınızı girin",
-            input_placeholder: "Macera cı adınız...",
+            input_placeholder: "Maceracı adınız...",
             btn_start: "Oyuna Başla",
             btn_guest: "Rastgele Ad İle Gir",
             menu_online_title: "Çevrimiçi Oyna",
@@ -1341,6 +1368,207 @@
             alert_peer_connected: "Второй игрок подключился! Игра начинается.",
             alert_peer_disconnected: "Соединение с соперником потеряно.",
             escaped_text: "сбежал из подземелья!"
+        },
+        es: {
+            login_title: "Entra a la Mazmorra",
+            login_desc: "Ingresa tu apodo para comenzar el juego",
+            input_placeholder: "Nombre de aventurero...",
+            btn_start: "Comenzar Juego",
+            btn_guest: "Jugar como Invitado",
+            menu_online_title: "Jugar en Línea",
+            menu_online_sub: "Compite con otros aventureros",
+            menu_bot_title: "Jugar vs Monstruo",
+            menu_bot_sub: "Un Jugador",
+            menu_multi_title: "Multijugador",
+            menu_multi_sub: "2, 3 o 4 Jugadores",
+            menu_leaderboard: "Tabla de Clasificación",
+            setup_title_bot: "Ajustes Modo Monstruo",
+            setup_title_multi: "Ajustes Multijugador",
+            setup_sub: "Selecciona modos y opciones",
+            p_count_2: "2 Jugadores",
+            p_count_3: "3 Jugadores",
+            p_count_4: "4 Jugadores",
+            rule_escape: "Escape",
+            rule_occupy: "Occupy",
+            rule_gate: "Gate",
+            diff_label: "NIVEL DE DIFICULTAD",
+            diff_easy: "Fácil",
+            diff_medium: "Medio",
+            diff_hard: "Difícil",
+            diff_master: "Maestro",
+            player_label: "Jugador",
+            bot_label: "Monstruo Mazmorra",
+            color_label: "SELECCIÓN DE COLOR",
+            lobby_title: "Lobby en Línea",
+            lobby_ready: "Listo para la Victoria",
+            lobby_create: "Crear Sala",
+            lobby_join: "Unirse con Código",
+            lobby_status_label: "ESTADO DE LA RED",
+            lobby_your_id: "Tu ID de Red",
+            lobby_loading: "Cargando...",
+            btn_copy: "Copiar",
+            account_title: "Mi Cuenta",
+            account_pname: "Nombre Aventurero",
+            account_logout: "Cerrar Sesión",
+            stats_title: "Estadísticas",
+            stat_score: "PUNTOS",
+            stat_games: "JUEGOS",
+            stat_wins: "VICTORIAS",
+            finish_banner: "🚪 PUERTA DE SALIDA 🚪",
+            ctrl_step: "Mover",
+            ctrl_horiz: "Muro Horizontal",
+            ctrl_vert: "Muro Vertical",
+            modal_win_title: "¡Victoria! 🎉",
+            modal_win_desc: "¡Has ganado!",
+            modal_restart: "Jugar de Nuevo",
+            turn_suffix: " Turno",
+            monster: "Monstruo",
+            opponent: "Oponente",
+            host: "Anfitrión",
+            alert_name_short: "Por favor ingresa un nombre de al menos 2 letras.",
+            alert_peer_wait: "Conectando a la red, intenta de nuevo en unos segundos.",
+            alert_room_created: "¡Código de Sala Copiado!\n\nCódigo: ",
+            alert_room_created_sub: "\n\nEnvía este código a tu amigo para unirse.",
+            alert_copied: "ID de sala copiado: ",
+            alert_enter_code: "Ingresa el código proporcionado por tu amigo:",
+            alert_joined: "¡Unido a la sala! El juego comienza.",
+            alert_peer_connected: "¡Segundo jugador conectado! El juego comienza.",
+            alert_peer_disconnected: "Oponente desconectado.",
+            escaped_text: "¡escapó de la mazmorra!"
+        },
+        de: {
+            login_title: "Betritt das Verlies",
+            login_desc: "Gib deinen Spitznamen ein, um zu starten",
+            input_placeholder: "Abenteurer-Name...",
+            btn_start: "Spiel Starten",
+            btn_guest: "Als Gast Spielen",
+            menu_online_title: "Online Spielen",
+            menu_online_sub: "Miss dich mit anderen Abenteurern",
+            menu_bot_title: "Gegen Monster",
+            menu_bot_sub: "Einzelspieler",
+            menu_multi_title: "Mehrspieler",
+            menu_multi_sub: "2, 3 oder 4 Spieler",
+            menu_leaderboard: "Bestenliste",
+            setup_title_bot: "Monster-Modus Einstellungen",
+            setup_title_multi: "Mehrspieler Einstellungen",
+            setup_sub: "Wähle Modus und Optionen",
+            p_count_2: "2 Spieler",
+            p_count_3: "3 Spieler",
+            p_count_4: "4 Spieler",
+            rule_escape: "Escape",
+            rule_occupy: "Occupy",
+            rule_gate: "Gate",
+            diff_label: "SCHWIERIGKEITSGRAD",
+            diff_easy: "Einfach",
+            diff_medium: "Mittel",
+            diff_hard: "Schwer",
+            diff_master: "Meister",
+            player_label: "Spieler",
+            bot_label: "Verlies-Monster",
+            color_label: "FARBAUSWAHL",
+            lobby_title: "Online-Lobby",
+            lobby_ready: "Bereit für den Sieg",
+            lobby_create: "Raum Erstellen",
+            lobby_join: "Mit Code Beitreten",
+            lobby_status_label: "NETZWERK-STATUS",
+            lobby_your_id: "Deine Netzwerk-ID",
+            lobby_loading: "Laden...",
+            btn_copy: "Kopieren",
+            account_title: "Mein Konto",
+            account_pname: "Abenteurer-Name",
+            account_logout: "Abmelden",
+            stats_title: "Statistiken",
+            stat_score: "PUNKTE",
+            stat_games: "SPIELE",
+            stat_wins: "SIEGE",
+            finish_banner: "🚪 AUSGANGSTOR 🚪",
+            ctrl_step: "Zug",
+            ctrl_horiz: "Horizontale Wand",
+            ctrl_vert: "Vertikale Wand",
+            modal_win_title: "Sieg! 🎉",
+            modal_win_desc: "Du hast gewonnen!",
+            modal_restart: "Erneut Spielen",
+            turn_suffix: " am Zug",
+            monster: "Monster",
+            opponent: "Gegner",
+            host: "Gastgeber",
+            alert_name_short: "Bitte gib einen Namen mit mindestens 2 Buchstaben ein.",
+            alert_peer_wait: "Verbindung wird hergestellt, bitte versuche es gleich erneut.",
+            alert_room_created: "Raumcode kopiert!\n\nCode: ",
+            alert_room_created_sub: "\n\nSende diesen Code an deinen Freund zum Beitreten.",
+            alert_copied: "Raum-ID kopiert: ",
+            alert_enter_code: "Gib den Raumcode deines Freundes ein:",
+            alert_joined: "Raum beigetreten! Spiel startet.",
+            alert_peer_connected: "Zweiter Spieler beigetreten! Spiel startet.",
+            alert_peer_disconnected: "Verbindung zum Gegner getrennt.",
+            escaped_text: "ist aus dem Verlies entkommen!"
+        },
+        fr: {
+            login_title: "Entrez dans le Donjon",
+            login_desc: "Entrez votre pseudo pour commencer la partie",
+            input_placeholder: "Nom d'aventurier...",
+            btn_start: "Commencer la partie",
+            btn_guest: "Jouer en tant qu'invité",
+            menu_online_title: "Jouer en Ligne",
+            menu_online_sub: "Affrontez d'autres aventuriers",
+            menu_bot_title: "Jouer contre le Monstre",
+            menu_bot_sub: "Joueur Solo",
+            menu_multi_title: "Multijoueur",
+            menu_multi_sub: "2, 3 ou 4 Joueurs",
+            menu_leaderboard: "Classement",
+            setup_title_bot: "Paramètres Mode Monstre",
+            setup_title_multi: "Paramètres Multijoueur",
+            setup_sub: "Sélectionnez le mode et les options",
+            p_count_2: "2 Joueurs",
+            p_count_3: "3 Joueurs",
+            p_count_4: "4 Joueurs",
+            rule_escape: "Escape",
+            rule_occupy: "Occupy",
+            rule_gate: "Gate",
+            diff_label: "NIVEAU DE DIFFICULTÉ",
+            diff_easy: "Facile",
+            diff_medium: "Moyen",
+            diff_hard: "Difficile",
+            diff_master: "Maître",
+            player_label: "Joueur",
+            bot_label: "Monstre du Donjon",
+            color_label: "SÉLECTION DE COULEUR",
+            lobby_title: "Lobby en Ligne",
+            lobby_ready: "Prêt pour la Victoire",
+            lobby_create: "Créer un Salon",
+            lobby_join: "Rejoindre avec Code",
+            lobby_status_label: "STATUT DU RÉSEAU",
+            lobby_your_id: "Votre ID Réseau",
+            lobby_loading: "Chargement...",
+            btn_copy: "Copier",
+            account_title: "Mon Compte",
+            account_pname: "Nom d'Aventurier",
+            account_logout: "Déconnexion",
+            stats_title: "Statistiques",
+            stat_score: "POINTS",
+            stat_games: "PARTIES",
+            stat_wins: "VICTOIRES",
+            finish_banner: "🚪 PORTE DE SORTIE 🚪",
+            ctrl_step: "Déplacer",
+            ctrl_horiz: "Mur Horizontal",
+            ctrl_vert: "Mur Vertical",
+            modal_win_title: "Victoire! 🎉",
+            modal_win_desc: "Vous avez gagné!",
+            modal_restart: "Rejouer",
+            turn_suffix: " Tour",
+            monster: "Monstre",
+            opponent: "Adversaire",
+            host: "Hôte",
+            alert_name_short: "Veuillez entrer un nom d'au moins 2 lettres.",
+            alert_peer_wait: "Connexion au réseau, réessayez dans quelques secondes.",
+            alert_room_created: "Code de salon copié!\n\nCode: ",
+            alert_room_created_sub: "\n\nEnvoyez ce code à votre ami pour qu'il rejoigne.",
+            alert_copied: "ID du salon copié: ",
+            alert_enter_code: "Entrez le code de salon fourni par votre ami:",
+            alert_joined: "Salon rejoint! La partie commence.",
+            alert_peer_connected: "Le deuxième joueur a rejoint! La partie commence.",
+            alert_peer_disconnected: "L'adversaire s'est déconnecté.",
+            escaped_text: "s'est échappé du donjon!"
         }
     };
 
@@ -1426,6 +1654,7 @@
             navigateTo('screen-menu');
         }
         initPeerNetwork();
+        initDragAndDropSystem();
         changeLanguage('az');
     };
 
@@ -1601,6 +1830,7 @@
     let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
 
     let boardEl = document.getElementById('board');
+    let ghostWall = document.getElementById('draggable-wall-ghost');
 
     function navigateTo(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1769,21 +1999,6 @@
 
                 switchTurn();
             }
-        } else {
-            let wr = r < 8 ? r : 7;
-            let wc = c < 8 ? c : 7;
-            
-            if (canPlaceWall(wr, wc, activeMode)) {
-                placeWall(wr, wc, activeMode);
-                currP.walls--;
-
-                if (currentGameMode === 'online_p2p') {
-                    sendOnlineAction({ type: 'WALL', r: wr, c: wc, wallType: activeMode, playerIndex: myOnlinePlayerIndex });
-                }
-
-                setMode('move');
-                switchTurn();
-            }
         }
     }
 
@@ -1793,6 +2008,8 @@
         if (mode === 'move') document.getElementById('btn-move').classList.add('active');
         if (mode === 'H') document.getElementById('btn-h').classList.add('active');
         if (mode === 'V') document.getElementById('btn-v').classList.add('active');
+        
+        updateGhostWallDisplay();
         highlightValidMoves();
     }
 
@@ -1850,6 +2067,96 @@
         boardEl.appendChild(wallEl);
     }
 
+    // ====================================================
+    // BARİKADALARI SÜRÜTLƏYİB QOYMA SİSTEMİ (DRAG & DROP)
+    // ====================================================
+    let isDraggingWall = false;
+    let dragPos = { r: 3, c: 3 };
+
+    function updateGhostWallDisplay() {
+        let currP = players[turnIndex];
+        if (activeMode === 'move' || currP.walls <= 0) {
+            ghostWall.style.display = 'none';
+            return;
+        }
+        if (currentGameMode === 'vs_bot' && turnIndex !== 0) return;
+        if (currentGameMode === 'online_p2p' && turnIndex !== myOnlinePlayerIndex) return;
+
+        let cellW = (340 - 80) / 9;
+        let gap = 10;
+        ghostWall.style.display = 'block';
+
+        if (activeMode === 'H') {
+            ghostWall.style.width = `${cellW * 2 + gap}px`;
+            ghostWall.style.height = `10px`;
+            ghostWall.style.left = `${10 + dragPos.c * (cellW + gap)}px`;
+            ghostWall.style.top = `${10 + (dragPos.r + 1) * cellW + dragPos.r * gap}px`;
+        } else {
+            ghostWall.style.width = `10px`;
+            ghostWall.style.height = `${cellW * 2 + gap}px`;
+            ghostWall.style.left = `${10 + (dragPos.c + 1) * cellW + dragPos.c * gap}px`;
+            ghostWall.style.top = `${10 + dragPos.r * (cellW + gap)}px`;
+        }
+
+        let valid = canPlaceWall(dragPos.r, dragPos.c, activeMode);
+        ghostWall.style.background = valid ? 'linear-gradient(135deg, #f59e0b, #b45309)' : 'linear-gradient(135deg, #ef4444, #991b1b)';
+        ghostWall.style.borderColor = valid ? '#fef08a' : '#fca5a5';
+    }
+
+    function initDragAndDropSystem() {
+        let wrapper = document.getElementById('board-wrapper');
+
+        function handlePointerMove(e) {
+            if (!isDraggingWall) return;
+            let rect = boardEl.getBoundingClientRect();
+            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            if(!clientX || !clientY) return;
+
+            let x = clientX - rect.left - 10;
+            let y = clientY - rect.top - 10;
+
+            let col = Math.floor(x / 36);
+            let row = Math.floor(y / 36);
+
+            col = Math.max(0, Math.min(7, col));
+            row = Math.max(0, Math.min(7, row));
+
+            dragPos = { r: row, c: col };
+            updateGhostWallDisplay();
+        }
+
+        function handlePointerUp() {
+            if (!isDraggingWall) return;
+            isDraggingWall = false;
+
+            let currP = players[turnIndex];
+            if (canPlaceWall(dragPos.r, dragPos.c, activeMode)) {
+                placeWall(dragPos.r, dragPos.c, activeMode);
+                currP.walls--;
+
+                if (currentGameMode === 'online_p2p') {
+                    sendOnlineAction({ type: 'WALL', r: dragPos.r, c: dragPos.c, wallType: activeMode, playerIndex: myOnlinePlayerIndex });
+                }
+
+                setMode('move');
+                switchTurn();
+            } else {
+                updateGhostWallDisplay();
+            }
+        }
+
+        ghostWall.addEventListener('mousedown', (e) => { isDraggingWall = true; e.preventDefault(); });
+        ghostWall.addEventListener('touchstart', (e) => { isDraggingWall = true; e.preventDefault(); });
+
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('touchmove', handlePointerMove, { passive: false });
+
+        window.addEventListener('mouseup', handlePointerUp);
+        window.addEventListener('touchend', handlePointerUp);
+    }
+
     function switchTurn() {
         turnIndex = (turnIndex + 1) % players.length;
         updateUI();
@@ -1880,11 +2187,13 @@
         dot.style.backgroundColor = currP.color;
         dot.style.boxShadow = `0 0 8px ${currP.color}`;
         
-        if (currentLang === 'en') {
+        if (['en', 'de', 'fr', 'es'].includes(currentLang)) {
             txt.textContent = `${currP.name}${i18nData[currentLang].turn_suffix}`;
         } else {
             txt.textContent = `${currP.name} ${i18nData[currentLang].turn_suffix}`;
         }
+
+        updateGhostWallDisplay();
     }
 
     // ==========================================
