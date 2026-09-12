@@ -684,73 +684,281 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
+        /* MODALS GENERAL STYLING */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 100;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.25s ease;
         }
 
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-        .modal {
-            background: #181b29;
-            border: 1px solid #2a3148;
+        .modal-card {
+            background: #161928;
+            border: 1px solid #242a3e;
             border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-            max-width: 320px;
+            padding: 20px;
             width: 90%;
+            max-width: 350px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .modal h2 { font-size: 20px; margin-bottom: 10px; }
-        .modal p { color: #a0a6b8; font-size: 14px; margin-bottom: 20px; }
-
-        .modal-btn {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        /* Player List Modal Style */
-        .player-row {
+        .modal-header-custom {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #161926;
-            border: 1px solid #23283b;
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 8px;
         }
-        .btn-invite {
-            background: #38ef7d;
-            color: #0b0f17;
-            border: none;
-            padding: 6px 12px;
+
+        .modal-title-custom {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #d89e47;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .modal-icon-badge {
+            width: 32px;
+            height: 32px;
+            background: rgba(216, 158, 71, 0.15);
             border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #d89e47;
+        }
+
+        .modal-close-btn {
+            background: #202638;
+            border: 1px solid #2c344d;
+            color: #8c96a8;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* CREATE ROOM MODAL STYLES (2-ci Şəkil) */
+        .input-group-custom {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+        }
+
+        .input-label-custom {
+            font-size: 10px;
+            font-weight: 800;
+            color: #6c757d;
+            letter-spacing: 1px;
+        }
+
+        .input-field-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field-icon {
+            position: absolute;
+            left: 14px;
+            font-size: 14px;
+            color: #d89e47;
+        }
+
+        .custom-room-input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            background: #0f131f;
+            border: 1px solid #23283b;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .custom-room-input:focus {
+            border-color: #d89e47;
+        }
+
+        .info-box-custom {
+            background: rgba(216, 158, 71, 0.08);
+            border: 1px solid rgba(216, 158, 71, 0.25);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .info-box-custom span {
+            font-size: 11px;
+            color: #d89e47;
+            line-height: 1.4;
+        }
+
+        .modal-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .btn-cancel-custom {
+            background: transparent;
+            border: 1px solid #252b3e;
+            color: #8c96a8;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn-start-room {
+            background: #283244;
+            border: 1px solid #36435c;
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* ONLINE PLAYERS MODAL STYLES (3-cü Şəkil) */
+        .online-status-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .online-dot-green {
+            width: 8px;
+            height: 8px;
+            background: #38ef7d;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #38ef7d;
+        }
+
+        .players-list-scroll {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 4px;
+        }
+
+        .player-row-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #111522;
+            border: 1px solid #1c2235;
+            padding: 10px 12px;
+            border-radius: 12px;
+        }
+
+        .player-left-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .player-avatar-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #202638;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: #ffffff;
+            border: 1px solid #2c344d;
+        }
+
+        .player-name-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .p-name-txt {
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .p-status-txt {
+            font-size: 10px;
+            color: #6c757d;
+            margin-top: 1px;
+        }
+
+        .btn-invite-custom {
+            background: #252d3d;
+            border: 1px solid #353f54;
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
         }
-        .btn-in-game {
-            background: #323952;
-            color: #6c757d;
-            border: none;
+
+        .btn-ingame-custom {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
             padding: 6px 12px;
             border-radius: 8px;
+            font-size: 11px;
             font-weight: 700;
+        }
+
+        .btn-refresh-list {
+            background: #23293a;
+            border: 1px solid #30374e;
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 6px;
         }
     </style>
 </head>
@@ -900,10 +1108,12 @@
       </div>
 
       <div class="lobby-actions">
-        <button class="btn-action primary" onclick="createOnlineRoom()">
+        <!-- OTAQ YARAT DÜYMƏSİ -> MODAL AÇIR -->
+        <button class="btn-action primary" onclick="openCreateRoomModal()">
           <span style="font-size: 20px;">⊕</span>
           <span>Otaq Yarat</span>
         </button>
+        <!-- ONLAYN OYUNÇULAR DÜYMƏSİ -> MODAL AÇIR -->
         <button class="btn-action" onclick="openPlayersModal()">
           <span style="font-size: 20px;">👥</span>
           <span>Açıq Otaqlar</span>
@@ -1030,21 +1240,71 @@
 
   </div>
 
-  <!-- ONLINE PLAYERS MODAL -->
+  <!-- CREATE NEW ROOM MODAL (2-Cİ ŞƏKİLƏ UYGUN) -->
+  <div class="modal-overlay" id="createRoomModal">
+      <div class="modal-card">
+          <div class="modal-header-custom">
+              <div class="modal-title-custom">
+                  <div class="modal-icon-badge">➕</div>
+                  <span>CREATE NEW ROOM</span>
+              </div>
+          </div>
+
+          <div class="input-group-custom">
+              <label class="input-label-custom">ROOM NAME</label>
+              <div class="input-field-wrapper">
+                  <span class="input-field-icon">✏️</span>
+                  <input type="text" id="custom-room-name-input" class="custom-room-input" value="fhsnov545's Room">
+              </div>
+          </div>
+
+          <div class="input-group-custom">
+              <label class="input-label-custom">PRIVATE CODE (OPTIONAL)</label>
+              <div class="input-field-wrapper">
+                  <span class="input-field-icon">🔒</span>
+                  <input type="text" id="custom-room-code-input" class="custom-room-input" placeholder="Private Code (Optional)">
+              </div>
+          </div>
+
+          <div class="info-box-custom">
+              <span style="font-size: 14px;">ℹ️</span>
+              <span>The highest duration and lowest round preference are used.</span>
+          </div>
+
+          <div class="modal-actions-grid">
+              <button class="btn-cancel-custom" onclick="closeCreateRoomModal()">Cancel</button>
+              <button class="btn-start-room" onclick="confirmCreateRoom()">Start Room</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- ONLINE PLAYERS MODAL (3-CÜ ŞƏKİLƏ UYGUN) -->
   <div class="modal-overlay" id="onlinePlayersModal">
-      <div class="modal">
-          <h2>Onlayn Oyunçular (<span id="playerCount">0</span>)</h2>
-          <div id="playersListContainer" style="max-height: 200px; overflow-y: auto; margin: 15px 0;"></div>
-          <button class="modal-btn" onclick="closePlayersModal()">Bağla</button>
+      <div class="modal-card">
+          <div class="modal-header-custom">
+              <div class="online-status-header">
+                  <div class="online-dot-green"></div>
+                  <span>Online Players (<span id="playerCount">0</span>)</span>
+              </div>
+              <button class="modal-close-btn" onclick="closePlayersModal()">✕</button>
+          </div>
+
+          <div class="players-list-scroll" id="playersListContainer">
+              <!-- JS ilə doldurulacaq -->
+          </div>
+
+          <button class="btn-refresh-list" onclick="loadOnlinePlayers()">
+              <span>🔄</span> Refresh
+          </button>
       </div>
   </div>
 
   <!-- GAME END MODAL -->
   <div class="modal-overlay" id="modal">
-      <div class="modal">
-          <h2 id="modal-title">Qələbə!</h2>
-          <p id="modal-desc">Siz qazandınız!</p>
-          <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
+      <div class="modal-card" style="text-align: center;">
+          <h2 id="modal-title" style="font-size: 20px;">Qələbə!</h2>
+          <p id="modal-desc" style="color: #6c757d; font-size: 14px;">Siz qazandınız!</p>
+          <button class="btn-submit" onclick="restartGame()">Yenidən Başla</button>
       </div>
   </div>
 
@@ -1064,7 +1324,6 @@
       firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.database();
-    const auth = firebase.auth();
 
     // USER STATE
     let currentUser = {
@@ -1178,16 +1437,42 @@
         document.getElementById('lb-current-score').textContent = currentUser.score;
     }
 
-    // ONLINE MODAL & INVITE FUNCTIONS
+    /* CREATE ROOM MODAL CONTROLS */
+    function openCreateRoomModal() {
+        document.getElementById('custom-room-name-input').value = (currentUser.name || 'Oyunçu') + "'s Room";
+        document.getElementById('createRoomModal').classList.add('active');
+    }
+
+    function closeCreateRoomModal() {
+        document.getElementById('createRoomModal').classList.remove('active');
+    }
+
+    function confirmCreateRoom() {
+        let roomName = document.getElementById('custom-room-name-input').value.trim();
+        let roomCode = document.getElementById('custom-room-code-input').value.trim();
+        
+        const roomId = 'room_' + Math.random().toString(36).substr(2, 6);
+        db.ref('rooms/' + roomId).set({
+            name: roomName || (currentUser.name + "'s Room"),
+            code: roomCode || "",
+            host: currentUser.name,
+            hostUid: currentUser.uid,
+            status: 'waiting'
+        });
+
+        closeCreateRoomModal();
+        alert("Otaq uğurla yaradıldı!");
+        startGame('multi_players');
+    }
+
+    /* ONLINE PLAYERS MODAL CONTROLS (3-CÜ ŞƏKİL DİZAYNI) */
     function openPlayersModal() {
-        const modal = document.getElementById('onlinePlayersModal');
-        if (modal) modal.classList.add('active');
+        document.getElementById('onlinePlayersModal').classList.add('active');
         loadOnlinePlayers();
     }
 
     function closePlayersModal() {
-        const modal = document.getElementById('onlinePlayersModal');
-        if (modal) modal.classList.remove('active');
+        document.getElementById('onlinePlayersModal').classList.remove('active');
     }
 
     function loadOnlinePlayers() {
@@ -1196,26 +1481,40 @@
             const container = document.getElementById('playersListContainer');
             if (!container) return;
             container.innerHTML = '';
-            let count = 0;
+            
+            // Öz istifadəçimizi ən başa əlavə edək
+            let count = 1;
+            let myRow = document.createElement('div');
+            myRow.className = 'player-row-item';
+            myRow.innerHTML = `
+                <div class="player-left-info">
+                    <div class="player-avatar-circle">${(currentUser.name || 'O').charAt(0).toUpperCase()}</div>
+                    <div class="player-name-details">
+                        <div class="p-name-txt">${currentUser.name || 'Oyunçu'} 🇦🇿</div>
+                        <div class="p-status-txt" style="color: #6c757d;">You</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(myRow);
 
             snapshot.forEach((child) => {
                 const data = child.val();
                 if (child.key !== currentUser.uid) {
                     count++;
                     const row = document.createElement('div');
-                    row.className = 'player-row';
+                    row.className = 'player-row-item';
                     
                     const isInGame = data.status === 'In game';
                     const btnHtml = isInGame 
-                      ? `<button class="btn-in-game" disabled>Oyun-içi</button>`
-                      : `<button class="btn-invite" onclick="sendInvite('${child.key}')">Dəvət et</button>`;
+                      ? `<button class="btn-ingame-custom">In game</button>`
+                      : `<button class="btn-invite-custom" onclick="sendInvite('${child.key}')">Invite</button>`;
 
                     row.innerHTML = `
-                      <div style="display:flex; align-items:center; gap:10px;">
-                        <div class="avatar-logo" style="width:32px; height:32px; font-size:12px;">${(data.username || 'O').substring(0, 1).toUpperCase()}</div>
-                        <div>
-                          <strong>${data.username || 'Oyunçu'}</strong>
-                          <div style="font-size:11px; color:#888;">${data.status || 'Online'}</div>
+                      <div class="player-left-info">
+                        <div class="player-avatar-circle">${(data.username || 'O').charAt(0).toUpperCase()}</div>
+                        <div class="player-name-details">
+                          <div class="p-name-txt">${data.username || 'Oyunçu'} 🇦🇿</div>
+                          <div class="p-status-txt">${isInGame ? 'In game' : 'Online'}</div>
                         </div>
                       </div>
                       ${btnHtml}
@@ -1236,17 +1535,6 @@
             timestamp: Date.now()
         });
         alert("Dəvət göndərildi!");
-    }
-
-    function createOnlineRoom() {
-        const roomId = 'room_' + Math.random().toString(36).substr(2, 6);
-        db.ref('rooms/' + roomId).set({
-            host: currentUser.name,
-            hostUid: currentUser.uid,
-            status: 'waiting'
-        });
-        alert("Otaq yaradıldı ID: " + roomId);
-        startGame('multi_players');
     }
 
     // SETUP UI
