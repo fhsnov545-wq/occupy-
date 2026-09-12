@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Occupy - Dungeon Escape Multiplayer</title>
-    <!-- PeerJS Kitabxanası (Pulsuz Canlı Onlayn Şəbəkə Üçün Əlavə Olundu) -->
+    <!-- PeerJS Kitabxanası -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         * {
@@ -67,6 +67,19 @@
             justify-content: center;
             cursor: pointer;
             position: relative;
+        }
+
+        /* Language Switcher Styling */
+        .lang-select-dropdown {
+            background: #181c28;
+            border: 1px solid #2d354b;
+            color: #f59e0b;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
         }
 
         /* LOGIN SCREEN STYLES */
@@ -755,7 +768,15 @@
 
     <!-- 0. LOGIN / ACCOUNT CREATION SCREEN -->
     <div id="screen-login" class="screen active">
-      <div style="text-align: center; margin-top: 30px;">
+      <div style="display: flex; justify-content: flex-end; width: 100%;">
+        <select class="lang-select-dropdown" onchange="changeLanguage(this.value)">
+            <option value="az">AZ</option>
+            <option value="en">EN</option>
+            <option value="tr">TR</option>
+            <option value="ru">RU</option>
+        </select>
+      </div>
+      <div style="text-align: center; margin-top: 10px;">
         <h1 style="font-size: 32px; font-weight: 900; letter-spacing: 3px; color: #f59e0b;">OCCUPY</h1>
         <p style="color: #94a3b8; font-size: 12px; margin-top: 4px; letter-spacing: 1px;">DUNGEON ESCAPE MULTIPLAYER</p>
       </div>
@@ -763,14 +784,14 @@
       <div class="login-card" style="margin-top: 20px;">
         <div class="avatar-logo" style="width: 60px; height: 60px; font-size: 24px;">🏰</div>
         <div>
-          <h2 style="font-size: 18px; font-weight: 800;">Zindana Daxil Olun</h2>
-          <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Oyuna başlamaq üçün ləqəbinizi daxil edin</p>
+          <h2 style="font-size: 18px; font-weight: 800;" data-i18n="login_title">Zindana Daxil Olun</h2>
+          <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;" data-i18n="login_desc">Oyuna başlamaq üçün ləqəbinizi daxil edin</p>
         </div>
 
-        <input type="text" id="input-username" class="username-input" placeholder="Macəraçı adınız..." maxlength="15">
+        <input type="text" id="input-username" class="username-input" data-i18n-ph="input_placeholder" placeholder="Macəraçı adınız..." maxlength="15">
 
-        <button class="btn-submit" onclick="loginUser()">Oyuna Başla</button>
-        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #283044;" onclick="loginAsGuest()">Təsadüfi Ad İlə Gir</button>
+        <button class="btn-submit" onclick="loginUser()" data-i18n="btn_start">Oyuna Başla</button>
+        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #283044;" onclick="loginAsGuest()" data-i18n="btn_guest">Təsadüfi Ad İlə Gir</button>
       </div>
     </div>
 
@@ -784,7 +805,15 @@
             <span class="username" id="display-username">Oyunçu</span>
           </div>
         </div>
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <select class="lang-select-dropdown" onchange="changeLanguage(this.value)">
+              <option value="az">AZ</option>
+              <option value="en">EN</option>
+              <option value="tr">TR</option>
+              <option value="ru">RU</option>
+          </select>
+          <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
+        </div>
       </div>
 
       <div class="menu-card" style="background: linear-gradient(180deg, #1f2536 0%, #151924 100%);" onclick="navigateTo('screen-lobby')">
@@ -794,8 +823,8 @@
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
           <div>
-            <div class="card-main-title">Play Online</div>
-            <div class="card-sub">Digər macəraçılarla mübarizə apar</div>
+            <div class="card-main-title" data-i18n="menu_online_title">Play Online</div>
+            <div class="card-sub" data-i18n="menu_online_sub">Digər macəraçılarla mübarizə apar</div>
           </div>
           <div class="icon-btn-rounded">→</div>
         </div>
@@ -805,16 +834,16 @@
         <div class="menu-card mode-card" onclick="openSetup('vs_bot')">
           <div class="mode-icon">👹</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">Canavar İlə Oyna</div>
-            <div class="card-sub">Tək Oyunçu</div>
+            <div class="card-main-title" style="font-size: 15px;" data-i18n="menu_bot_title">Canavar İlə Oyna</div>
+            <div class="card-sub" data-i18n="menu_bot_sub">Tək Oyunçu</div>
           </div>
         </div>
 
         <div class="menu-card mode-card" onclick="openSetup('multi_players')">
           <div class="mode-icon">👥</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">Çox Oyunçu</div>
-            <div class="card-sub">2, 3 və ya 4 Oyunçu</div>
+            <div class="card-main-title" style="font-size: 15px;" data-i18n="menu_multi_title">Çox Oyunçu</div>
+            <div class="card-sub" data-i18n="menu_multi_sub">2, 3 və ya 4 Oyunçu</div>
           </div>
         </div>
       </div>
@@ -822,7 +851,7 @@
       <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screen-stats')">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 18px;">🏆</span>
-          <span style="font-weight: 700; font-size: 15px;">Liderlər Lövhəsi</span>
+          <span style="font-weight: 700; font-size: 15px;" data-i18n="menu_leaderboard">Liderlər Lövhəsi</span>
         </div>
         <span style="color: #94a3b8;">›</span>
       </div>
@@ -834,39 +863,39 @@
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
         <div style="text-align: center;">
             <div class="header-title" id="setup-title">Game Settings</div>
-            <div style="font-size: 11px; color: #94a3b8;">Rejim və ayarları seçin</div>
+            <div style="font-size: 11px; color: #94a3b8;" data-i18n="setup_sub">Rejim və ayarları seçin</div>
         </div>
         <div></div>
       </div>
 
       <!-- Player Count Selector -->
       <div class="player-count-container" id="player-count-box">
-        <button class="player-count-btn active" id="btn-count-2" onclick="setPlayerCount(2)">2 Oyunçu</button>
-        <button class="player-count-btn" id="btn-count-3" onclick="setPlayerCount(3)">3 Oyunçu</button>
-        <button class="player-count-btn" id="btn-count-4" onclick="setPlayerCount(4)">4 Oyunçu</button>
+        <button class="player-count-btn active" id="btn-count-2" onclick="setPlayerCount(2)"><span data-i18n="p_count_2">2 Oyunçu</span></button>
+        <button class="player-count-btn" id="btn-count-3" onclick="setPlayerCount(3)"><span data-i18n="p_count_3">3 Oyunçu</span></button>
+        <button class="player-count-btn" id="btn-count-4" onclick="setPlayerCount(4)"><span data-i18n="p_count_4">4 Oyunçu</span></button>
       </div>
 
       <!-- Mode Selector -->
       <div class="mode-toggle-container">
         <button class="mode-toggle-btn active" id="btn-mode-classic" onclick="setGameRule('classic')">
-            <span>🗡️</span> Escape
+            <span>🗡️</span> <span data-i18n="rule_escape">Escape</span>
         </button>
         <button class="mode-toggle-btn" id="btn-mode-center" onclick="setGameRule('center_race')">
-            <span>🏰</span> Occupy
+            <span>🏰</span> <span data-i18n="rule_occupy">Occupy</span>
         </button>
         <button class="mode-toggle-btn" id="btn-mode-finish" onclick="setGameRule('finish_race')">
-            <span>🚪</span> Gate
+            <span>🚪</span> <span data-i18n="rule_gate">Gate</span>
         </button>
       </div>
 
       <!-- Bot Difficulty Selector -->
       <div id="bot-difficulty-box" style="display: none; flex-direction: column; gap: 6px;">
-        <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;">ÇƏTİNLİK SEVİYYƏSİ</div>
+        <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;" data-i18n="diff_label">ÇƏTİNLİK SEVİYYƏSİ</div>
         <div class="diff-grid">
-            <button class="diff-btn" id="btn-diff-easy" onclick="setDifficulty('easy')">📊 Asan</button>
-            <button class="diff-btn active" id="btn-diff-medium" onclick="setDifficulty('medium')">📊 Orta</button>
-            <button class="diff-btn" id="btn-diff-hard" onclick="setDifficulty('hard')">📊 Çətin</button>
-            <button class="diff-btn master" id="btn-diff-master" onclick="setDifficulty('master')">🎗️ Master</button>
+            <button class="diff-btn" id="btn-diff-easy" onclick="setDifficulty('easy')">📊 <span data-i18n="diff_easy">Asan</span></button>
+            <button class="diff-btn active" id="btn-diff-medium" onclick="setDifficulty('medium')">📊 <span data-i18n="diff_medium">Orta</span></button>
+            <button class="diff-btn" id="btn-diff-hard" onclick="setDifficulty('hard')">📊 <span data-i18n="diff_hard">Çətin</span></button>
+            <button class="diff-btn master" id="btn-diff-master" onclick="setDifficulty('master')">🎗️ <span data-i18n="diff_master">Master</span></button>
         </div>
       </div>
 
@@ -875,14 +904,14 @@
         <!-- Dynamic Player Cards Will Render Here -->
       </div>
 
-      <button class="btn-submit" style="margin-top: 6px;" onclick="confirmAndStartGame()">Oyuna Başla</button>
+      <button class="btn-submit" style="margin-top: 6px;" onclick="confirmAndStartGame()" data-i18n="btn_start">Oyuna Başla</button>
     </div>
 
     <!-- 2. ONLINE LOBBY SCREEN -->
     <div id="screen-lobby" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Online Lobi</div>
+        <div class="header-title" data-i18n="lobby_title">Online Lobi</div>
         <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
       </div>
 
@@ -891,7 +920,7 @@
           <div class="avatar-logo" id="lobby-avatar">👤</div>
           <div>
             <div class="username" id="lobby-username">Oyunçu</div>
-            <div class="card-sub" style="margin-top: 2px;">Qələbə Hazırdır</div>
+            <div class="card-sub" style="margin-top: 2px;" data-i18n="lobby_ready">Qələbə Hazırdır</div>
           </div>
         </div>
         <div class="points-box">
@@ -903,25 +932,25 @@
       <div class="lobby-actions">
         <button class="btn-action primary" onclick="createOnlineRoom()">
           <span style="font-size: 20px;">⊕</span>
-          <span>Otaq Yarat</span>
+          <span data-i18n="lobby_create">Otaq Yarat</span>
         </button>
         <button class="btn-action" onclick="joinOnlineRoomPrompt()">
           <span style="font-size: 20px;">👥</span>
-          <span>Koda Göre Qoşul</span>
+          <span data-i18n="lobby_join">Koda Göre Qoşul</span>
         </button>
       </div>
 
-      <div class="section-label">CANLI ŞƏBƏKƏ STATUSU</div>
+      <div class="section-label" data-i18n="lobby_status_label">CANLI ŞƏBƏKƏ STATUSU</div>
 
       <div id="room-list" style="display: flex; flex-direction: column; gap: 8px;">
         <div class="room-item">
           <div class="room-info">
             <div>
-              <div class="room-title" id="online-status-title">Onlayn Şəbəkə ID-niz</div>
-              <div class="room-host" id="my-peer-id">Yüklənir...</div>
+              <div class="room-title" id="online-status-title" data-i18n="lobby_your_id">Onlayn Şəbəkə ID-niz</div>
+              <div class="room-host" id="my-peer-id" data-i18n="lobby_loading">Yüklənir...</div>
             </div>
           </div>
-          <button class="btn-join" onclick="copyMyPeerId()">Kopyala</button>
+          <button class="btn-join" onclick="copyMyPeerId()" data-i18n="btn_copy">Kopyala</button>
         </div>
       </div>
     </div>
@@ -930,7 +959,7 @@
     <div id="screen-account" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Hesabım</div>
+        <div class="header-title" data-i18n="account_title">Hesabım</div>
         <div></div>
       </div>
 
@@ -938,7 +967,7 @@
         <div style="display: flex; align-items: center; gap: 12px;">
           <div class="avatar-logo" id="account-avatar">👤</div>
           <div>
-            <div class="card-sub">Macəraçı Adı</div>
+            <div class="card-sub" data-i18n="account_pname">Macəraçı Adı</div>
             <div class="username" style="font-size: 16px;" id="account-username">Oyunçu</div>
           </div>
         </div>
@@ -948,7 +977,7 @@
         <div class="account-item" onclick="logout()">
           <div class="account-item-left danger-text">
             <span>🚪</span>
-            <span>Hesabdan Çıx</span>
+            <span data-i18n="account_logout">Hesabdan Çıx</span>
           </div>
           <span class="danger-text">›</span>
         </div>
@@ -959,7 +988,7 @@
     <div id="screen-stats" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Statistika</div>
+        <div class="header-title" data-i18n="stats_title">Statistika</div>
         <div></div>
       </div>
 
@@ -974,15 +1003,15 @@
         <div class="stats-summary">
           <div class="stat-box">
             <div class="stat-num" id="stats-score">0</div>
-            <div class="stat-lbl">XAL</div>
+            <div class="stat-lbl" data-i18n="stat_score">XAL</div>
           </div>
           <div class="stat-box">
             <div class="stat-num" id="stats-games">0</div>
-            <div class="stat-lbl">OYUN</div>
+            <div class="stat-lbl" data-i18n="stat_games">OYUN</div>
           </div>
           <div class="stat-box">
             <div class="stat-num" id="stats-wins">0</div>
-            <div class="stat-lbl">QƏLƏBƏ</div>
+            <div class="stat-lbl" data-i18n="stat_wins">QƏLƏBƏ</div>
           </div>
         </div>
       </div>
@@ -1020,14 +1049,14 @@
       </div>
 
       <div id="board-wrapper">
-        <div class="finish-banner" id="finish-banner">🚪 ÇIXIŞ QAPISI 🚪</div>
+        <div class="finish-banner" id="finish-banner" data-i18n="finish_banner">🚪 ÇIXIŞ QAPISI 🚪</div>
         <div id="board"></div>
       </div>
 
       <div class="controls">
-        <button class="btn-mode active" id="btn-move" onclick="setMode('move')">🏃 Addım</button>
-        <button class="btn-mode" id="btn-h" onclick="setMode('H')">▬ Yatay Barrikada</button>
-        <button class="btn-mode" id="btn-v" onclick="setMode('V')">❚ Dikey Barrikada</button>
+        <button class="btn-mode active" id="btn-move" onclick="setMode('move')">🏃 <span data-i18n="ctrl_step">Addım</span></button>
+        <button class="btn-mode" id="btn-h" onclick="setMode('H')">▬ <span data-i18n="ctrl_horiz">Yatay Barrikada</span></button>
+        <button class="btn-mode" id="btn-v" onclick="setMode('V')">❚ <span data-i18n="ctrl_vert">Dikey Barrikada</span></button>
       </div>
     </div>
 
@@ -1036,13 +1065,329 @@
   <!-- GAME END MODAL -->
   <div class="modal-overlay" id="modal">
       <div class="modal">
-          <h2 id="modal-title">Qələbə! 🎉</h2>
-          <p id="modal-desc">Siz qazandınız!</p>
-          <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
+          <h2 id="modal-title" data-i18n="modal_win_title">Qələbə! 🎉</h2>
+          <p id="modal-desc" data-i18n="modal_win_desc">Siz qazandınız!</p>
+          <button class="modal-btn" onclick="restartGame()" data-i18n="modal_restart">Yenidən Başla</button>
       </div>
   </div>
 
 <script>
+    // TRANSLATION DICTIONARY
+    const i18nData = {
+        az: {
+            login_title: "Zindana Daxil Olun",
+            login_desc: "Oyuna başlamaq üçün ləqəbinizi daxil edin",
+            input_placeholder: "Macəraçı adınız...",
+            btn_start: "Oyuna Başla",
+            btn_guest: "Təsadüfi Ad İlə Gir",
+            menu_online_title: "Play Online",
+            menu_online_sub: "Digər macəraçılarla mübarizə apar",
+            menu_bot_title: "Canavar İlə Oyna",
+            menu_bot_sub: "Tək Oyunçu",
+            menu_multi_title: "Çox Oyunçu",
+            menu_multi_sub: "2, 3 və ya 4 Oyunçu",
+            menu_leaderboard: "Liderlər Lövhəsi",
+            setup_title_bot: "Canavar Oyunu Parametrləri",
+            setup_title_multi: "Çox Oyunçulu Rejim",
+            setup_sub: "Rejim və ayarları seçin",
+            p_count_2: "2 Oyunçu",
+            p_count_3: "3 Oyunçu",
+            p_count_4: "4 Oyunçu",
+            rule_escape: "Escape",
+            rule_occupy: "Occupy",
+            rule_gate: "Gate",
+            diff_label: "ÇƏTİNLİK SEVİYYƏSİ",
+            diff_easy: "Asan",
+            diff_medium: "Orta",
+            diff_hard: "Çətin",
+            diff_master: "Master",
+            player_label: "Oyunçu",
+            bot_label: "Zindan Canavarı",
+            color_label: "RƏNG SEÇİMİ",
+            lobby_title: "Online Lobi",
+            lobby_ready: "Qələbə Hazırdır",
+            lobby_create: "Otaq Yarat",
+            lobby_join: "Koda Göre Qoşul",
+            lobby_status_label: "CANLI ŞƏBƏKƏ STATUSU",
+            lobby_your_id: "Onlayn Şəbəkə ID-niz",
+            lobby_loading: "Yüklənir...",
+            btn_copy: "Kopyala",
+            account_title: "Hesabım",
+            account_pname: "Macəraçı Adı",
+            account_logout: "Hesabdan Çıx",
+            stats_title: "Statistika",
+            stat_score: "XAL",
+            stat_games: "OYUN",
+            stat_wins: "QƏLƏBƏ",
+            finish_banner: "🚪 ÇIXIŞ QAPISI 🚪",
+            ctrl_step: "Addım",
+            ctrl_horiz: "Yatay Barrikada",
+            ctrl_vert: "Dikey Barrikada",
+            modal_win_title: "Qələbə! 🎉",
+            modal_win_desc: "Siz qazandınız!",
+            modal_restart: "Yenidən Başla",
+            turn_suffix: "Sırası",
+            monster: "Canavar",
+            opponent: "Rəqib Oyunçu",
+            host: "Otaq Sahibi",
+            alert_name_short: "Zəhmət olmasa ən azı 2 hərfdən ibarət ad yazın.",
+            alert_peer_wait: "Şəbəkəyə qoşulunur, bir neçə saniyə sonra yenidən cəhd edin.",
+            alert_room_created: "Otaq Kodunuz Kopyalandı!\n\nKod: ",
+            alert_room_created_sub: "\n\nBu kodu dostunuza göndərin, 'Koda Göre Qoşul' düyməsinə yazsın.",
+            alert_copied: "Otaq ID kopyalandı: ",
+            alert_enter_code: "Dostunuzun verdiyi Otaq Kodunu daxil edin:",
+            alert_joined: "Otağa qoşulundu! Oyun başlayır.",
+            alert_peer_connected: "İkinci oyunçu otağınıza qoşuldu! Oyun başlayır.",
+            alert_peer_disconnected: "Rəqibin internet əlaqəsi kəsildi.",
+            escaped_text: "zindandan qaçdı!"
+        },
+        en: {
+            login_title: "Enter the Dungeon",
+            login_desc: "Enter your nickname to start the game",
+            input_placeholder: "Adventurer name...",
+            btn_start: "Start Game",
+            btn_guest: "Play as Guest",
+            menu_online_title: "Play Online",
+            menu_online_sub: "Compete with other adventurers",
+            menu_bot_title: "Play vs Monster",
+            menu_bot_sub: "Single Player",
+            menu_multi_title: "Multiplayer",
+            menu_multi_sub: "2, 3 or 4 Players",
+            menu_leaderboard: "Leaderboard",
+            setup_title_bot: "Monster Mode Settings",
+            setup_title_multi: "Multiplayer Settings",
+            setup_sub: "Select modes and options",
+            p_count_2: "2 Players",
+            p_count_3: "3 Players",
+            p_count_4: "4 Players",
+            rule_escape: "Escape",
+            rule_occupy: "Occupy",
+            rule_gate: "Gate",
+            diff_label: "DIFFICULTY LEVEL",
+            diff_easy: "Easy",
+            diff_medium: "Medium",
+            diff_hard: "Hard",
+            diff_master: "Master",
+            player_label: "Player",
+            bot_label: "Dungeon Monster",
+            color_label: "COLOR SELECTION",
+            lobby_title: "Online Lobby",
+            lobby_ready: "Ready for Victory",
+            lobby_create: "Create Room",
+            lobby_join: "Join with Code",
+            lobby_status_label: "LIVE NETWORK STATUS",
+            lobby_your_id: "Your Online Network ID",
+            lobby_loading: "Loading...",
+            btn_copy: "Copy",
+            account_title: "My Account",
+            account_pname: "Adventurer Name",
+            account_logout: "Logout",
+            stats_title: "Statistics",
+            stat_score: "SCORE",
+            stat_games: "GAMES",
+            stat_wins: "WINS",
+            finish_banner: "🚪 EXIT GATE 🚪",
+            ctrl_step: "Move",
+            ctrl_horiz: "Horizontal Wall",
+            ctrl_vert: "Vertical Wall",
+            modal_win_title: "Victory! 🎉",
+            modal_win_desc: "You won!",
+            modal_restart: "Play Again",
+            turn_suffix: "'s Turn",
+            monster: "Monster",
+            opponent: "Opponent Player",
+            host: "Room Host",
+            alert_name_short: "Please enter a name with at least 2 letters.",
+            alert_peer_wait: "Connecting to network, please try again in a few seconds.",
+            alert_room_created: "Room Code Copied!\n\nCode: ",
+            alert_room_created_sub: "\n\nSend this code to your friend to join via 'Join with Code'.",
+            alert_copied: "Room ID copied: ",
+            alert_enter_code: "Enter the Room Code provided by your friend:",
+            alert_joined: "Joined the room! Game starting.",
+            alert_peer_connected: "Second player joined your room! Game starting.",
+            alert_peer_disconnected: "Opponent disconnected.",
+            escaped_text: "escaped the dungeon!"
+        },
+        tr: {
+            login_title: "Zindana Giriş Yap",
+            login_desc: "Oyuna başlamak için takma adınızı girin",
+            input_placeholder: "Macera cı adınız...",
+            btn_start: "Oyuna Başla",
+            btn_guest: "Rastgele Ad İle Gir",
+            menu_online_title: "Çevrimiçi Oyna",
+            menu_online_sub: "Diğer maceracılarla mücadele et",
+            menu_bot_title: "Canavar İle Oyna",
+            menu_bot_sub: "Tek Oyunculu",
+            menu_multi_title: "Çok Oyunculu",
+            menu_multi_sub: "2, 3 veya 4 Oyuncu",
+            menu_leaderboard: "Liderlik Tablosu",
+            setup_title_bot: "Canavar Oyunu Ayarları",
+            setup_title_multi: "Çok Oyunculu Mod",
+            setup_sub: "Mod ve ayarları seçin",
+            p_count_2: "2 Oyuncu",
+            p_count_3: "3 Oyuncu",
+            p_count_4: "4 Oyuncu",
+            rule_escape: "Escape",
+            rule_occupy: "Occupy",
+            rule_gate: "Gate",
+            diff_label: "ZORLUK SEVİYESİ",
+            diff_easy: "Kolay",
+            diff_medium: "Orta",
+            diff_hard: "Zor",
+            diff_master: "Usta",
+            player_label: "Oyuncu",
+            bot_label: "Zindan Canavarı",
+            color_label: "RENK SEÇİMİ",
+            lobby_title: "Çevrimiçi Lobi",
+            lobby_ready: "Zafer Hazır",
+            lobby_create: "Oda Oluştur",
+            lobby_join: "Kod İle Katıl",
+            lobby_status_label: "CANLI AĞ DURUMU",
+            lobby_your_id: "Çevrimiçi Ağ ID'niz",
+            lobby_loading: "Yükleniyor...",
+            btn_copy: "Kopyala",
+            account_title: "Hesabım",
+            account_pname: "Maceracı Adı",
+            account_logout: "Çıkış Yap",
+            stats_title: "İstatistikler",
+            stat_score: "PUAN",
+            stat_games: "OYUN",
+            stat_wins: "ZAFER",
+            finish_banner: "🚪 ÇIKIŞ KAPISI 🚪",
+            ctrl_step: "Adım",
+            ctrl_horiz: "Yatay Barikat",
+            ctrl_vert: "Dikey Barikat",
+            modal_win_title: "Zafer! 🎉",
+            modal_win_desc: "Kazandınız!",
+            modal_restart: "Yeniden Başla",
+            turn_suffix: "Sırası",
+            monster: "Canavar",
+            opponent: "Rakip Oyuncu",
+            host: "Oda Sahibi",
+            alert_name_short: "Lütfen en az 2 harften oluşan bir isim girin.",
+            alert_peer_wait: "Ağa bağlanılıyor, birkaç saniye sonra tekrar deneyin.",
+            alert_room_created: "Oda Kodunuz Kopyalandı!\n\nKod: ",
+            alert_room_created_sub: "\n\nBu kodu arkadaşınıza gönderin, 'Kod İle Katıl' butonuna yazsın.",
+            alert_copied: "Oda ID kopyalandı: ",
+            alert_enter_code: "Arkadaşınızın verdiği Oda Kodunu girin:",
+            alert_joined: "Odaya katılındı! Oyun başlıyor.",
+            alert_peer_connected: "İkinci oyuncu odaya katıldı! Oyun başlıyor.",
+            alert_peer_disconnected: "Rakibin internet bağlantısı kesildi.",
+            escaped_text: "zindandan kaçtı!"
+        },
+        ru: {
+            login_title: "Войти в подземелье",
+            login_desc: "Введите свой ник, чтобы начать игру",
+            input_placeholder: "Имя искателя приключений...",
+            btn_start: "Начать игру",
+            btn_guest: "Случайное имя",
+            menu_online_title: "Играть онлайн",
+            menu_online_sub: "Соревнуйтесь с другими игроками",
+            menu_bot_title: "Играть против монстра",
+            menu_bot_sub: "Одиночная игра",
+            menu_multi_title: "Мультиплеер",
+            menu_multi_sub: "2, 3 или 4 игрока",
+            menu_leaderboard: "Таблица лидеров",
+            setup_title_bot: "Настройки игры с монстром",
+            setup_title_multi: "Многопользовательский режим",
+            setup_sub: "Выберите режим и настройки",
+            p_count_2: "2 Игрока",
+            p_count_3: "3 Игрока",
+            p_count_4: "4 Игрока",
+            rule_escape: "Escape",
+            rule_occupy: "Occupy",
+            rule_gate: "Gate",
+            diff_label: "УРОВЕНЬ СЛОЖНОСТИ",
+            diff_easy: "Легко",
+            diff_medium: "Средне",
+            diff_hard: "Сложно",
+            diff_master: "Мастер",
+            player_label: "Игрок",
+            bot_label: "Монстр подземелья",
+            color_label: "ВЫБОР ЦВЕТА",
+            lobby_title: "Онлайн лобби",
+            lobby_ready: "Готов к победе",
+            lobby_create: "Создать комнату",
+            lobby_join: "Войти по коду",
+            lobby_status_label: "СТАТУС СЕТИ",
+            lobby_your_id: "Ваш сетевой ID",
+            lobby_loading: "Загрузка...",
+            btn_copy: "Копировать",
+            account_title: "Мой аккаунт",
+            account_pname: "Имя игрока",
+            account_logout: "Выйти",
+            stats_title: "Статистика",
+            stat_score: "ОЧКИ",
+            stat_games: "ИГРЫ",
+            stat_wins: "ПОБЕДЫ",
+            finish_banner: "🚪 ВЫХОДНЫЕ ВОРОТА 🚪",
+            ctrl_step: "Шаг",
+            ctrl_horiz: "Гориз. барьер",
+            ctrl_vert: "Верт. барьер",
+            modal_win_title: "Победа! 🎉",
+            modal_win_desc: "Вы победили!",
+            modal_restart: "Начать заново",
+            turn_suffix: " Ход",
+            monster: "Монстр",
+            opponent: "Соперник",
+            host: "Создатель комнаты",
+            alert_name_short: "Пожалуйста, введите имя минимум из 2 букв.",
+            alert_peer_wait: "Подключение к сети, попробуйте снова через несколько секунд.",
+            alert_room_created: "Код комнаты скопирован!\n\nКод: ",
+            alert_room_created_sub: "\n\nОтправьте этот код другу для подключения.",
+            alert_copied: "ID комнаты скопирован: ",
+            alert_enter_code: "Введите код комнаты вашего друга:",
+            alert_joined: "Подключено к комнате! Игра начинается.",
+            alert_peer_connected: "Второй игрок подключился! Игра начинается.",
+            alert_peer_disconnected: "Соединение с соперником потеряно.",
+            escaped_text: "сбежал из подземелья!"
+        }
+    };
+
+    let currentLang = 'az';
+
+    function changeLanguage(lang) {
+        if (!i18nData[lang]) return;
+        currentLang = lang;
+
+        // Apply text elements
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            let key = el.getAttribute('data-i18n');
+            if (i18nData[lang][key]) {
+                el.textContent = i18nData[lang][key];
+            }
+        });
+
+        // Apply placeholders
+        document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+            let key = el.getAttribute('data-i18n-ph');
+            if (i18nData[lang][key]) {
+                el.placeholder = i18nData[lang][key];
+            }
+        });
+
+        // Sync dropdown selectors
+        document.querySelectorAll('.lang-select-dropdown').forEach(sel => {
+            sel.value = lang;
+        });
+
+        // Dynamic setup titles & player cards reload if open
+        if(document.getElementById('screen-pass-setup').classList.contains('active')) {
+            let titleEl = document.getElementById('setup-title');
+            if(gameSetup.mode === 'vs_bot') {
+                titleEl.textContent = i18nData[currentLang].setup_title_bot;
+            } else {
+                titleEl.textContent = i18nData[currentLang].setup_title_multi;
+            }
+            renderPlayersSetupUI();
+        }
+
+        // Active game interface reload if in game
+        if(document.getElementById('screen-game').classList.contains('active')) {
+            updateUI();
+        }
+    }
+
     // USER STATE
     let currentUser = {
         name: "",
@@ -1081,6 +1426,7 @@
             navigateTo('screen-menu');
         }
         initPeerNetwork();
+        changeLanguage('az');
     };
 
     function saveUserData() {
@@ -1090,7 +1436,7 @@
     function loginUser() {
         let inputName = document.getElementById('input-username').value.trim();
         if(inputName.length < 2) {
-            alert("Zəhmət olmasa ən azı 2 hərfdən ibarət ad yazın.");
+            alert(i18nData[currentLang].alert_name_short);
             return;
         }
         currentUser.name = inputName;
@@ -1100,7 +1446,7 @@
     }
 
     function loginAsGuest() {
-        currentUser.name = "Macəraçı_" + Math.floor(Math.random() * 899 + 100);
+        currentUser.name = (i18nData[currentLang].player_label || "Oyunçu") + "_" + Math.floor(Math.random() * 899 + 100);
         saveUserData();
         updateUserUI();
         navigateTo('screen-menu');
@@ -1146,22 +1492,25 @@
 
             let card = document.createElement('div');
             card.className = 'player-setup-card';
+            
+            let pTitle = isBot ? `${i18nData[currentLang].bot_label} (${i18nData[currentLang]['diff_' + gameSetup.difficulty].toUpperCase()})` : `${i18nData[currentLang].player_label} ${i + 1}`;
+            
             card.innerHTML = `
                 <div class="player-setup-header">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <div class="player-badge" style="background: ${p.color}; color: #fff;">${i + 1}</div>
                         <div>
-                            <div style="font-size: 13px; font-weight: 800;">${isBot ? 'Zindan Canavarı (' + gameSetup.difficulty.toUpperCase() + ')' : 'Oyunçu ' + (i + 1)}</div>
+                            <div style="font-size: 13px; font-weight: 800;">${pTitle}</div>
                         </div>
                     </div>
                     <div id="p-preview-${i}" style="width: 14px; height: 14px; border-radius: 50%; background: ${p.color};"></div>
                 </div>
                 <div>
                     <input type="text" id="p-name-input-${i}" class="username-input" style="text-align: left; padding: 8px 12px; font-size: 12px;" 
-                           value="${isBot ? 'Canavar (' + gameSetup.difficulty.toUpperCase() + ')' : p.name}" ${isBot ? 'disabled' : ''}>
+                           value="${isBot ? i18nData[currentLang].monster + ' (' + i18nData[currentLang]['diff_' + gameSetup.difficulty].toUpperCase() + ')' : p.name}" ${isBot ? 'disabled' : ''}>
                 </div>
                 <div>
-                    <div style="font-size: 9px; color: #94a3b8; font-weight: 800; margin-bottom: 4px;">RƏNG SEÇİMİ</div>
+                    <div style="font-size: 9px; color: #94a3b8; font-weight: 800; margin-bottom: 4px;">${i18nData[currentLang].color_label}</div>
                     <div class="color-palette" id="p-palette-${i}"></div>
                 </div>
             `;
@@ -1190,11 +1539,11 @@
         let diffBox = document.getElementById('bot-difficulty-box');
 
         if(mode === 'vs_bot') {
-            titleEl.textContent = "Canavar Oyunu Parametrləri";
+            titleEl.textContent = i18nData[currentLang].setup_title_bot;
             countBox.style.display = 'none';
             diffBox.style.display = 'flex';
         } else {
-            titleEl.textContent = "Çox Oyunçulu Rejim";
+            titleEl.textContent = i18nData[currentLang].setup_title_multi;
             countBox.style.display = 'flex';
             diffBox.style.display = 'none';
         }
@@ -1273,7 +1622,7 @@
             modeText = 'Gate Race';
         } else if (mode === 'vs_bot') {
             icon = '👹';
-            modeText = `vs Canavar (${gameSetup.difficulty.toUpperCase()})`;
+            modeText = `vs ${i18nData[currentLang].monster} (${i18nData[currentLang]['diff_' + gameSetup.difficulty].toUpperCase()})`;
         } else if (mode === 'online_p2p') {
             icon = '🌐';
             modeText = 'Live Online Match';
@@ -1458,7 +1807,6 @@
             if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
         }
 
-        // Barrikada qoyarkən heç bir macəraçının yolunu tam kəsməməlidir
         if (type === 'H') hWalls[r][c] = true;
         else vWalls[r][c] = true;
 
@@ -1470,7 +1818,6 @@
             }
         }
 
-        // Geri qaytarırıq
         if (type === 'H') hWalls[r][c] = false;
         else vWalls[r][c] = false;
 
@@ -1532,7 +1879,12 @@
 
         dot.style.backgroundColor = currP.color;
         dot.style.boxShadow = `0 0 8px ${currP.color}`;
-        txt.textContent = `${currP.name} Sırası`;
+        
+        if (currentLang === 'en') {
+            txt.textContent = `${currP.name}${i18nData[currentLang].turn_suffix}`;
+        } else {
+            txt.textContent = `${currP.name} ${i18nData[currentLang].turn_suffix}`;
+        }
     }
 
     // ==========================================
@@ -1550,7 +1902,6 @@
         while (queue.length > 0) {
             let curr = queue.shift();
 
-            // Win condition check
             if (gameSetup.rule === 'center_race' && curr.r === 4 && curr.c === 4) return curr.dist;
             if (gameSetup.rule === 'finish_race' && curr.r === 0) return curr.dist;
             if (gameSetup.rule === 'classic') {
@@ -1583,7 +1934,6 @@
         let botDist = getShortestPathLength(botP);
         let humanDist = getShortestPathLength(humanP);
 
-        // 1. EASY MODE
         if (diff === 'easy') {
             if (Math.random() < 0.3 && botP.walls > 0) {
                 if (tryRandomWall(botP)) return;
@@ -1592,7 +1942,6 @@
             return;
         }
 
-        // 2. MEDIUM MODE
         if (diff === 'medium') {
             if (humanDist < botDist && botP.walls > 0 && Math.random() < 0.4) {
                 if (tryBlockingWall(botP, humanP)) return;
@@ -1601,7 +1950,6 @@
             return;
         }
 
-        // 3. HARD MODE
         if (diff === 'hard') {
             if (humanDist <= botDist && botP.walls > 0) {
                 if (tryBlockingWall(botP, humanP)) return;
@@ -1610,7 +1958,6 @@
             return;
         }
 
-        // 4. MASTER MODE
         if (diff === 'master') {
             if (humanDist <= 2 && botP.walls > 0) {
                 if (tryBlockingWall(botP, humanP)) return;
@@ -1730,8 +2077,8 @@
             currentUser.score += 50;
         }
 
-        document.getElementById('modal-title').textContent = "Qələbə! 🎉";
-        document.getElementById('modal-desc').textContent = `${winnerP.name} zindandan qaçdı!`;
+        document.getElementById('modal-title').textContent = i18nData[currentLang].modal_win_title;
+        document.getElementById('modal-desc').textContent = `${winnerP.name} ${i18nData[currentLang].escaped_text}`;
 
         saveUserData();
         updateUserUI();
@@ -1802,45 +2149,44 @@
 
         peer.on('connection', function(conn) {
             peerConn = conn;
-            myOnlinePlayerIndex = 0; // Otağı yaradan Oyunçu 1
+            myOnlinePlayerIndex = 0;
             setupConnectionListeners();
-            alert("İkinci oyunçu otağınıza qoşuldu! Oyun başlayır.");
+            alert(i18nData[currentLang].alert_peer_connected);
             
-            // Onlayn oyunu başladırıq
             gameSetup.playerCount = 2;
-            gameSetup.players[0].name = currentUser.name || "Oyunçu 1";
-            gameSetup.players[1].name = "Rəqib Oyunçu";
+            gameSetup.players[0].name = currentUser.name || `${i18nData[currentLang].player_label} 1`;
+            gameSetup.players[1].name = i18nData[currentLang].opponent;
             startGame('online_p2p');
         });
     }
 
     function createOnlineRoom() {
         if (!myPeerId) {
-            alert("Şəbəkəyə qoşulunur, bir neçə saniyə sonra yenidən cəhd edin.");
+            alert(i18nData[currentLang].alert_peer_wait);
             return;
         }
         navigator.clipboard.writeText(myPeerId);
-        alert("Otaq Kodunuz Kopyalandı!\n\nKod: " + myPeerId + "\n\nBu kodu dostunuza göndərin, 'Koda Göre Qoşul' düyməsinə yazsın.");
+        alert(i18nData[currentLang].alert_room_created + myPeerId + i18nData[currentLang].alert_room_created_sub);
     }
 
     function copyMyPeerId() {
         if (myPeerId) {
             navigator.clipboard.writeText(myPeerId);
-            alert("Otaq ID kopyalandı: " + myPeerId);
+            alert(i18nData[currentLang].alert_copied + myPeerId);
         }
     }
 
     function joinOnlineRoomPrompt() {
-        let hostId = prompt("Dostunuzun verdiyi Otaq Kodunu daxil edin:");
+        let hostId = prompt(i18nData[currentLang].alert_enter_code);
         if (hostId) {
             peerConn = peer.connect(hostId.trim());
-            myOnlinePlayerIndex = 1; // Otağa qoşulan Oyunçu 2
+            myOnlinePlayerIndex = 1;
             setupConnectionListeners();
-            alert("Otağa qoşulundu! Oyun başlayır.");
+            alert(i18nData[currentLang].alert_joined);
 
             gameSetup.playerCount = 2;
-            gameSetup.players[0].name = "Otaq Sahibi";
-            gameSetup.players[1].name = currentUser.name || "Oyunçu 2";
+            gameSetup.players[0].name = i18nData[currentLang].host;
+            gameSetup.players[1].name = currentUser.name || `${i18nData[currentLang].player_label} 2`;
             startGame('online_p2p');
         }
     }
@@ -1851,7 +2197,7 @@
         });
 
         peerConn.on('close', function() {
-            alert("Rəqibin internet əlaqəsi kəsildi.");
+            alert(i18nData[currentLang].alert_peer_disconnected);
         });
     }
 
@@ -1867,7 +2213,6 @@
             p.r = data.r;
             p.c = data.c;
 
-            // Remotely verify win condition
             if(gameSetup.rule === 'center_race' && p.r === 4 && p.c === 4) return endGame(p);
             if(gameSetup.rule === 'finish_race' && p.r === 0) return endGame(p);
             if(gameSetup.rule === 'classic') {
