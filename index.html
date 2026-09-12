@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Occupy - Dungeon Escape Multiplayer</title>
+    <!-- PeerJS CDN -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -34,11 +36,9 @@
             position: relative;
         }
 
-        /* Screen Switcher */
         .screen { display: none; flex-direction: column; gap: 14px; width: 100%; }
         .screen.active { display: flex; }
 
-        /* Header Navigation Styles */
         .screen-header {
             display: flex;
             justify-content: space-between;
@@ -64,10 +64,8 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            position: relative;
         }
 
-        /* LOGIN SCREEN STYLES */
         .login-card {
             background: #151924;
             border: 1px solid #283044;
@@ -95,9 +93,7 @@
             -webkit-user-select: auto;
         }
 
-        .username-input:focus {
-            border-color: #f59e0b;
-        }
+        .username-input:focus { border-color: #f59e0b; }
 
         .btn-submit {
             width: 100%;
@@ -112,7 +108,6 @@
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
         }
 
-        /* MAIN MENU STYLES */
         .profile-header {
             display: flex;
             justify-content: space-between;
@@ -180,16 +175,10 @@
         }
 
         .badge-streak { font-size: 12px; color: #ef4444; font-weight: 700; }
-
         .card-main-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
         .card-sub { font-size: 12px; color: #94a3b8; }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .mode-card { display: flex; flex-direction: column; gap: 12px; }
 
         .mode-icon {
@@ -203,8 +192,7 @@
             font-size: 18px;
         }
 
-        /* PASS & PLAY SETUP STYLES */
-        .mode-toggle-container {
+        .player-count-container, .mode-toggle-container {
             display: flex;
             background: #151924;
             border: 1px solid #283044;
@@ -213,40 +201,7 @@
             gap: 4px;
         }
 
-        .mode-toggle-btn {
-            flex: 1;
-            padding: 8px 4px;
-            border-radius: 10px;
-            border: none;
-            background: transparent;
-            color: #94a3b8;
-            font-weight: 700;
-            font-size: 11px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .mode-toggle-btn.active {
-            background: #283044;
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .player-count-container {
-            display: flex;
-            background: #151924;
-            border: 1px solid #283044;
-            border-radius: 14px;
-            padding: 4px;
-            gap: 4px;
-        }
-
-        .player-count-btn {
+        .player-count-btn, .mode-toggle-btn {
             flex: 1;
             padding: 10px;
             border-radius: 10px;
@@ -259,19 +214,13 @@
             transition: all 0.2s ease;
         }
 
-        .player-count-btn.active {
+        .player-count-btn.active, .mode-toggle-btn.active {
             background: #f59e0b;
             color: #0b0d12;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
-        /* DIFFICULTY STYLES */
-        .diff-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 4px;
-        }
+        .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
 
         .diff-btn {
             padding: 10px;
@@ -282,24 +231,9 @@
             font-weight: 800;
             font-size: 12px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s ease;
         }
 
-        .diff-btn.active {
-            border-color: #f59e0b;
-            color: #ffffff;
-            background: rgba(245, 158, 11, 0.1);
-        }
-
-        .diff-btn.master.active {
-            border-color: #ef4444;
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
+        .diff-btn.active { border-color: #f59e0b; color: #ffffff; background: rgba(245, 158, 11, 0.1); }
 
         .player-setup-card {
             background: #151924;
@@ -311,47 +245,6 @@
             gap: 10px;
         }
 
-        .player-setup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .player-badge {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: #283044;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 12px;
-        }
-
-        .color-palette {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 2px;
-        }
-
-        .color-circle {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.15s ease, border 0.15s ease;
-            border: 2px solid transparent;
-        }
-
-        .color-circle.selected {
-            transform: scale(1.15);
-            border-color: #ffffff;
-            box-shadow: 0 0 8px rgba(255,255,255,0.4);
-        }
-
-        /* ONLINE LOBBY STYLES */
         .user-stats-card {
             background: #151924;
             border: 1px solid #283044;
@@ -371,13 +264,9 @@
         }
 
         .points-value { font-size: 18px; font-weight: 900; color: #f59e0b; }
-        .points-label { font-size: 9px; color: #94a3b8; font-weight: 700; letter-spacing: 1px; }
+        .points-label { font-size: 9px; color: #94a3b8; font-weight: 700; }
 
-        .lobby-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .lobby-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .btn-action {
             background: #151924;
@@ -400,123 +289,6 @@
             color: #f59e0b;
         }
 
-        .section-label {
-            font-size: 11px;
-            font-weight: 800;
-            color: #f59e0b;
-            letter-spacing: 1px;
-            margin-top: 6px;
-        }
-
-        .room-item {
-            background: #151924;
-            border: 1px solid #283044;
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .room-info { display: flex; align-items: center; gap: 12px; }
-        .room-title { font-size: 14px; font-weight: 700; }
-        .room-host { font-size: 11px; color: #94a3b8; }
-
-        .btn-join {
-            background: #283044;
-            border: 1px solid #3b4663;
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        /* ACCOUNT STYLES */
-        .account-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .account-item {
-            background: #151924;
-            border: 1px solid #283044;
-            border-radius: 14px;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .account-item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .danger-text { color: #ef4444; }
-
-        /* LEADERBOARD & STATS STYLES */
-        .stats-summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        .stat-box {
-            background: #1f2536;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .stat-num { font-size: 16px; font-weight: 800; }
-        .stat-lbl { font-size: 9px; color: #94a3b8; font-weight: 700; margin-top: 2px; }
-
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #151924;
-            border: 1px solid #283044;
-            border-radius: 16px;
-            padding: 12px;
-        }
-
-        .lb-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 4px;
-            border-bottom: 1px solid #242c3f;
-        }
-
-        .lb-item:last-child { border-bottom: none; }
-
-        .lb-left { display: flex; align-items: center; gap: 10px; }
-        .lb-rank {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 800;
-            background: #283044;
-        }
-
-        .lb-rank.top-1 { background: #f59e0b; color: #000; }
-        .lb-user { font-size: 13px; font-weight: 700; }
-        .lb-score { font-size: 13px; font-weight: 800; color: #f59e0b; }
-
-        /* GAME PLAY STYLES (DUNGEON THEME) */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -586,7 +358,6 @@
 
         .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
 
-        /* Dungeon Board Styling */
         #board-wrapper {
             position: relative;
             background: #121620;
@@ -598,21 +369,6 @@
             align-items: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
             touch-action: none;
-        }
-
-        .finish-banner {
-            display: none;
-            width: 340px;
-            text-align: center;
-            padding: 6px;
-            margin-bottom: 8px;
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px dashed #f59e0b;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            color: #f59e0b;
-            letter-spacing: 2px;
         }
 
         #board {
@@ -634,17 +390,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-        }
-
-        .cell.center-cell::before {
-            content: "🏰";
-            font-size: 16px;
-            opacity: 0.85;
-        }
-
-        .cell.finish-cell {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px dashed #f59e0b;
         }
 
         .cell.valid-move {
@@ -670,7 +415,6 @@
             z-index: 5;
         }
 
-        /* Wall / Rock Barricade Styling */
         .wall-placed {
             position: absolute;
             background: linear-gradient(135deg, #7f1d1d, #450a0a) !important;
@@ -705,7 +449,6 @@
             box-shadow: 0 4px 12px rgba(180, 83, 9, 0.4);
         }
 
-        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -745,34 +488,44 @@
             cursor: pointer;
             width: 100%;
         }
+
+        .online-code-box {
+            background: #0b0d12;
+            border: 2px dashed #f59e0b;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 900;
+            color: #f59e0b;
+            letter-spacing: 4px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
 
   <div class="app-container">
 
-    <!-- 0. LOGIN / ACCOUNT CREATION SCREEN -->
+    <!-- 0. LOGIN -->
     <div id="screen-login" class="screen active">
       <div style="text-align: center; margin-top: 30px;">
         <h1 style="font-size: 32px; font-weight: 900; letter-spacing: 3px; color: #f59e0b;">OCCUPY</h1>
-        <p style="color: #94a3b8; font-size: 12px; margin-top: 4px; letter-spacing: 1px;">DUNGEON ESCAPE MULTIPLAYER</p>
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 4px;">DUNGEON ESCAPE MULTIPLAYER</p>
       </div>
 
       <div class="login-card" style="margin-top: 20px;">
         <div class="avatar-logo" style="width: 60px; height: 60px; font-size: 24px;">🏰</div>
         <div>
           <h2 style="font-size: 18px; font-weight: 800;">Zindana Daxil Olun</h2>
-          <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Oyuna başlamaq üçün ləqəbinizi daxil edin</p>
+          <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Ləqəbinizi daxil edin</p>
         </div>
 
         <input type="text" id="input-username" class="username-input" placeholder="Macəraçı adınız..." maxlength="15">
-
         <button class="btn-submit" onclick="loginUser()">Oyuna Başla</button>
-        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #283044;" onclick="loginAsGuest()">Təsadüfi Ad İlə Gir</button>
       </div>
     </div>
 
-    <!-- 1. MAIN MENU SCREEN -->
+    <!-- 1. MAIN MENU -->
     <div id="screen-menu" class="screen">
       <div class="profile-header">
         <div class="user-info">
@@ -782,18 +535,16 @@
             <span class="username" id="display-username">Oyunçu</span>
           </div>
         </div>
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
       </div>
 
       <div class="menu-card" style="background: linear-gradient(180deg, #1f2536 0%, #151924 100%);" onclick="navigateTo('screen-lobby')">
         <div class="status-row">
-          <span class="badge-online">ONLINE</span>
-          <span class="badge-streak" id="user-streak">🔥 Streak: 0</span>
+          <span class="badge-online">LIVE ONLINE</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
           <div>
-            <div class="card-main-title">Play Online</div>
-            <div class="card-sub">Digər macəraçılarla mübarizə apar</div>
+            <div class="card-main-title">Play Online (P2P)</div>
+            <div class="card-sub">Dostuna kod göndər və canlı oyna!</div>
           </div>
           <div class="icon-btn-rounded">→</div>
         </div>
@@ -803,7 +554,7 @@
         <div class="menu-card mode-card" onclick="openSetup('vs_bot')">
           <div class="mode-icon">👹</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">Canavar İlə Oyna</div>
+            <div class="card-main-title" style="font-size: 15px;">Bot İlə Oyna</div>
             <div class="card-sub">Tək Oyunçu</div>
           </div>
         </div>
@@ -811,77 +562,40 @@
         <div class="menu-card mode-card" onclick="openSetup('multi_players')">
           <div class="mode-icon">👥</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">Çox Oyunçu</div>
-            <div class="card-sub">2, 3 və ya 4 Oyunçu</div>
+            <div class="card-main-title" style="font-size: 15px;">Offlayn Çoxlu</div>
+            <div class="card-sub">Eyni cihazda 2-4 oyunçu</div>
           </div>
         </div>
       </div>
-
-      <div class="menu-card" style="display: flex; justify-content: space-between; align-items: center;" onclick="navigateTo('screen-stats')">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 18px;">🏆</span>
-          <span style="font-weight: 700; font-size: 15px;">Liderlər Lövhəsi</span>
-        </div>
-        <span style="color: #94a3b8;">›</span>
-      </div>
     </div>
 
-    <!-- 1.5 SETUP SCREEN (BOT & MULTI PLAYERS) -->
+    <!-- SETUP SCREEN -->
     <div id="screen-pass-setup" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div style="text-align: center;">
-            <div class="header-title" id="setup-title">Game Settings</div>
-            <div style="font-size: 11px; color: #94a3b8;">Rejim və ayarları seçin</div>
-        </div>
+        <div class="header-title" id="setup-title">Oyun Ayarları</div>
         <div></div>
       </div>
 
-      <!-- Player Count Selector -->
-      <div class="player-count-container" id="player-count-box">
-        <button class="player-count-btn active" id="btn-count-2" onclick="setPlayerCount(2)">2 Oyunçu</button>
-        <button class="player-count-btn" id="btn-count-3" onclick="setPlayerCount(3)">3 Oyunçu</button>
-        <button class="player-count-btn" id="btn-count-4" onclick="setPlayerCount(4)">4 Oyunçu</button>
-      </div>
-
-      <!-- Mode Selector -->
-      <div class="mode-toggle-container">
-        <button class="mode-toggle-btn active" id="btn-mode-classic" onclick="setGameRule('classic')">
-            <span>🗡️</span> Escape
-        </button>
-        <button class="mode-toggle-btn" id="btn-mode-center" onclick="setGameRule('center_race')">
-            <span>🏰</span> Occupy
-        </button>
-        <button class="mode-toggle-btn" id="btn-mode-finish" onclick="setGameRule('finish_race')">
-            <span>🚪</span> Gate
-        </button>
-      </div>
-
-      <!-- Bot Difficulty Selector -->
-      <div id="bot-difficulty-box" style="display: none; flex-direction: column; gap: 6px;">
-        <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;">ÇƏTİNLİK SEVİYYƏSİ</div>
+      <div id="bot-difficulty-box" style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; font-weight: 800; color: #f59e0b;">BOT ÇƏTİNLİYİ</div>
         <div class="diff-grid">
-            <button class="diff-btn" id="btn-diff-easy" onclick="setDifficulty('easy')">📊 Asan</button>
-            <button class="diff-btn active" id="btn-diff-medium" onclick="setDifficulty('medium')">📊 Orta</button>
-            <button class="diff-btn" id="btn-diff-hard" onclick="setDifficulty('hard')">📊 Çətin</button>
-            <button class="diff-btn master" id="btn-diff-master" onclick="setDifficulty('master')">🎗️ Master</button>
+            <button class="diff-btn" id="btn-diff-easy" onclick="setDifficulty('easy')">Asan</button>
+            <button class="diff-btn active" id="btn-diff-medium" onclick="setDifficulty('medium')">Orta</button>
+            <button class="diff-btn" id="btn-diff-hard" onclick="setDifficulty('hard')">Çətin</button>
+            <button class="diff-btn" id="btn-diff-master" onclick="setDifficulty('master')">Master</button>
         </div>
       </div>
 
-      <!-- Player Config Container -->
-      <div id="players-config-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto;">
-        <!-- Dynamic Player Cards Will Render Here -->
-      </div>
-
-      <button class="btn-submit" style="margin-top: 6px;" onclick="confirmAndStartGame()">Oyuna Başla</button>
+      <button class="btn-submit" style="margin-top: 20px;" onclick="confirmAndStartGame()">Oyuna Başla</button>
     </div>
 
-    <!-- 2. ONLINE LOBBY SCREEN -->
+    <!-- ONLINE LOBBY SCREEN -->
     <div id="screen-lobby" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
         <div class="header-title">Online Lobi</div>
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
+        <div></div>
       </div>
 
       <div class="user-stats-card">
@@ -889,121 +603,42 @@
           <div class="avatar-logo" id="lobby-avatar">👤</div>
           <div>
             <div class="username" id="lobby-username">Oyunçu</div>
-            <div class="card-sub" style="margin-top: 2px;">Qələbə Hazırdır</div>
+            <div class="card-sub" id="peer-status-text" style="color: #10b981;">Şəbəkəyə qoşulur...</div>
           </div>
-        </div>
-        <div class="points-box">
-          <div class="points-value" id="lobby-points">0</div>
-          <div class="points-label">POINTS</div>
         </div>
       </div>
 
       <div class="lobby-actions">
-        <button class="btn-action primary" onclick="startGame('multi_players')">
+        <button class="btn-action primary" onclick="createOnlineRoom()">
           <span style="font-size: 20px;">⊕</span>
           <span>Otaq Yarat</span>
         </button>
-        <button class="btn-action" onclick="startGame('multi_players')">
-          <span style="font-size: 20px;">👥</span>
-          <span>Açıq Otaqlar</span>
+        <button class="btn-action" onclick="showJoinInput()">
+          <span style="font-size: 20px;">🔑</span>
+          <span>Koda Göre Qoşul</span>
         </button>
       </div>
 
-      <div class="section-label">MÖVCUD ZİNDAN OTAQLARI</div>
+      <!-- Create Room Box -->
+      <div id="host-box" style="display: none;" class="login-card">
+        <div style="font-size: 13px; color: #94a3b8;">Sizin Otaq Kodunuz:</div>
+        <div class="online-code-box" id="my-room-code">------</div>
+        <div style="font-size: 11px; color: #94a3b8;">Bu kodu dostunuza göndərin. O qoşulanda oyun avtomatik başlayacaq.</div>
+      </div>
 
-      <div id="room-list" style="display: flex; flex-direction: column; gap: 8px;">
-        <div class="room-item">
-          <div class="room-info">
-            <div>
-              <div class="room-title">Otaq #101</div>
-              <div class="room-host">Gözlənilir...</div>
-            </div>
-          </div>
-          <button class="btn-join" onclick="startGame('multi_players')">Qoşul</button>
-        </div>
+      <!-- Join Room Box -->
+      <div id="join-box" style="display: none;" class="login-card">
+        <div style="font-size: 13px; color: #94a3b8;">Dostunuzun Otaq Kodunu Yazın:</div>
+        <input type="text" id="input-room-code" class="username-input" placeholder="6 rəqəmli kod..." maxlength="6">
+        <button class="btn-submit" onclick="joinOnlineRoom()">Otağa Qoşul</button>
       </div>
     </div>
 
-    <!-- 3. MY ACCOUNT SCREEN -->
-    <div id="screen-account" class="screen">
-      <div class="screen-header">
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Hesabım</div>
-        <div></div>
-      </div>
-
-      <div class="user-stats-card">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo" id="account-avatar">👤</div>
-          <div>
-            <div class="card-sub">Macəraçı Adı</div>
-            <div class="username" style="font-size: 16px;" id="account-username">Oyunçu</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="account-menu">
-        <div class="account-item" onclick="logout()">
-          <div class="account-item-left danger-text">
-            <span>🚪</span>
-            <span>Hesabdan Çıx</span>
-          </div>
-          <span class="danger-text">›</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. LEADERBOARD & STATS SCREEN -->
-    <div id="screen-stats" class="screen">
-      <div class="screen-header">
-        <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Statistika</div>
-        <div></div>
-      </div>
-
-      <div class="user-stats-card" style="flex-direction: column; align-items: stretch; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="avatar-logo" id="stats-avatar">👤</div>
-          <div>
-            <div class="username" id="stats-username">Oyunçu</div>
-          </div>
-        </div>
-
-        <div class="stats-summary">
-          <div class="stat-box">
-            <div class="stat-num" id="stats-score">0</div>
-            <div class="stat-lbl">XAL</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="stats-games">0</div>
-            <div class="stat-lbl">OYUN</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="stats-wins">0</div>
-            <div class="stat-lbl">QƏLƏBƏ</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="leaderboard-list">
-        <div class="lb-item">
-          <div class="lb-left">
-            <div class="lb-rank top-1">1</div>
-            <div class="avatar-logo" style="width: 28px; height: 28px; font-size: 12px;">★</div>
-            <div>
-              <div class="lb-user" id="lb-current-user">Oyunçu</div>
-            </div>
-          </div>
-          <div class="lb-score" id="lb-current-score">0</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5. GAME PLAY SCREEN -->
+    <!-- GAME PLAY SCREEN -->
     <div id="screen-game" class="screen">
       <div class="game-header">
         <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
-        <div class="game-mode-indicator" id="game-mode-title">👹 vs Canavar</div>
+        <div class="game-mode-indicator" id="game-mode-title">🗡️ Dungeon Escape</div>
         <button class="icon-btn" onclick="restartGame()">🔄</button>
       </div>
 
@@ -1012,13 +647,10 @@
           <div class="dot-indicator" id="turn-dot"></div>
           <span id="turn-text">Sizin növbəniz</span>
         </div>
-        <div class="wall-counters" id="wall-counters-container">
-          <!-- Dynamic Wall Counters -->
-        </div>
+        <div class="wall-counters" id="wall-counters-container"></div>
       </div>
 
       <div id="board-wrapper">
-        <div class="finish-banner" id="finish-banner">🚪 ÇIXIŞ QAPISI 🚪</div>
         <div id="board"></div>
       </div>
 
@@ -1031,52 +663,34 @@
 
   </div>
 
-  <!-- GAME END MODAL -->
+  <!-- MODAL -->
   <div class="modal-overlay" id="modal">
       <div class="modal">
           <h2 id="modal-title">Qələbə! 🎉</h2>
           <p id="modal-desc">Siz qazandınız!</p>
-          <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
+          <button class="modal-btn" onclick="navigateTo('screen-menu')">Ana Menyu</button>
       </div>
   </div>
 
 <script>
     // USER STATE
-    let currentUser = {
-        name: "",
-        score: 0,
-        games: 0,
-        wins: 0,
-        streak: 0
-    };
+    let currentUser = { name: "", score: 0 };
+    let gameSetup = { mode: 'vs_bot', difficulty: 'medium' };
 
-    // SETUP STATE
-    const COLOR_OPTIONS = [
-        '#f59e0b', '#ef4444', '#10b981', '#3b82f6', 
-        '#ec4899', '#06b6d4', '#ffffff', '#8b5cf6', 
-        '#d97706', '#14b8a6'
-    ];
+    // ONLINE MULTIPLAYER (PEERJS) STATE
+    let peer = null;
+    let conn = null;
+    let myPeerId = "";
+    let isOnlineGame = false;
+    let myPlayerIndex = 0; // 0 = Host (P1), 1 = Client (P2)
 
-    let gameSetup = {
-        mode: 'multi_players', // 'vs_bot' or 'multi_players'
-        playerCount: 2,       // 2, 3, or 4
-        rule: 'classic',      // 'classic', 'center_race', or 'finish_race'
-        difficulty: 'medium', // 'easy', 'medium', 'hard', 'master'
-        players: [
-            { name: 'Oyunçu 1', color: '#f59e0b' },
-            { name: 'Oyunçu 2', color: '#ef4444' },
-            { name: 'Oyunçu 3', color: '#10b981' },
-            { name: 'Oyunçu 4', color: '#3b82f6' }
-        ]
-    };
-
-    // Auto load user if saved before
     window.onload = function() {
         let savedUser = localStorage.getItem('occupy_user');
         if(savedUser) {
             currentUser = JSON.parse(savedUser);
             updateUserUI();
             navigateTo('screen-menu');
+            initPeer();
         }
     };
 
@@ -1086,219 +700,193 @@
 
     function loginUser() {
         let inputName = document.getElementById('input-username').value.trim();
-        if(inputName.length < 2) {
-            alert("Zəhmət olmasa ən azı 2 hərfdən ibarət ad yazın.");
-            return;
-        }
+        if(inputName.length < 2) return alert("Ən azı 2 hərb yazın.");
         currentUser.name = inputName;
         saveUserData();
         updateUserUI();
         navigateTo('screen-menu');
-    }
-
-    function loginAsGuest() {
-        currentUser.name = "Macəraçı_" + Math.floor(Math.random() * 899 + 100);
-        saveUserData();
-        updateUserUI();
-        navigateTo('screen-menu');
-    }
-
-    function logout() {
-        localStorage.removeItem('occupy_user');
-        currentUser = { name: "", score: 0, games: 0, wins: 0, streak: 0 };
-        document.getElementById('input-username').value = "";
-        navigateTo('screen-login');
+        initPeer();
     }
 
     function updateUserUI() {
-        const nameEls = ['display-username', 'lobby-username', 'account-username', 'stats-username', 'lb-current-user'];
-        nameEls.forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.textContent = currentUser.name;
-        });
-
-        const avatarEls = ['user-avatar', 'lobby-avatar', 'account-avatar', 'stats-avatar'];
-        avatarEls.forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.textContent = currentUser.name.charAt(0).toUpperCase();
-        });
-
-        document.getElementById('stats-score').textContent = currentUser.score;
-        document.getElementById('stats-games').textContent = currentUser.games;
-        document.getElementById('stats-wins').textContent = currentUser.wins;
-        document.getElementById('lobby-points').textContent = currentUser.score;
-        document.getElementById('lb-current-score').textContent = currentUser.score;
+        document.getElementById('display-username').textContent = currentUser.name;
+        document.getElementById('user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+        document.getElementById('lobby-username').textContent = currentUser.name;
+        document.getElementById('lobby-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
     }
-
-    // SETUP FUNCTIONS FOR BOTH BOT AND MULTI PLAYERS
-    function renderPlayersSetupUI() {
-        const container = document.getElementById('players-config-list');
-        container.innerHTML = '';
-
-        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
-
-        for (let i = 0; i < count; i++) {
-            let p = gameSetup.players[i];
-            let isBot = (gameSetup.mode === 'vs_bot' && i === 1);
-
-            let card = document.createElement('div');
-            card.className = 'player-setup-card';
-            card.innerHTML = `
-                <div class="player-setup-header">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div class="player-badge" style="background: ${p.color}; color: #fff;">${i + 1}</div>
-                        <div>
-                            <div style="font-size: 13px; font-weight: 800;">${isBot ? 'Zindan Canavarı (' + gameSetup.difficulty.toUpperCase() + ')' : 'Oyunçu ' + (i + 1)}</div>
-                        </div>
-                    </div>
-                    <div id="p-preview-${i}" style="width: 14px; height: 14px; border-radius: 50%; background: ${p.color};"></div>
-                </div>
-                <div>
-                    <input type="text" id="p-name-input-${i}" class="username-input" style="text-align: left; padding: 8px 12px; font-size: 12px;" 
-                           value="${isBot ? 'Canavar (' + gameSetup.difficulty.toUpperCase() + ')' : p.name}" ${isBot ? 'disabled' : ''}>
-                </div>
-                <div>
-                    <div style="font-size: 9px; color: #94a3b8; font-weight: 800; margin-bottom: 4px;">RƏNG SEÇİMİ</div>
-                    <div class="color-palette" id="p-palette-${i}"></div>
-                </div>
-            `;
-            container.appendChild(card);
-
-            // Palette Circles
-            let pal = card.querySelector(`#p-palette-${i}`);
-            COLOR_OPTIONS.forEach(color => {
-                let c = document.createElement('div');
-                c.className = `color-circle ${color === p.color ? 'selected' : ''}`;
-                c.style.background = color;
-                c.onclick = () => selectColorForPlayer(i, color);
-                pal.appendChild(c);
-            });
-        }
-    }
-
-    function openSetup(mode) {
-        gameSetup.mode = mode;
-        if(currentUser.name) {
-            gameSetup.players[0].name = currentUser.name;
-        }
-
-        let titleEl = document.getElementById('setup-title');
-        let countBox = document.getElementById('player-count-box');
-        let diffBox = document.getElementById('bot-difficulty-box');
-
-        if(mode === 'vs_bot') {
-            titleEl.textContent = "Canavar Oyunu Parametrləri";
-            countBox.style.display = 'none';
-            diffBox.style.display = 'flex';
-        } else {
-            titleEl.textContent = "Çox Oyunçulu Rejim";
-            countBox.style.display = 'flex';
-            diffBox.style.display = 'none';
-        }
-
-        renderPlayersSetupUI();
-        navigateTo('screen-pass-setup');
-    }
-
-    function setPlayerCount(count) {
-        gameSetup.playerCount = count;
-        document.getElementById('btn-count-2').classList.toggle('active', count === 2);
-        document.getElementById('btn-count-3').classList.toggle('active', count === 3);
-        document.getElementById('btn-count-4').classList.toggle('active', count === 4);
-        renderPlayersSetupUI();
-    }
-
-    function setGameRule(rule) {
-        gameSetup.rule = rule;
-        document.getElementById('btn-mode-classic').classList.toggle('active', rule === 'classic');
-        document.getElementById('btn-mode-center').classList.toggle('active', rule === 'center_race');
-        document.getElementById('btn-mode-finish').classList.toggle('active', rule === 'finish_race');
-    }
-
-    function setDifficulty(diff) {
-        gameSetup.difficulty = diff;
-        document.querySelectorAll('.diff-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`btn-diff-${diff}`).classList.add('active');
-        renderPlayersSetupUI();
-    }
-
-    function selectColorForPlayer(index, color) {
-        gameSetup.players[index].color = color;
-        renderPlayersSetupUI();
-    }
-
-    function confirmAndStartGame() {
-        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
-        for (let i = 0; i < count; i++) {
-            let inp = document.getElementById(`p-name-input-${i}`);
-            if (inp && inp.value.trim()) {
-                gameSetup.players[i].name = inp.value.trim();
-            }
-        }
-        startGame(gameSetup.mode);
-    }
-
-    // GAME LOGIC
-    const BOARD_SIZE = 9;
-    let players = [];
-    let turnIndex = 0; 
-    let activeMode = 'move';
-    let currentGameMode = 'vs_bot';
-
-    let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-    let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-
-    let boardEl = document.getElementById('board');
 
     function navigateTo(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
     }
 
-    function startGame(mode) {
-        currentGameMode = mode;
-        navigateTo('screen-game');
+    // ==========================================
+    // PEERJS REALTIME ONLINE SYSTEM
+    // ==========================================
 
-        let icon = '🗡️';
-        let modeText = 'Dungeon Escape';
+    function initPeer() {
+        // Təsadüfi 6 rəqəmli kod yaradılır
+        myPeerId = Math.floor(100000 + Math.random() * 900000).toString();
+        peer = new Peer('occupy-room-' + myPeerId);
 
-        if (gameSetup.rule === 'center_race') {
-            icon = '🏰';
-            modeText = 'Occupy Fortress';
-        } else if (gameSetup.rule === 'finish_race') {
-            icon = '🚪';
-            modeText = 'Gate Race';
-        } else if (mode === 'vs_bot') {
-            icon = '👹';
-            modeText = `vs Canavar (${gameSetup.difficulty.toUpperCase()})`;
+        peer.on('open', (id) => {
+            document.getElementById('peer-status-text').textContent = "● Onlayn (Hazırdır)";
+        });
+
+        // Biri bizə qoşulanda (Host tərəfi)
+        peer.on('connection', (c) => {
+            conn = c;
+            myPlayerIndex = 0; // Host P1-dir
+            isOnlineGame = true;
+            setupConnectionListeners();
+            
+            // Oyunu Başlat
+            startOnlineGame();
+        });
+
+        peer.on('error', (err) => {
+            console.error(err);
+            document.getElementById('peer-status-text').textContent = "⚠️ Şəbəkə xətası";
+        });
+    }
+
+    function createOnlineRoom() {
+        document.getElementById('join-box').style.display = 'none';
+        document.getElementById('host-box').style.display = 'flex';
+        document.getElementById('my-room-code').textContent = myPeerId;
+    }
+
+    function showJoinInput() {
+        document.getElementById('host-box').style.display = 'none';
+        document.getElementById('join-box').style.display = 'flex';
+    }
+
+    function joinOnlineRoom() {
+        let code = document.getElementById('input-room-code').value.trim();
+        if(code.length !== 6) return alert("6 rəqəmli kodu düzgün yazın.");
+
+        conn = peer.connect('occupy-room-' + code);
+        myPlayerIndex = 1; // Qoşulan şəxs P2-dir
+        isOnlineGame = true;
+
+        setupConnectionListeners();
+    }
+
+    function setupConnectionListeners() {
+        conn.on('open', () => {
+            if(myPlayerIndex === 1) {
+                // Client tərəfi qoşulduqda Host-a öz adını göndərir
+                sendData({ type: 'JOIN_INFO', name: currentUser.name });
+                startOnlineGame();
+            }
+        });
+
+        conn.on('data', (data) => {
+            handleOnlineData(data);
+        });
+
+        conn.on('close', () => {
+            alert("Rəqib oyundan çıxdı!");
+            navigateTo('screen-menu');
+        });
+    }
+
+    function sendData(data) {
+        if (conn && conn.open) {
+            conn.send(data);
         }
+    }
 
-        document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
+    function handleOnlineData(data) {
+        if (data.type === 'MOVE') {
+            let p = players[data.playerIndex];
+            p.r = data.r;
+            p.c = data.c;
+            checkWin(p);
+            switchTurn(false);
+        } else if (data.type === 'WALL') {
+            placeWall(data.r, data.c, data.wallType);
+            players[data.playerIndex].walls--;
+            switchTurn(false);
+        } else if (data.type === 'JOIN_INFO') {
+            players[1].name = data.name;
+            updateUI();
+        }
+    }
 
-        restartGame();
+    function startOnlineGame() {
+        gameSetup.mode = 'online';
+        navigateTo('screen-game');
+        document.getElementById('game-mode-title').innerHTML = `🌐 Online Matç`;
+        
+        players = [
+            { id: 0, r: 8, c: 4, walls: 10, name: myPlayerIndex === 0 ? currentUser.name : "Rəqib", color: '#f59e0b', targetSide: 'top' },
+            { id: 1, r: 0, c: 4, walls: 10, name: myPlayerIndex === 1 ? currentUser.name : "Rəqib", color: '#ef4444', targetSide: 'bottom' }
+        ];
+
+        turnIndex = 0;
+        activeMode = 'move';
+        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        document.querySelectorAll('.wall-placed').forEach(w => w.remove());
+        
+        initBoard();
+    }
+
+    // ==========================================
+    // OFFLINE & BOT GAME LOGIC
+    // ==========================================
+
+    const BOARD_SIZE = 9;
+    let players = [];
+    let turnIndex = 0; 
+    let activeMode = 'move';
+    let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+    let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+
+    let boardEl = document.getElementById('board');
+
+    function openSetup(mode) {
+        gameSetup.mode = mode;
+        if(mode === 'vs_bot') {
+            document.getElementById('bot-difficulty-box').style.display = 'flex';
+        } else {
+            document.getElementById('bot-difficulty-box').style.display = 'none';
+        }
+        navigateTo('screen-pass-setup');
+    }
+
+    function setDifficulty(diff) {
+        gameSetup.difficulty = diff;
+        document.querySelectorAll('.diff-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-diff-${diff}`).classList.add('active');
+    }
+
+    function confirmAndStartGame() {
+        isOnlineGame = false;
+        navigateTo('screen-game');
+        document.getElementById('game-mode-title').innerHTML = gameSetup.mode === 'vs_bot' ? `👹 vs Bot (${gameSetup.difficulty.toUpperCase()})` : `👥 Local Match`;
+
+        players = [
+            { id: 0, r: 8, c: 4, walls: 10, name: currentUser.name || "Oyunçu 1", color: '#f59e0b', targetSide: 'top' },
+            { id: 1, r: 0, c: 4, walls: 10, name: gameSetup.mode === 'vs_bot' ? "Canavar" : "Oyunçu 2", color: '#ef4444', targetSide: 'bottom' }
+        ];
+
+        turnIndex = 0;
+        activeMode = 'move';
+        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        document.querySelectorAll('.wall-placed').forEach(w => w.remove());
+
+        initBoard();
     }
 
     function initBoard() {
         boardEl.innerHTML = '';
-        let finishBanner = document.getElementById('finish-banner');
-        if (gameSetup.rule === 'finish_race') {
-            finishBanner.style.display = 'block';
-        } else {
-            finishBanner.style.display = 'none';
-        }
-
         for (let r = 0; r < BOARD_SIZE; r++) {
             for (let c = 0; c < BOARD_SIZE; c++) {
                 let cell = document.createElement('div');
                 cell.className = 'cell';
-                
-                if(gameSetup.rule === 'center_race' && r === 4 && c === 4) {
-                    cell.classList.add('center-cell');
-                }
-                if(gameSetup.rule === 'finish_race' && r === 0) {
-                    cell.classList.add('finish-cell');
-                }
-
                 cell.dataset.r = r;
                 cell.dataset.c = c;
                 cell.onclick = () => onCellClick(r, c);
@@ -1311,19 +899,16 @@
 
     function renderPawns() {
         document.querySelectorAll('.pawn').forEach(p => p.remove());
-        
         players.forEach(p => {
             let cell = getCellEl(p.r, p.c);
             if (cell) {
                 let pawn = document.createElement('div');
                 pawn.className = 'pawn';
                 pawn.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${p.color})`;
-                pawn.style.border = `2px solid ${p.color}`;
                 pawn.style.boxShadow = `0 0 10px ${p.color}`;
                 cell.appendChild(pawn);
             }
         });
-
         highlightValidMoves();
     }
 
@@ -1333,7 +918,8 @@
 
     function highlightValidMoves() {
         document.querySelectorAll('.cell').forEach(c => c.classList.remove('valid-move'));
-        if (currentGameMode === 'vs_bot' && turnIndex !== 0) return;
+        if (isOnlineGame && turnIndex !== myPlayerIndex) return; // Online-da növbə sənin deyilsə göstərmə
+        if (gameSetup.mode === 'vs_bot' && turnIndex !== 0) return;
         if (activeMode !== 'move') return;
 
         let currP = players[turnIndex];
@@ -1385,7 +971,9 @@
     }
 
     function onCellClick(r, c) {
-        if (currentGameMode === 'vs_bot' && turnIndex !== 0) return;
+        // Əgər onlayn oyundursa və növbə bizdə deyilsə, klik etməyə icazə vermə
+        if (isOnlineGame && turnIndex !== myPlayerIndex) return;
+        if (gameSetup.mode === 'vs_bot' && turnIndex !== 0) return;
 
         let currP = players[turnIndex];
 
@@ -1394,19 +982,12 @@
             if (validMoves.some(m => m.r === r && m.c === c)) {
                 currP.r = r; currP.c = c;
                 
-                // WIN CONDITIONS
-                if(gameSetup.rule === 'center_race') {
-                    if (currP.r === 4 && currP.c === 4) return endGame(currP);
-                } else if(gameSetup.rule === 'finish_race') {
-                    if (currP.r === 0) return endGame(currP);
-                } else {
-                    if (currP.targetSide === 'top' && currP.r === 0) return endGame(currP);
-                    if (currP.targetSide === 'bottom' && currP.r === 8) return endGame(currP);
-                    if (currP.targetSide === 'right' && currP.c === 8) return endGame(currP);
-                    if (currP.targetSide === 'left' && currP.c === 0) return endGame(currP);
+                if(isOnlineGame) {
+                    sendData({ type: 'MOVE', playerIndex: myPlayerIndex, r: r, c: c });
                 }
 
-                switchTurn();
+                if(checkWin(currP)) return;
+                switchTurn(true);
             }
         } else {
             let wr = r < 8 ? r : 7;
@@ -1415,10 +996,23 @@
             if (canPlaceWall(wr, wc, activeMode)) {
                 placeWall(wr, wc, activeMode);
                 currP.walls--;
+
+                if(isOnlineGame) {
+                    sendData({ type: 'WALL', playerIndex: myPlayerIndex, r: wr, c: wc, wallType: activeMode });
+                }
+
                 setMode('move');
-                switchTurn();
+                switchTurn(true);
             }
         }
+    }
+
+    function checkWin(p) {
+        if ((p.targetSide === 'top' && p.r === 0) || (p.targetSide === 'bottom' && p.r === 8)) {
+            endGame(p);
+            return true;
+        }
+        return false;
     }
 
     function setMode(mode) {
@@ -1441,30 +1035,13 @@
             if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
         }
 
-        // Barrikada qoyarkən heç bir macəraçının yolunu tam kəsməməlidir
-        if (type === 'H') hWalls[r][c] = true;
-        else vWalls[r][c] = true;
-
-        let pathBlocked = false;
-        for (let p of players) {
-            if (getShortestPathLength(p) === Infinity) {
-                pathBlocked = true;
-                break;
-            }
-        }
-
-        // Geri qaytarırıq
-        if (type === 'H') hWalls[r][c] = false;
-        else vWalls[r][c] = false;
-
-        return !pathBlocked;
+        return true;
     }
 
     function placeWall(r, c, type) {
         if (type === 'H') hWalls[r][c] = true;
         else vWalls[r][c] = true;
 
-        let currP = players[turnIndex];
         let wallEl = document.createElement('div');
         wallEl.className = 'wall-placed';
         
@@ -1486,13 +1063,13 @@
         boardEl.appendChild(wallEl);
     }
 
-    function switchTurn() {
+    function switchTurn(isLocalAction = true) {
         turnIndex = (turnIndex + 1) % players.length;
         updateUI();
         renderPawns();
 
-        if (currentGameMode === 'vs_bot' && turnIndex === 1) {
-            setTimeout(aiTurn, 350);
+        if (!isOnlineGame && gameSetup.mode === 'vs_bot' && turnIndex === 1) {
+            setTimeout(aiTurn, 400);
         }
     }
 
@@ -1502,129 +1079,32 @@
         players.forEach((p) => {
             let pill = document.createElement('div');
             pill.className = 'wall-pill';
-            pill.innerHTML = `
-                <div class="wall-pill-icon" style="background: ${p.color}"></div>
-                <span>${p.walls}</span>
-            `;
+            pill.innerHTML = `<div class="wall-pill-icon" style="background: ${p.color}"></div><span>${p.walls}</span>`;
             wallContainer.appendChild(pill);
         });
 
         let currP = players[turnIndex];
-        let dot = document.getElementById('turn-dot');
-        let txt = document.getElementById('turn-text');
-
-        dot.style.backgroundColor = currP.color;
-        dot.style.boxShadow = `0 0 8px ${currP.color}`;
-        txt.textContent = `${currP.name} Sırası`;
-    }
-
-    // ==========================================
-    // CANAVAR ALQORİTMİ (BFS - Pathfinding AI)
-    // ==========================================
-
-    function getShortestPathLength(p) {
-        let queue = [{ r: p.r, c: p.c, dist: 0 }];
-        let visited = Array(9).fill(0).map(() => Array(9).fill(false));
-        visited[p.r][p.c] = true;
-
-        let dr = [-1, 1, 0, 0];
-        let dc = [0, 0, -1, 1];
-
-        while (queue.length > 0) {
-            let curr = queue.shift();
-
-            // Win condition check
-            if (gameSetup.rule === 'center_race' && curr.r === 4 && curr.c === 4) return curr.dist;
-            if (gameSetup.rule === 'finish_race' && curr.r === 0) return curr.dist;
-            if (gameSetup.rule === 'classic') {
-                if (p.targetSide === 'top' && curr.r === 0) return curr.dist;
-                if (p.targetSide === 'bottom' && curr.r === 8) return curr.dist;
-                if (p.targetSide === 'right' && curr.c === 8) return curr.dist;
-                if (p.targetSide === 'left' && curr.c === 0) return curr.dist;
-            }
-
-            for (let i = 0; i < 4; i++) {
-                let nr = curr.r + dr[i];
-                let nc = curr.c + dc[i];
-
-                if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && !visited[nr][nc]) {
-                    if (!isWallBetween(curr.r, curr.c, nr, nc)) {
-                        visited[nr][nc] = true;
-                        queue.push({ r: nr, c: nc, dist: curr.dist + 1 });
-                    }
-                }
-            }
+        document.getElementById('turn-dot').style.backgroundColor = currP.color;
+        
+        if (isOnlineGame) {
+            document.getElementById('turn-text').textContent = (turnIndex === myPlayerIndex) ? "Sizin növbəniz" : "Rəqib oynayır...";
+        } else {
+            document.getElementById('turn-text').textContent = `${currP.name} Sırası`;
         }
-        return Infinity;
     }
 
+    // BOT LOGIC
     function aiTurn() {
         let botP = players[1];
-        let humanP = players[0];
-        let diff = gameSetup.difficulty;
-
-        let botDist = getShortestPathLength(botP);
-        let humanDist = getShortestPathLength(humanP);
-
-        // 1. EASY MODE
-        if (diff === 'easy') {
-            if (Math.random() < 0.3 && botP.walls > 0) {
-                if (tryRandomWall(botP)) return;
-            }
-            makeBestMove(botP);
-            return;
-        }
-
-        // 2. MEDIUM MODE
-        if (diff === 'medium') {
-            if (humanDist < botDist && botP.walls > 0 && Math.random() < 0.4) {
-                if (tryBlockingWall(botP, humanP)) return;
-            }
-            makeBestMove(botP);
-            return;
-        }
-
-        // 3. HARD MODE
-        if (diff === 'hard') {
-            if (humanDist <= botDist && botP.walls > 0) {
-                if (tryBlockingWall(botP, humanP)) return;
-            }
-            makeBestMove(botP);
-            return;
-        }
-
-        // 4. MASTER MODE
-        if (diff === 'master') {
-            if (humanDist <= 2 && botP.walls > 0) {
-                if (tryBlockingWall(botP, humanP)) return;
-            }
-            
-            if (botP.walls > 0) {
-                let bestWall = findBestMasterWall(botP, humanP);
-                if (bestWall) {
-                    placeWall(bestWall.r, bestWall.c, bestWall.type);
-                    botP.walls--;
-                    setMode('move');
-                    switchTurn();
-                    return;
-                }
-            }
-            makeBestMove(botP);
-        }
-    }
-
-    function makeBestMove(botP) {
         let moves = getValidMoves(botP);
         if (!moves || moves.length === 0) return;
 
         let bestMove = moves[0];
-        let minDistance = Infinity;
+        let maxR = -1;
 
         for (let m of moves) {
-            let tempP = { ...botP, r: m.r, c: m.c };
-            let dist = getShortestPathLength(tempP);
-            if (dist < minDistance) {
-                minDistance = dist;
+            if (m.r > maxR) {
+                maxR = m.r;
                 bestMove = m;
             }
         }
@@ -1632,139 +1112,22 @@
         botP.r = bestMove.r;
         botP.c = bestMove.c;
 
-        if (gameSetup.rule === 'center_race' && botP.r === 4 && botP.c === 4) return endGame(botP);
-        if (gameSetup.rule === 'finish_race' && botP.r === 0) return endGame(botP);
-        if (gameSetup.rule === 'classic' && botP.r === 8) return endGame(botP);
-
-        switchTurn();
-    }
-
-    function tryBlockingWall(botP, humanP) {
-        let bestWall = findBestMasterWall(botP, humanP);
-        if (bestWall) {
-            placeWall(bestWall.r, bestWall.c, bestWall.type);
-            botP.walls--;
-            setMode('move');
-            switchTurn();
-            return true;
-        }
-        return false;
-    }
-
-    function tryRandomWall(botP) {
-        let types = ['H', 'V'];
-        for (let attempt = 0; attempt < 10; attempt++) {
-            let r = Math.floor(Math.random() * 8);
-            let c = Math.floor(Math.random() * 8);
-            let type = types[Math.floor(Math.random() * 2)];
-
-            if (canPlaceWall(r, c, type)) {
-                placeWall(r, c, type);
-                botP.walls--;
-                setMode('move');
-                switchTurn();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function findBestMasterWall(botP, humanP) {
-        let currentHumanDist = getShortestPathLength(humanP);
-        let currentBotDist = getShortestPathLength(botP);
-
-        let bestWall = null;
-        let maxHumanDistIncrease = 0;
-
-        for (let r = 0; r < 8; r++) {
-            for (let c = 0; c < 8; c++) {
-                for (let type of ['H', 'V']) {
-                    if (canPlaceWall(r, c, type)) {
-                        if (type === 'H') hWalls[r][c] = true;
-                        else vWalls[r][c] = true;
-
-                        let newHumanDist = getShortestPathLength(humanP);
-                        let newBotDist = getShortestPathLength(botP);
-
-                        if (type === 'H') hWalls[r][c] = false;
-                        else vWalls[r][c] = false;
-
-                        let humanDistIncrease = newHumanDist - currentHumanDist;
-                        let botDistIncrease = newBotDist - currentBotDist;
-
-                        if (humanDistIncrease > maxHumanDistIncrease && botDistIncrease <= 1) {
-                            maxHumanDistIncrease = humanDistIncrease;
-                            bestWall = { r, c, type };
-                        }
-                    }
-                }
-            }
-        }
-
-        return bestWall;
+        if (checkWin(botP)) return;
+        switchTurn(false);
     }
 
     function endGame(winnerP) {
-        currentUser.games++;
-        let isP1Win = (winnerP.id === 0);
-
-        if(isP1Win) {
-            currentUser.wins++;
-            currentUser.score += 50;
-        }
-
         document.getElementById('modal-title').textContent = "Qələbə! 🎉";
         document.getElementById('modal-desc').textContent = `${winnerP.name} zindandan qaçdı!`;
-
-        saveUserData();
-        updateUserUI();
         document.getElementById('modal').classList.add('active');
     }
 
     function restartGame() {
-        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
-        let initialWalls = count === 2 ? 10 : (count === 3 ? 7 : 5);
-
-        players = [];
-
-        if (gameSetup.rule === 'finish_race') {
-            let startCols = [1, 3, 5, 7];
-            if (count === 2) startCols = [2, 6];
-            else if (count === 3) startCols = [2, 4, 6];
-
-            for (let i = 0; i < count; i++) {
-                players.push({
-                    id: i,
-                    r: 8,
-                    c: startCols[i],
-                    walls: initialWalls,
-                    name: gameSetup.players[i].name,
-                    color: gameSetup.players[i].color,
-                    targetSide: 'top'
-                });
-            }
+        if(isOnlineGame) {
+            startOnlineGame();
         } else {
-            players.push({ id: 0, r: 8, c: 4, walls: initialWalls, name: gameSetup.players[0].name, color: gameSetup.players[0].color, targetSide: 'top' });
-
-            if (count === 2) {
-                players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
-            } else {
-                players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
-                players.push({ id: 2, r: 4, c: 0, walls: initialWalls, name: gameSetup.players[2].name, color: gameSetup.players[2].color, targetSide: 'right' });
-                if (count === 4) {
-                    players.push({ id: 3, r: 4, c: 8, walls: initialWalls, name: gameSetup.players[3].name, color: gameSetup.players[3].color, targetSide: 'left' });
-                }
-            }
+            confirmAndStartGame();
         }
-
-        turnIndex = 0;
-        activeMode = 'move';
-        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        document.querySelectorAll('.wall-placed').forEach(w => w.remove());
-        document.getElementById('modal').classList.remove('active');
-        setMode('move');
-        initBoard();
     }
 </script>
 </body>
