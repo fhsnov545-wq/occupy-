@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wayblock - Quoridor MultiPlayer</title>
+    <title>Occupy - Dungeon Escape Multiplayer</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,8 +15,8 @@
         }
 
         body {
-            background-color: #0b0f17;
-            color: #ffffff;
+            background-color: #0b0d12;
+            color: #e2e8f0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -49,14 +49,16 @@
         .header-title {
             font-size: 18px;
             font-weight: 800;
+            color: #f59e0b;
+            letter-spacing: 1px;
         }
 
         .icon-btn-rounded {
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #181c28;
+            border: 1px solid #2d354b;
             color: #fff;
             display: flex;
             align-items: center;
@@ -67,8 +69,8 @@
 
         /* LOGIN SCREEN STYLES */
         .login-card {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 20px;
             padding: 24px;
             text-align: center;
@@ -76,13 +78,14 @@
             flex-direction: column;
             align-items: center;
             gap: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
         }
 
         .username-input {
             width: 100%;
             padding: 12px;
-            background: #0b0f17;
-            border: 1px solid #23283b;
+            background: #0b0d12;
+            border: 1px solid #283044;
             border-radius: 12px;
             color: #ffffff;
             font-size: 14px;
@@ -93,19 +96,20 @@
         }
 
         .username-input:focus {
-            border-color: #38ef7d;
+            border-color: #f59e0b;
         }
 
         .btn-submit {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #11998e, #38ef7d);
+            background: linear-gradient(135deg, #b45309, #f59e0b);
             border: none;
             border-radius: 12px;
             color: #ffffff;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
         }
 
         /* MAIN MENU STYLES */
@@ -122,24 +126,24 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: #23283b;
+            background: #1f2536;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
             font-size: 16px;
-            border: 2px solid #323952;
-            color: #38ef7d;
+            border: 2px solid #3b4663;
+            color: #f59e0b;
             text-transform: uppercase;
         }
 
         .user-details { display: flex; flex-direction: column; }
-        .brand-name { font-size: 10px; letter-spacing: 1px; color: #6c757d; font-weight: 700; }
+        .brand-name { font-size: 10px; letter-spacing: 2px; color: #f59e0b; font-weight: 800; }
         .username { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
 
         .menu-card {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 18px;
             padding: 16px;
             cursor: pointer;
@@ -156,8 +160,8 @@
         }
 
         .badge-online {
-            background: rgba(56, 239, 125, 0.15);
-            color: #38ef7d;
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 11px;
@@ -171,14 +175,14 @@
             content: "";
             width: 6px;
             height: 6px;
-            background: #38ef7d;
+            background: #f59e0b;
             border-radius: 50%;
         }
 
-        .badge-streak { font-size: 12px; color: #f59e0b; font-weight: 700; }
+        .badge-streak { font-size: 12px; color: #ef4444; font-weight: 700; }
 
         .card-main-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
-        .card-sub { font-size: 12px; color: #6c757d; }
+        .card-sub { font-size: 12px; color: #94a3b8; }
 
         .grid-2 {
             display: grid;
@@ -192,7 +196,7 @@
             width: 36px;
             height: 36px;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -202,8 +206,8 @@
         /* PASS & PLAY SETUP STYLES */
         .mode-toggle-container {
             display: flex;
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 14px;
             padding: 4px;
             gap: 4px;
@@ -215,7 +219,7 @@
             border-radius: 10px;
             border: none;
             background: transparent;
-            color: #6c757d;
+            color: #94a3b8;
             font-weight: 700;
             font-size: 11px;
             cursor: pointer;
@@ -227,7 +231,7 @@
         }
 
         .mode-toggle-btn.active {
-            background: #23283b;
+            background: #283044;
             color: #f59e0b;
             border: 1px solid rgba(245, 158, 11, 0.4);
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -235,8 +239,8 @@
 
         .player-count-container {
             display: flex;
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 14px;
             padding: 4px;
             gap: 4px;
@@ -248,7 +252,7 @@
             border-radius: 10px;
             border: none;
             background: transparent;
-            color: #6c757d;
+            color: #94a3b8;
             font-weight: 800;
             font-size: 12px;
             cursor: pointer;
@@ -256,12 +260,12 @@
         }
 
         .player-count-btn.active {
-            background: #38ef7d;
-            color: #0b0f17;
-            box-shadow: 0 4px 12px rgba(56, 239, 125, 0.3);
+            background: #f59e0b;
+            color: #0b0d12;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
-        /* DIFFICULTY STYLES (yeni) */
+        /* DIFFICULTY STYLES */
         .diff-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -271,10 +275,10 @@
 
         .diff-btn {
             padding: 10px;
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 12px;
-            color: #8c96a8;
+            color: #94a3b8;
             font-weight: 800;
             font-size: 12px;
             cursor: pointer;
@@ -286,20 +290,20 @@
         }
 
         .diff-btn.active {
-            border-color: #38ef7d;
-            color: #ffffff;
-            background: rgba(56, 239, 125, 0.1);
-        }
-
-        .diff-btn.master.active {
             border-color: #f59e0b;
-            color: #f59e0b;
+            color: #ffffff;
             background: rgba(245, 158, 11, 0.1);
         }
 
+        .diff-btn.master.active {
+            border-color: #ef4444;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
         .player-setup-card {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 16px;
             padding: 12px 14px;
             display: flex;
@@ -317,7 +321,7 @@
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: #23283b;
+            background: #283044;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -349,8 +353,8 @@
 
         /* ONLINE LOBBY STYLES */
         .user-stats-card {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 18px;
             padding: 16px;
             display: flex;
@@ -367,7 +371,7 @@
         }
 
         .points-value { font-size: 18px; font-weight: 900; color: #f59e0b; }
-        .points-label { font-size: 9px; color: #6c757d; font-weight: 700; letter-spacing: 1px; }
+        .points-label { font-size: 9px; color: #94a3b8; font-weight: 700; letter-spacing: 1px; }
 
         .lobby-actions {
             display: grid;
@@ -376,8 +380,8 @@
         }
 
         .btn-action {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 14px;
             padding: 14px;
             display: flex;
@@ -391,9 +395,9 @@
         }
 
         .btn-action.primary {
-            background: rgba(56, 239, 125, 0.08);
-            border-color: rgba(56, 239, 125, 0.3);
-            color: #38ef7d;
+            background: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
         }
 
         .section-label {
@@ -405,8 +409,8 @@
         }
 
         .room-item {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 14px;
             padding: 12px 16px;
             display: flex;
@@ -416,11 +420,11 @@
 
         .room-info { display: flex; align-items: center; gap: 12px; }
         .room-title { font-size: 14px; font-weight: 700; }
-        .room-host { font-size: 11px; color: #6c757d; }
+        .room-host { font-size: 11px; color: #94a3b8; }
 
         .btn-join {
-            background: #23283b;
-            border: 1px solid #323952;
+            background: #283044;
+            border: 1px solid #3b4663;
             color: #fff;
             padding: 6px 16px;
             border-radius: 8px;
@@ -437,8 +441,8 @@
         }
 
         .account-item {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 14px;
             padding: 14px 16px;
             display: flex;
@@ -455,7 +459,7 @@
             font-weight: 600;
         }
 
-        .danger-text { color: #ff5252; }
+        .danger-text { color: #ef4444; }
 
         /* LEADERBOARD & STATS STYLES */
         .stats-summary {
@@ -466,21 +470,21 @@
         }
 
         .stat-box {
-            background: #202538;
+            background: #1f2536;
             border-radius: 10px;
             padding: 10px;
             text-align: center;
         }
 
         .stat-num { font-size: 16px; font-weight: 800; }
-        .stat-lbl { font-size: 9px; color: #6c757d; font-weight: 700; margin-top: 2px; }
+        .stat-lbl { font-size: 9px; color: #94a3b8; font-weight: 700; margin-top: 2px; }
 
         .leaderboard-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 16px;
             padding: 12px;
         }
@@ -490,7 +494,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 8px 4px;
-            border-bottom: 1px solid #1f2436;
+            border-bottom: 1px solid #242c3f;
         }
 
         .lb-item:last-child { border-bottom: none; }
@@ -505,14 +509,14 @@
             justify-content: center;
             font-size: 11px;
             font-weight: 800;
-            background: #23283b;
+            background: #283044;
         }
 
         .lb-rank.top-1 { background: #f59e0b; color: #000; }
         .lb-user { font-size: 13px; font-weight: 700; }
         .lb-score { font-size: 13px; font-weight: 800; color: #f59e0b; }
 
-        /* GAME PLAY STYLES */
+        /* GAME PLAY STYLES (DUNGEON THEME) */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -521,9 +525,9 @@
         }
 
         .icon-btn {
-            background: #161926;
-            border: 1px solid #23283b;
-            color: #a0a6b8;
+            background: #151924;
+            border: 1px solid #283044;
+            color: #94a3b8;
             width: 38px;
             height: 38px;
             border-radius: 10px;
@@ -535,8 +539,8 @@
         }
 
         .game-mode-indicator {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             padding: 8px 16px;
             border-radius: 10px;
             font-size: 13px;
@@ -544,11 +548,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #f59e0b;
         }
 
         .card-game-info {
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 14px;
             padding: 10px 14px;
             display: flex;
@@ -563,35 +568,35 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background-color: #38ef7d;
-            box-shadow: 0 0 8px #38ef7d;
+            background-color: #f59e0b;
+            box-shadow: 0 0 8px #f59e0b;
         }
 
         .wall-counters { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
         .wall-pill {
-            background: #1f2436;
+            background: #1f2536;
             padding: 2px 6px;
             border-radius: 6px;
             display: flex;
             align-items: center;
             gap: 4px;
             font-size: 11px;
-            border: 1px solid #2d344b;
+            border: 1px solid #2d354b;
         }
 
         .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
 
-        /* Board Styling */
+        /* Dungeon Board Styling */
         #board-wrapper {
             position: relative;
-            background: #161926;
-            border: 1px solid #23283b;
+            background: #121620;
+            border: 2px solid #2e374d;
             border-radius: 16px;
             padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
             touch-action: none;
         }
 
@@ -601,12 +606,12 @@
             text-align: center;
             padding: 6px;
             margin-bottom: 8px;
-            background: rgba(56, 239, 125, 0.1);
-            border: 1px dashed #38ef7d;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px dashed #f59e0b;
             border-radius: 8px;
             font-size: 12px;
             font-weight: 800;
-            color: #38ef7d;
+            color: #f59e0b;
             letter-spacing: 2px;
         }
 
@@ -621,7 +626,8 @@
         }
 
         .cell {
-            background: #23293e;
+            background: #1e2535;
+            border: 1px solid #161c28;
             border-radius: 6px;
             position: relative;
             display: flex;
@@ -631,19 +637,19 @@
         }
 
         .cell.center-cell::before {
-            content: "👑";
+            content: "🏰";
             font-size: 16px;
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
         .cell.finish-cell {
-            background: rgba(56, 239, 125, 0.12);
-            border: 1px dashed #38ef7d;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px dashed #f59e0b;
         }
 
         .cell.valid-move {
-            background: rgba(56, 239, 125, 0.15);
-            border: 1px dashed rgba(56, 239, 125, 0.5);
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px dashed rgba(245, 158, 11, 0.6);
         }
 
         .cell.valid-move::after {
@@ -651,8 +657,8 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #38ef7d;
-            box-shadow: 0 0 6px #38ef7d;
+            background: #f59e0b;
+            box-shadow: 0 0 6px #f59e0b;
         }
 
         .pawn {
@@ -664,9 +670,12 @@
             z-index: 5;
         }
 
+        /* Wall / Rock Barricade Styling */
         .wall-placed {
             position: absolute;
-            box-shadow: 0 0 8px rgba(230, 126, 34, 0.6);
+            background: linear-gradient(135deg, #7f1d1d, #450a0a) !important;
+            border: 1px solid #f87171;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
             border-radius: 3px;
             z-index: 10;
         }
@@ -676,31 +685,31 @@
         .btn-mode {
             flex: 1;
             padding: 12px;
-            background: #161926;
-            border: 1px solid #23283b;
-            color: #8c96a8;
+            background: #151924;
+            border: 1px solid #283044;
+            color: #94a3b8;
             border-radius: 12px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             cursor: pointer;
         }
 
         .btn-mode.active {
-            background: #2563eb;
+            background: #b45309;
             color: #ffffff;
-            border-color: #3b82f6;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            border-color: #f59e0b;
+            box-shadow: 0 4px 12px rgba(180, 83, 9, 0.4);
         }
 
         /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -713,8 +722,8 @@
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal {
-            background: #181b29;
-            border: 1px solid #2a3148;
+            background: #151924;
+            border: 1px solid #283044;
             border-radius: 20px;
             padding: 24px;
             text-align: center;
@@ -722,11 +731,11 @@
             width: 90%;
         }
 
-        .modal h2 { font-size: 20px; margin-bottom: 10px; }
-        .modal p { color: #a0a6b8; font-size: 14px; margin-bottom: 20px; }
+        .modal h2 { font-size: 20px; margin-bottom: 10px; color: #f59e0b; }
+        .modal p { color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
 
         .modal-btn {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
+            background: linear-gradient(135deg, #b45309, #f59e0b);
             color: #fff;
             border: none;
             padding: 12px 24px;
@@ -745,21 +754,21 @@
     <!-- 0. LOGIN / ACCOUNT CREATION SCREEN -->
     <div id="screen-login" class="screen active">
       <div style="text-align: center; margin-top: 30px;">
-        <h1 style="font-size: 28px; font-weight: 900; letter-spacing: 2px;">WAYBLOCK</h1>
-        <p style="color: #6c757d; font-size: 13px; margin-top: 4px;">Online Quoridor Multiplayer</p>
+        <h1 style="font-size: 32px; font-weight: 900; letter-spacing: 3px; color: #f59e0b;">OCCUPY</h1>
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 4px; letter-spacing: 1px;">DUNGEON ESCAPE MULTIPLAYER</p>
       </div>
 
       <div class="login-card" style="margin-top: 20px;">
-        <div class="avatar-logo" style="width: 60px; height: 60px; font-size: 24px;">🎮</div>
+        <div class="avatar-logo" style="width: 60px; height: 60px; font-size: 24px;">🏰</div>
         <div>
-          <h2 style="font-size: 18px; font-weight: 800;">Hesab Yaradın</h2>
-          <p style="font-size: 12px; color: #6c757d; margin-top: 4px;">Oyuna daxil olmaq üçün istifadəçi adınızı daxil edin</p>
+          <h2 style="font-size: 18px; font-weight: 800;">Zindana Daxil Olun</h2>
+          <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Oyuna başlamaq üçün ləqəbinizi daxil edin</p>
         </div>
 
-        <input type="text" id="input-username" class="username-input" placeholder="İstifadəçi adınızı yazın..." maxlength="15">
+        <input type="text" id="input-username" class="username-input" placeholder="Macəraçı adınız..." maxlength="15">
 
         <button class="btn-submit" onclick="loginUser()">Oyuna Başla</button>
-        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #23283b;" onclick="loginAsGuest()">Təsadüfi Ad İlə Gir</button>
+        <button class="btn-join" style="width: 100%; padding: 12px; background: transparent; border: 1px solid #283044;" onclick="loginAsGuest()">Təsadüfi Ad İlə Gir</button>
       </div>
     </div>
 
@@ -769,14 +778,14 @@
         <div class="user-info">
           <div class="avatar-logo" id="user-avatar">👤</div>
           <div class="user-details">
-            <span class="brand-name">WAYBLOCK</span>
+            <span class="brand-name">OCCUPY</span>
             <span class="username" id="display-username">Oyunçu</span>
           </div>
         </div>
         <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
       </div>
 
-      <div class="menu-card" style="background: linear-gradient(180deg, #1e293b 0%, #161926 100%);" onclick="navigateTo('screen-lobby')">
+      <div class="menu-card" style="background: linear-gradient(180deg, #1f2536 0%, #151924 100%);" onclick="navigateTo('screen-lobby')">
         <div class="status-row">
           <span class="badge-online">ONLINE</span>
           <span class="badge-streak" id="user-streak">🔥 Streak: 0</span>
@@ -784,7 +793,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
           <div>
             <div class="card-main-title">Play Online</div>
-            <div class="card-sub">Onlayn oyunçularla oyna</div>
+            <div class="card-sub">Digər macəraçılarla mübarizə apar</div>
           </div>
           <div class="icon-btn-rounded">→</div>
         </div>
@@ -792,9 +801,9 @@
 
       <div class="grid-2">
         <div class="menu-card mode-card" onclick="openSetup('vs_bot')">
-          <div class="mode-icon">🤖</div>
+          <div class="mode-icon">👹</div>
           <div>
-            <div class="card-main-title" style="font-size: 15px;">Bot ilə Oyna</div>
+            <div class="card-main-title" style="font-size: 15px;">Canavar İlə Oyna</div>
             <div class="card-sub">Tək Oyunçu</div>
           </div>
         </div>
@@ -813,7 +822,7 @@
           <span style="font-size: 18px;">🏆</span>
           <span style="font-weight: 700; font-size: 15px;">Liderlər Lövhəsi</span>
         </div>
-        <span style="color: #6c757d;">›</span>
+        <span style="color: #94a3b8;">›</span>
       </div>
     </div>
 
@@ -823,7 +832,7 @@
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
         <div style="text-align: center;">
             <div class="header-title" id="setup-title">Game Settings</div>
-            <div style="font-size: 11px; color: #6c757d;">Rejim və ayarları seçin</div>
+            <div style="font-size: 11px; color: #94a3b8;">Rejim və ayarları seçin</div>
         </div>
         <div></div>
       </div>
@@ -838,23 +847,23 @@
       <!-- Mode Selector -->
       <div class="mode-toggle-container">
         <button class="mode-toggle-btn active" id="btn-mode-classic" onclick="setGameRule('classic')">
-            <span>🚩</span> Classic
+            <span>🗡️</span> Escape
         </button>
         <button class="mode-toggle-btn" id="btn-mode-center" onclick="setGameRule('center_race')">
-            <span>👑</span> Center
+            <span>🏰</span> Occupy
         </button>
         <button class="mode-toggle-btn" id="btn-mode-finish" onclick="setGameRule('finish_race')">
-            <span>🏁</span> Finish
+            <span>🚪</span> Gate
         </button>
       </div>
 
-      <!-- Bot Difficulty Selector (yalnız Bot rejimində görünür) -->
+      <!-- Bot Difficulty Selector -->
       <div id="bot-difficulty-box" style="display: none; flex-direction: column; gap: 6px;">
-        <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;">DIFFICULTY</div>
+        <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;">ÇƏTİNLİK SEVİYYƏSİ</div>
         <div class="diff-grid">
-            <button class="diff-btn" id="btn-diff-easy" onclick="setDifficulty('easy')">📊 Easy</button>
-            <button class="diff-btn active" id="btn-diff-medium" onclick="setDifficulty('medium')">📊 Medium</button>
-            <button class="diff-btn" id="btn-diff-hard" onclick="setDifficulty('hard')">📊 Hard</button>
+            <button class="diff-btn" id="btn-diff-easy" onclick="setDifficulty('easy')">📊 Asan</button>
+            <button class="diff-btn active" id="btn-diff-medium" onclick="setDifficulty('medium')">📊 Orta</button>
+            <button class="diff-btn" id="btn-diff-hard" onclick="setDifficulty('hard')">📊 Çətin</button>
             <button class="diff-btn master" id="btn-diff-master" onclick="setDifficulty('master')">🎗️ Master</button>
         </div>
       </div>
@@ -871,7 +880,7 @@
     <div id="screen-lobby" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
-        <div class="header-title">Online Lobby</div>
+        <div class="header-title">Online Lobi</div>
         <button class="icon-btn-rounded" onclick="navigateTo('screen-account')">👤</button>
       </div>
 
@@ -900,7 +909,7 @@
         </button>
       </div>
 
-      <div class="section-label">MÖVCUD OTAQLAR</div>
+      <div class="section-label">MÖVCUD ZİNDAN OTAQLARI</div>
 
       <div id="room-list" style="display: flex; flex-direction: column; gap: 8px;">
         <div class="room-item">
@@ -927,7 +936,7 @@
         <div style="display: flex; align-items: center; gap: 12px;">
           <div class="avatar-logo" id="account-avatar">👤</div>
           <div>
-            <div class="card-sub">İstifadəçi Adı</div>
+            <div class="card-sub">Macəraçı Adı</div>
             <div class="username" style="font-size: 16px;" id="account-username">Oyunçu</div>
           </div>
         </div>
@@ -994,7 +1003,7 @@
     <div id="screen-game" class="screen">
       <div class="game-header">
         <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
-        <div class="game-mode-indicator" id="game-mode-title">🤖 vs Bot</div>
+        <div class="game-mode-indicator" id="game-mode-title">👹 vs Canavar</div>
         <button class="icon-btn" onclick="restartGame()">🔄</button>
       </div>
 
@@ -1009,14 +1018,14 @@
       </div>
 
       <div id="board-wrapper">
-        <div class="finish-banner" id="finish-banner">🏁 FINISH ZOLAĞI 🏁</div>
+        <div class="finish-banner" id="finish-banner">🚪 ÇIXIŞ QAPISI 🚪</div>
         <div id="board"></div>
       </div>
 
       <div class="controls">
-        <button class="btn-mode active" id="btn-move" onclick="setMode('move')">🏃 Hərəkət</button>
-        <button class="btn-mode" id="btn-h" onclick="setMode('H')">▬ Yatay</button>
-        <button class="btn-mode" id="btn-v" onclick="setMode('V')">❚ Dikey</button>
+        <button class="btn-mode active" id="btn-move" onclick="setMode('move')">🏃 Addım</button>
+        <button class="btn-mode" id="btn-h" onclick="setMode('H')">▬ Yatay Barrikada</button>
+        <button class="btn-mode" id="btn-v" onclick="setMode('V')">❚ Dikey Barrikada</button>
       </div>
     </div>
 
@@ -1025,7 +1034,7 @@
   <!-- GAME END MODAL -->
   <div class="modal-overlay" id="modal">
       <div class="modal">
-          <h2 id="modal-title">Qələbə!</h2>
+          <h2 id="modal-title">Qələbə! 🎉</h2>
           <p id="modal-desc">Siz qazandınız!</p>
           <button class="modal-btn" onclick="restartGame()">Yenidən Başla</button>
       </div>
@@ -1043,9 +1052,9 @@
 
     // SETUP STATE
     const COLOR_OPTIONS = [
-        '#5865F2', '#E74C3C', '#2ECC71', '#F1C40F', 
-        '#E91E63', '#00BCD4', '#FFFFFF', '#8BC34A', 
-        '#9B59B6', '#1ABC9C'
+        '#f59e0b', '#ef4444', '#10b981', '#3b82f6', 
+        '#ec4899', '#06b6d4', '#ffffff', '#8b5cf6', 
+        '#d97706', '#14b8a6'
     ];
 
     let gameSetup = {
@@ -1054,16 +1063,16 @@
         rule: 'classic',      // 'classic', 'center_race', or 'finish_race'
         difficulty: 'medium', // 'easy', 'medium', 'hard', 'master'
         players: [
-            { name: 'Player 1', color: '#5865F2' },
-            { name: 'Player 2', color: '#E74C3C' },
-            { name: 'Player 3', color: '#2ECC71' },
-            { name: 'Player 4', color: '#F1C40F' }
+            { name: 'Oyunçu 1', color: '#f59e0b' },
+            { name: 'Oyunçu 2', color: '#ef4444' },
+            { name: 'Oyunçu 3', color: '#10b981' },
+            { name: 'Oyunçu 4', color: '#3b82f6' }
         ]
     };
 
     // Auto load user if saved before
     window.onload = function() {
-        let savedUser = localStorage.getItem('wayblock_user');
+        let savedUser = localStorage.getItem('occupy_user');
         if(savedUser) {
             currentUser = JSON.parse(savedUser);
             updateUserUI();
@@ -1072,7 +1081,7 @@
     };
 
     function saveUserData() {
-        localStorage.setItem('wayblock_user', JSON.stringify(currentUser));
+        localStorage.setItem('occupy_user', JSON.stringify(currentUser));
     }
 
     function loginUser() {
@@ -1088,14 +1097,14 @@
     }
 
     function loginAsGuest() {
-        currentUser.name = "Oyunçu_" + Math.floor(Math.random() * 899 + 100);
+        currentUser.name = "Macəraçı_" + Math.floor(Math.random() * 899 + 100);
         saveUserData();
         updateUserUI();
         navigateTo('screen-menu');
     }
 
     function logout() {
-        localStorage.removeItem('wayblock_user');
+        localStorage.removeItem('occupy_user');
         currentUser = { name: "", score: 0, games: 0, wins: 0, streak: 0 };
         document.getElementById('input-username').value = "";
         navigateTo('screen-login');
@@ -1139,17 +1148,17 @@
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <div class="player-badge" style="background: ${p.color}; color: #fff;">${i + 1}</div>
                         <div>
-                            <div style="font-size: 13px; font-weight: 800;">${isBot ? 'Bot (' + gameSetup.difficulty.toUpperCase() + ')' : 'Oyunçu ' + (i + 1)}</div>
+                            <div style="font-size: 13px; font-weight: 800;">${isBot ? 'Zindan Canavarı (' + gameSetup.difficulty.toUpperCase() + ')' : 'Oyunçu ' + (i + 1)}</div>
                         </div>
                     </div>
                     <div id="p-preview-${i}" style="width: 14px; height: 14px; border-radius: 50%; background: ${p.color};"></div>
                 </div>
                 <div>
                     <input type="text" id="p-name-input-${i}" class="username-input" style="text-align: left; padding: 8px 12px; font-size: 12px;" 
-                           value="${isBot ? 'Bot (' + gameSetup.difficulty.toUpperCase() + ')' : p.name}" ${isBot ? 'disabled' : ''}>
+                           value="${isBot ? 'Canavar (' + gameSetup.difficulty.toUpperCase() + ')' : p.name}" ${isBot ? 'disabled' : ''}>
                 </div>
                 <div>
-                    <div style="font-size: 9px; color: #6c757d; font-weight: 800; margin-bottom: 4px;">RƏNG SEÇİMİ</div>
+                    <div style="font-size: 9px; color: #94a3b8; font-weight: 800; margin-bottom: 4px;">RƏNG SEÇİMİ</div>
                     <div class="color-palette" id="p-palette-${i}"></div>
                 </div>
             `;
@@ -1178,7 +1187,7 @@
         let diffBox = document.getElementById('bot-difficulty-box');
 
         if(mode === 'vs_bot') {
-            titleEl.textContent = "Bot Oyun Parametrləri";
+            titleEl.textContent = "Canavar Oyunu Parametrləri";
             countBox.style.display = 'none';
             diffBox.style.display = 'flex';
         } else {
@@ -1250,18 +1259,18 @@
         currentGameMode = mode;
         navigateTo('screen-game');
 
-        let icon = '🚩';
-        let modeText = 'Classic';
+        let icon = '🗡️';
+        let modeText = 'Dungeon Escape';
 
         if (gameSetup.rule === 'center_race') {
-            icon = '👑';
-            modeText = 'Center Race';
+            icon = '🏰';
+            modeText = 'Occupy Fortress';
         } else if (gameSetup.rule === 'finish_race') {
-            icon = '🏁';
-            modeText = 'Finish Race';
+            icon = '🚪';
+            modeText = 'Gate Race';
         } else if (mode === 'vs_bot') {
-            icon = '🤖';
-            modeText = `vs Bot (${gameSetup.difficulty.toUpperCase()})`;
+            icon = '👹';
+            modeText = `vs Canavar (${gameSetup.difficulty.toUpperCase()})`;
         }
 
         document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
@@ -1432,7 +1441,7 @@
             if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
         }
 
-        // Divar qoyarkən heç bir oyunçunun yolunu tam kəsməməlidir
+        // Barrikada qoyarkən heç bir macəraçının yolunu tam kəsməməlidir
         if (type === 'H') hWalls[r][c] = true;
         else vWalls[r][c] = true;
 
@@ -1458,7 +1467,6 @@
         let currP = players[turnIndex];
         let wallEl = document.createElement('div');
         wallEl.className = 'wall-placed';
-        wallEl.style.background = currP.color;
         
         let cellW = (340 - 80) / 9;
         let gap = 10;
@@ -1511,7 +1519,7 @@
     }
 
     // ==========================================
-    // AKILLI BOT ALQORİTMİ (BFS - Pathfinding)
+    // CANAVAR ALQORİTMİ (BFS - Pathfinding AI)
     // ==========================================
 
     function getShortestPathLength(p) {
@@ -1567,7 +1575,7 @@
             return;
         }
 
-        // 2. MEDIUM MODE (Sadə Ən Qısa Yol)
+        // 2. MEDIUM MODE
         if (diff === 'medium') {
             if (humanDist < botDist && botP.walls > 0 && Math.random() < 0.4) {
                 if (tryBlockingWall(botP, humanP)) return;
@@ -1576,7 +1584,7 @@
             return;
         }
 
-        // 3. HARD MODE (Strategiya + Maneə Kəsmə)
+        // 3. HARD MODE
         if (diff === 'hard') {
             if (humanDist <= botDist && botP.walls > 0) {
                 if (tryBlockingWall(botP, humanP)) return;
@@ -1585,14 +1593,12 @@
             return;
         }
 
-        // 4. MASTER MODE (Müəssisəvi Təhlil & Mükəmməl Min-Maks)
+        // 4. MASTER MODE
         if (diff === 'master') {
-            // Əgər insan udmaq üzrədisə, nə olursa olsun divar qoy
             if (humanDist <= 2 && botP.walls > 0) {
                 if (tryBlockingWall(botP, humanP)) return;
             }
             
-            // Divar qoymaq insan yolunu uzadacaqsa və öz yolumuz çox uzanmayacaqsa divar qoy
             if (botP.walls > 0) {
                 let bestWall = findBestMasterWall(botP, humanP);
                 if (bestWall) {
@@ -1674,21 +1680,18 @@
             for (let c = 0; c < 8; c++) {
                 for (let type of ['H', 'V']) {
                     if (canPlaceWall(r, c, type)) {
-                        // Test divarı qoyuruq
                         if (type === 'H') hWalls[r][c] = true;
                         else vWalls[r][c] = true;
 
                         let newHumanDist = getShortestPathLength(humanP);
                         let newBotDist = getShortestPathLength(botP);
 
-                        // Divarı götürürük
                         if (type === 'H') hWalls[r][c] = false;
                         else vWalls[r][c] = false;
 
                         let humanDistIncrease = newHumanDist - currentHumanDist;
                         let botDistIncrease = newBotDist - currentBotDist;
 
-                        // İnsanın yolunu azı +2 uzadırsa və botun yolunu insaninkindən çox uzatmırsa
                         if (humanDistIncrease > maxHumanDistIncrease && botDistIncrease <= 1) {
                             maxHumanDistIncrease = humanDistIncrease;
                             bestWall = { r, c, type };
@@ -1710,8 +1713,8 @@
             currentUser.score += 50;
         }
 
-        document.getElementById('modal-title').textContent = "Təbriklər! 🎉";
-        document.getElementById('modal-desc').textContent = `${winnerP.name} qalib gəldi!`;
+        document.getElementById('modal-title').textContent = "Qələbə! 🎉";
+        document.getElementById('modal-desc').textContent = `${winnerP.name} zindandan qaçdı!`;
 
         saveUserData();
         updateUserUI();
