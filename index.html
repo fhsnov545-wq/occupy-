@@ -2307,7 +2307,7 @@
 
         if (gameSetup.rule === 'center_race' && botP.r === 4 && botP.c === 4) return endGame(botP);
         if (gameSetup.rule === 'finish_race' && botP.r === 0) return endGame(botP);
-        if (gameSetup.rule === 'classic' && botP.r === 0) return endGame(botP);
+        if (gameSetup.rule === 'classic' && botP.r === 8) return endGame(botP);
 
         switchTurn();
     }
@@ -2399,9 +2399,6 @@
         let initialWalls = count === 2 ? 10 : (count === 3 ? 7 : 5);
 
         players = [];
-        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        document.querySelectorAll('.wall-placed').forEach(w => w.remove());
 
         if (gameSetup.rule === 'finish_race') {
             let startCols = [1, 3, 5, 7];
@@ -2424,95 +2421,163 @@
 
             if (count === 2) {
                 players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
-            } else if (count === 3) {
-                players.push({ id: 1, r: 0, c: 2, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
-                players.push({ id: 2, r: 0, c: 6, walls: initialWalls, name: gameSetup.players[2].name, color: gameSetup.players[2].color, targetSide: 'bottom' });
-            } else if (count === 4) {
+            } else {
                 players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
                 players.push({ id: 2, r: 4, c: 0, walls: initialWalls, name: gameSetup.players[2].name, color: gameSetup.players[2].color, targetSide: 'right' });
-                players.push({ id: 3, r: 4, c: 8, walls: initialWalls, name: gameSetup.players[3].name, color: gameSetup.players[3].color, targetSide: 'left' });
+                if (count === 4) {
+                    players.push({ id: 3, r: 4, c: 8, walls: initialWalls, name: gameSetup.players[3].name, color: gameSetup.players[3].color, targetSide: 'left' });
+                }
             }
         }
 
         turnIndex = 0;
+        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         activeMode = 'move';
+        
+        document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-move').classList.add('active');
         document.getElementById('modal').classList.remove('active');
-        setMode('move');
+
         initBoard();
     }
 
-    // ONLINE P2P (PEERJS) LOGIC PLACEHOLDER HOOKS
+    // ==========================================
+    // PEERJS ONLINE MULTIPLAYER INTEGRATION
+    // ==========================================
     let peer = null;
     let conn = null;
-    let myOnlinePlayerIndex = 0;
+    let myPeerId = null;
+    let myOnlinePlayerIndex = 0; // 0 = Host, 1 = Guest
 
     function initPeerNetwork() {
         try {
             peer = new Peer();
+
             peer.on('open', (id) => {
-                let el = document.getElementById('my-peer-id');
-                if(el) el.textContent = id;
+                myPeerId = id;
+                let idEl = document.getElementById('my-peer-id');
+                if(idEl) idEl.textContent = id;
             });
-            peer.on('connection', (connection) => {
-                conn = connection;
+
+            peer.on('connection', (incomingConn) => {
+                conn = incomingConn;
                 setupConnectionHandlers();
-                alert(i18nData[currentLang].alert_peer_connected);
-                myOnlinePlayerIndex = 0;
-                startGame('online_p2p');
+                myOnlinePlayerIndex = 0; // Host is Player 0
+                
+                // Start Online Game with 2 players
+                setTimeout(() => {
+                    alert(i18nData[currentLang].alert_peer_connected);
+                    startOnlineMatchAsHost();
+                }, 500);
             });
         } catch(e) {
-            console.log("PeerJS initialization deferred.");
+            console.log("PeerJS initialization error:", e);
         }
     }
 
     function copyMyPeerId() {
-        let idText = document.getElementById('my-peer-id').textContent;
-        if(idText && idText !== "Yüklənir..." && idText !== "Loading...") {
-            navigator.clipboard.writeText(idText);
-            alert(i18nData[currentLang].alert_room_created + idText + i18nData[currentLang].alert_room_created_sub);
-        } else {
+        if(!myPeerId) {
             alert(i18nData[currentLang].alert_peer_wait);
+            return;
         }
+        navigator.clipboard.writeText(myPeerId).then(() => {
+            alert(i18nData[currentLang].alert_room_created + myPeerId + i18nData[currentLang].alert_room_created_sub);
+        }).catch(() => {
+            prompt(i18nData[currentLang].alert_copied, myPeerId);
+        });
     }
 
     function createOnlineRoom() {
+        if(!myPeerId) {
+            alert(i18nData[currentLang].alert_peer_wait);
+            return;
+        }
         copyMyPeerId();
     }
 
     function joinOnlineRoomPrompt() {
         let code = prompt(i18nData[currentLang].alert_enter_code);
-        if(code && code.trim()) {
-            conn = peer.connect(code.trim());
-            setupConnectionHandlers();
-            myOnlinePlayerIndex = 1;
+        if(!code || !code.trim()) return;
+
+        code = code.trim();
+        conn = peer.connect(code);
+        myOnlinePlayerIndex = 1; // Guest is Player 1
+
+        setupConnectionHandlers();
+        
+        conn.on('open', () => {
             alert(i18nData[currentLang].alert_joined);
-            startGame('online_p2p');
-        }
+            startOnlineMatchAsGuest();
+        });
     }
 
     function setupConnectionHandlers() {
         if(!conn) return;
+
         conn.on('data', (data) => {
-            if(data.type === 'MOVE') {
-                let p = players[data.playerIndex];
-                p.r = data.r;
-                p.c = data.c;
-                switchTurn();
-            } else if(data.type === 'WALL') {
-                placeWall(data.r, data.c, data.wallType);
-                players[data.playerIndex].walls--;
-                switchTurn();
-            }
+            handleIncomingOnlineAction(data);
         });
+
         conn.on('close', () => {
             alert(i18nData[currentLang].alert_peer_disconnected);
-            navigateTo('screen-menu');
+            navigateTo('screen-lobby');
         });
     }
 
     function sendOnlineAction(actionData) {
         if(conn && conn.open) {
             conn.send(actionData);
+        }
+    }
+
+    function startOnlineMatchAsHost() {
+        gameSetup.mode = 'online_p2p';
+        gameSetup.playerCount = 2;
+        gameSetup.rule = 'classic';
+        
+        gameSetup.players[0].name = currentUser.name || "Host";
+        gameSetup.players[1].name = "Guest";
+
+        startGame('online_p2p');
+        
+        // Send initial state to guest
+        sendOnlineAction({
+            type: 'START',
+            players: gameSetup.players,
+            rule: gameSetup.rule
+        });
+    }
+
+    function startOnlineMatchAsGuest() {
+        gameSetup.mode = 'online_p2p';
+        gameSetup.playerCount = 2;
+        gameSetup.rule = 'classic';
+        
+        // Wait for START packet from host
+    }
+
+    function handleIncomingOnlineAction(data) {
+        if(data.type === 'START') {
+            gameSetup.rule = data.rule;
+            gameSetup.players = data.players;
+            startGame('online_p2p');
+        }
+        else if(data.type === 'MOVE') {
+            let p = players[data.playerIndex];
+            p.r = data.r;
+            p.c = data.c;
+            
+            // Check win condition
+            if(p.r === 0 || p.r === 8 || p.c === 0 || p.c === 8) {
+                // Let local rendering catch up
+            }
+            switchTurn();
+        }
+        else if(data.type === 'WALL') {
+            placeWall(data.r, data.c, data.wallType);
+            players[data.playerIndex].walls--;
+            switchTurn();
         }
     }
 </script>
