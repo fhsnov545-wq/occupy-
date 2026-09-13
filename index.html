@@ -779,6 +779,31 @@
             cursor: pointer;
             width: 100%;
         }
+        .question-mark {
+    position: absolute;
+    font-size: 18px;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 3;
+    animation: qm-pulse 1.4s infinite ease-in-out;
+}
+@keyframes qm-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+}
+.fog-dark {
+    background: #05060a !important;
+    border-color: #05060a !important;
+    transition: background 0.4s ease;
+}
+.wall-placed.breakable-highlight {
+    cursor: pointer;
+    animation: wall-pulse 1s infinite;
+}
+@keyframes wall-pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(239,68,68,0.6); }
+    50% { box-shadow: 0 0 18px rgba(245,158,11,0.9); }
+        }
     </style>
 </head>
 <body>
@@ -2580,6 +2605,206 @@
             switchTurn();
         }
     }
+    // ======================================================
+// SUAL İŞARƏSİ (MYSTERY POWER CELL) MODULU - ƏLAVƏ HİSSƏ
+// ======================================================
+let questionCells = [];
+const POWERS = ['break_wall', 'fog_vision'];
+
+function pickRandomQuestionCells() {
+    questionCells = [];
+    let tries = 0;
+    while (questionCells.length < 1 && tries < 100) {
+        tries++;
+        let r = Math.floor(Math.random() * 9);
+        let c = Math.floor(Math.random() * 9);
+        let occupied = players.some(p => p.r === r && p.c === c);
+        let isCenter = (gameSetup.rule === 'center_race' && r === 4 && c === 4);
+        let isFinish = (gameSetup.rule === 'finish_race' && r === 0);
+        if (!occupied && !isCenter && !isFinish) questionCells.push({ r, c });
+    }
+}
+
+function renderQuestionCells() {
+    questionCells.forEach(q => {
+        let cell = getCellEl(q.r, q.c);
+        if (cell && !cell.querySelector('.question-mark')) {
+            let qm = document.createElement('div');
+            qm.className = 'question-mark';
+            qm.textContent = '❓';
+            cell.appendChild(qm);
+        }
+    });
+}
+
+function showPowerBanner(icon, title, desc) {
+    let toast = document.createElement('div');
+    toast.style.cssText = `position:fixed;top:20px;left:50%;transform:translateX(-50%);
+        background:#151924;border:1px solid #f59e0b;border-radius:14px;padding:14px 20px;
+        z-index:200;text-align:center;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,0.6);color:#fff;`;
+    toast.innerHTML = `<div style="font-size:24px;">${icon}</div>
+        <div style="font-weight:800;color:#f59e0b;margin-top:4px;">${title}</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">${desc}</div>`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+}
+
+function triggerRandomPower(p) {
+    let power = POWERS[Math.floor(Math.random() * POWERS.length)];
+    if (power === 'break_wall') grantBreakWallPower(p);
+    else applyFogVision(p);
+}
+
+// --- GÜC 1: Divarı Qırma Bacarığı ---
+function grantBreakWallPower(p) {
+    p.breakWallCharges = (p.breakWallCharges || 0) + 1;
+    showPowerBanner('🔨', 'Divar Qırma Gücü!', '"Divar Qır" düyməsi ilə 1 divarı sil.');
+    renderBreakWallButton();
+}
+
+function renderBreakWallButton() {
+    let controls = document.querySelector('.controls');
+    if (!controls) return;
+    let existing = document.getElementById('btn-break-wall');
+    let p = players[turnIndex];
+    if (p && p.breakWallCharges > 0) {
+        if (!existing) {
+            let btn = document.createElement('button');
+            btn.id = 'btn-break-wall';
+            btn.className = 'btn-mode';
+            btn.style.borderColor = '#f59e0b';
+            btn.style.color = '#f59e0b';
+            btn.innerHTML = `💥 <span>Divar Qır (${p.breakWallCharges})</span>`;
+            btn.onclick = () => setMode('break_wall');
+            controls.appendChild(btn);
+        } else {
+            existing.querySelector('span').textContent = `Divar Qır (${p.breakWallCharges})`;
+            existing.style.display = 'flex';
+        }
+    } else if (existing) {
+        existing.style.display = 'none';
+    }
+}
+
+function highlightBreakableWalls() {
+    document.querySelectorAll('.wall-placed').forEach(w => {
+        w.classList.add('breakable-highlight');
+        w.onclick = (e) => {
+            e.stopPropagation();
+            if (activeMode !== 'break_wall') return;
+            handleWallBreakClick(w);
+        };
+    });
+}
+
+function handleWallBreakClick(wallEl) {
+    let p = players[turnIndex];
+    if (!p.breakWallCharges) return;
+    let r = parseInt(wallEl.dataset.r);
+    let c = parseInt(wallEl.dataset.c);
+    let type = wallEl.dataset.type;
+    if (type === 'H') hWalls[r][c] = false; else vWalls[r][c] = false;
+    wallEl.remove();
+    p.breakWallCharges--;
+    setMode('move');
+    renderBreakWallButton();
+    highlightValidMoves();
+}
+
+// --- GÜC 2: Görüş Zəifləməsi (Fog Vision) ---
+function applyFogVision(p) {
+    p.fogTurnsLeft = 2;
+    showPowerBanner('🌫️', 'Görüş Zəifləyir!', 'Yalnız ətrafındakı xanaları görəcəksən (2 növbə).');
+}
+
+function updateFogOverlay() {
+    document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('fog-dark'));
+    let p = players[turnIndex];
+    if (!p || !p.fogTurnsLeft) return;
+    document.querySelectorAll('.cell').forEach(cell => {
+        let r = parseInt(cell.dataset.r), c = parseInt(cell.dataset.c);
+        if (Math.abs(r - p.r) > 1 || Math.abs(c - p.c) > 1) cell.classList.add('fog-dark');
+    });
+}
+
+function clearFogOverlay() {
+    document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('fog-dark'));
+}
+
+// --- SUAL XANASI TETİKLƏYİCİSİ ---
+function checkQuestionCellTrigger(mover, r, c) {
+    if (document.getElementById('modal').classList.contains('active')) return;
+    if (mover.r !== r || mover.c !== c) return;
+    let idx = questionCells.findIndex(q => q.r === r && q.c === c);
+    if (idx === -1) return;
+    questionCells.splice(idx, 1);
+    let cell = getCellEl(r, c);
+    let qm = cell && cell.querySelector('.question-mark');
+    if (qm) qm.remove();
+    triggerRandomPower(mover);
+}
+
+// ============ MÖVCUD FUNKSİYALARIN "WRAP" EDİLMƏSİ ============
+const _originalInitBoard = initBoard;
+initBoard = function() {
+    _originalInitBoard();
+    pickRandomQuestionCells();
+    renderQuestionCells();
+};
+
+const _originalOnCellClick = onCellClick;
+onCellClick = function(r, c) {
+    let mover = players[turnIndex];
+    _originalOnCellClick(r, c);
+    checkQuestionCellTrigger(mover, r, c);
+};
+
+const _originalSetMode = setMode;
+setMode = function(mode) {
+    _originalSetMode(mode);
+    if (mode === 'break_wall') {
+        document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
+        let btn = document.getElementById('btn-break-wall');
+        if (btn) btn.classList.add('active');
+        highlightBreakableWalls();
+    } else {
+        document.querySelectorAll('.wall-placed').forEach(w => w.classList.remove('breakable-highlight'));
+    }
+};
+
+const _originalPlaceWall = placeWall;
+placeWall = function(r, c, type) {
+    _originalPlaceWall(r, c, type);
+    let walls = document.querySelectorAll('.wall-placed');
+    let lastWall = walls[walls.length - 1];
+    if (lastWall) {
+        lastWall.dataset.r = r;
+        lastWall.dataset.c = c;
+        lastWall.dataset.type = type;
+    }
+};
+
+const _originalSwitchTurn = switchTurn;
+switchTurn = function() {
+    let endedPlayer = players[turnIndex];
+    if (endedPlayer && endedPlayer.fogTurnsLeft > 0) endedPlayer.fogTurnsLeft--;
+    _originalSwitchTurn();
+};
+
+const _originalRenderPawns = renderPawns;
+renderPawns = function() {
+    _originalRenderPawns();
+    updateFogOverlay();
+    renderBreakWallButton();
+};
+
+const _originalRestartGame = restartGame;
+restartGame = function() {
+    _originalRestartGame();
+    let btn = document.getElementById('btn-break-wall');
+    if (btn) btn.remove();
+    clearFogOverlay();
+};
 </script>
 </body>
 </html>
