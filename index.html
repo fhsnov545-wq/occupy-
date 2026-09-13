@@ -2537,6 +2537,168 @@
             switchTurn();
         }
     }
+        function restartGame() {
+        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
+        players = [];
+        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+
+        let startPositions = [
+            { r: 8, c: 4, targetSide: 'top' },
+            { r: 0, c: 4, targetSide: 'bottom' },
+            { r: 4, c: 0, targetSide: 'right' },
+            { r: 4, c: 8, targetSide: 'left' }
+        ];
+
+        if (gameSetup.rule === 'center_race' || gameSetup.rule === 'finish_race') {
+            startPositions = [
+                { r: 8, c: 4, targetSide: 'top' },
+                { r: 0, c: 4, targetSide: 'bottom' },
+                { r: 4, c: 0, targetSide: 'right' },
+                { r: 4, c: 8, targetSide: 'left' }
+            ];
+        }
+
+        let wallCount = count === 2 ? 10 : 5;
+
+        for (let i = 0; i < count; i++) {
+            players.push({
+                id: i,
+                name: gameSetup.players[i].name,
+                color: gameSetup.players[i].color,
+                r: startPositions[i].r,
+                c: startPositions[i].c,
+                targetSide: startPositions[i].targetSide,
+                walls: wallCount
+            });
+        }
+
+        turnIndex = 0;
+        activeMode = 'move';
+        document.getElementById('modal').classList.remove('active');
+        setMode('move');
+        initBoard();
+    }
+
+    // ==========================================
+    // PEERJS (ONLINE P2P) MULTIPLAYER INTEGRATION
+    // ==========================================
+    let peer = null;
+    let conn = null;
+    let myOnlinePlayerIndex = 0;
+    let isHost = false;
+
+    function initPeerNetwork() {
+        try {
+            peer = new Peer({
+                config: {
+                    'iceServers': [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:global.stun.twilio.com:3478' }
+                    ]
+                }
+            });
+
+            peer.on('open', (id) => {
+                let idEl = document.getElementById('my-peer-id');
+                if (idEl) idEl.textContent = id;
+            });
+
+            peer.on('connection', (connection) => {
+                conn = connection;
+                isHost = true;
+                myOnlinePlayerIndex = 0;
+                setupPeerConnectionEvents();
+                
+                alert(i18nData[currentLang].alert_peer_connected);
+                
+                // Initialize online 2P game as host
+                gameSetup.mode = 'online_p2p';
+                gameSetup.playerCount = 2;
+                gameSetup.players[0].name = currentUser.name;
+                gameSetup.players[1].name = i18nData[currentLang].opponent;
+                
+                startGame('online_p2p');
+            });
+        } catch (e) {
+            console.log("PeerJS init error:", e);
+        }
+    }
+
+    function copyMyPeerId() {
+        let idText = document.getElementById('my-peer-id').textContent;
+        if (idText && idText !== "Yüklənir..." && idText !== "Loading...") {
+            navigator.clipboard.writeText(idText);
+            alert(i18nData[currentLang].alert_copied + idText);
+        } else {
+            alert(i18nData[currentLang].alert_peer_wait);
+        }
+    }
+
+    function createOnlineRoom() {
+        copyMyPeerId();
+        let idText = document.getElementById('my-peer-id').textContent;
+        alert(i18nData[currentLang].alert_room_created + idText + i18nData[currentLang].alert_room_created_sub);
+    }
+
+    function joinOnlineRoomPrompt() {
+        let remoteId = prompt(i18nData[currentLang].alert_enter_code);
+        if (!remoteId) return;
+
+        conn = peer.connect(remoteId.trim());
+        isHost = false;
+        myOnlinePlayerIndex = 1;
+
+        setupPeerConnectionEvents();
+
+        conn.on('open', () => {
+            alert(i18nData[currentLang].alert_joined);
+            gameSetup.mode = 'online_p2p';
+            gameSetup.playerCount = 2;
+            gameSetup.players[1].name = currentUser.name;
+            gameSetup.players[0].name = i18nData[currentLang].host;
+            startGame('online_p2p');
+        });
+    }
+
+    function setupPeerConnectionEvents() {
+        conn.on('data', (data) => {
+            handleOnlineAction(data);
+        });
+
+        conn.on('close', () => {
+            alert(i18nData[currentLang].alert_peer_disconnected);
+            navigateTo('screen-lobby');
+        });
+    }
+
+    function sendOnlineAction(actionData) {
+        if (conn && conn.open) {
+            conn.send(actionData);
+        }
+    }
+
+    function handleOnlineAction(data) {
+        if (data.type === 'MOVE') {
+            let p = players[data.playerIndex];
+            p.r = data.r;
+            p.c = data.c;
+            
+            // Check win condition remotely
+            if (p.targetSide === 'top' && p.r === 0) return endGame(p);
+            if (p.targetSide === 'bottom' && p.r === 8) return endGame(p);
+
+            turnIndex = (turnIndex + 1) % players.length;
+            updateUI();
+            renderPawns();
+        } else if (data.type === 'WALL') {
+            placeWall(data.r, data.c, data.wallType);
+            let p = players[data.playerIndex];
+            p.walls--;
+
+            turnIndex = (turnIndex + 1) % players.length;
+            updateUI();
+            renderPawns();
 </script>
 </body>
 </html>
