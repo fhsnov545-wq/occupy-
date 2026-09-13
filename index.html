@@ -779,31 +779,6 @@
             cursor: pointer;
             width: 100%;
         }
-        .question-mark {
-    position: absolute;
-    font-size: 18px;
-    opacity: 0.8;
-    pointer-events: none;
-    z-index: 3;
-    animation: qm-pulse 1.4s infinite ease-in-out;
-}
-@keyframes qm-pulse {
-    0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.15); opacity: 1; }
-}
-.fog-dark {
-    background: #05060a !important;
-    border-color: #05060a !important;
-    transition: background 0.4s ease;
-}
-.wall-placed.breakable-highlight {
-    cursor: pointer;
-    animation: wall-pulse 1s infinite;
-}
-@keyframes wall-pulse {
-    0%, 100% { box-shadow: 0 0 10px rgba(239,68,68,0.6); }
-    50% { box-shadow: 0 0 18px rgba(245,158,11,0.9); }
-        }
     </style>
 </head>
 <body>
@@ -1311,7 +1286,7 @@
             ctrl_vert: "Dikey Barikat",
             modal_win_title: "Zafer! 🎉",
             modal_win_desc: "Kazandınız!",
-            modal_restart: "Yenidən Başla",
+            modal_restart: "Yeniden Başla",
             turn_suffix: "Sırası",
             monster: "Canavar",
             opponent: "Rakip Oyuncu",
@@ -2456,355 +2431,113 @@
         }
 
         turnIndex = 0;
+        activeMode = 'move';
         hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        activeMode = 'move';
-        
-        document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-move').classList.add('active');
+        document.querySelectorAll('.wall-placed').forEach(w => w.remove());
         document.getElementById('modal').classList.remove('active');
-
+        setMode('move');
         initBoard();
     }
 
-    // ==========================================
-    // PEERJS ONLINE MULTIPLAYER INTEGRATION
-    // ==========================================
+    // ======================================================
+    // CANLI ONLAYN MULTIPLAYER ƏLAVƏSİ (PeerJS - P2P ŞƏBƏKƏ)
+    // ======================================================
     let peer = null;
-    let conn = null;
-    let myPeerId = null;
-    let myOnlinePlayerIndex = 0; // 0 = Host, 1 = Guest
+    let peerConn = null;
+    let myPeerId = "";
+    let myOnlinePlayerIndex = 0;
 
     function initPeerNetwork() {
-        try {
-            peer = new Peer();
+        peer = new Peer();
 
-            peer.on('open', (id) => {
-                myPeerId = id;
-                let idEl = document.getElementById('my-peer-id');
-                if(idEl) idEl.textContent = id;
-            });
+        peer.on('open', function(id) {
+            myPeerId = id;
+            document.getElementById('my-peer-id').textContent = id;
+        });
 
-            peer.on('connection', (incomingConn) => {
-                conn = incomingConn;
-                setupConnectionHandlers();
-                myOnlinePlayerIndex = 0; // Host is Player 0
-                
-                // Start Online Game with 2 players
-                setTimeout(() => {
-                    alert(i18nData[currentLang].alert_peer_connected);
-                    startOnlineMatchAsHost();
-                }, 500);
-            });
-        } catch(e) {
-            console.log("PeerJS initialization error:", e);
-        }
-    }
-
-    function copyMyPeerId() {
-        if(!myPeerId) {
-            alert(i18nData[currentLang].alert_peer_wait);
-            return;
-        }
-        navigator.clipboard.writeText(myPeerId).then(() => {
-            alert(i18nData[currentLang].alert_room_created + myPeerId + i18nData[currentLang].alert_room_created_sub);
-        }).catch(() => {
-            prompt(i18nData[currentLang].alert_copied, myPeerId);
+        peer.on('connection', function(conn) {
+            peerConn = conn;
+            myOnlinePlayerIndex = 0;
+            setupConnectionListeners();
+            alert(i18nData[currentLang].alert_peer_connected);
+            
+            gameSetup.playerCount = 2;
+            gameSetup.players[0].name = currentUser.name || `${i18nData[currentLang].player_label} 1`;
+            gameSetup.players[1].name = i18nData[currentLang].opponent;
+            startGame('online_p2p');
         });
     }
 
     function createOnlineRoom() {
-        if(!myPeerId) {
+        if (!myPeerId) {
             alert(i18nData[currentLang].alert_peer_wait);
             return;
         }
-        copyMyPeerId();
+        navigator.clipboard.writeText(myPeerId);
+        alert(i18nData[currentLang].alert_room_created + myPeerId + i18nData[currentLang].alert_room_created_sub);
+    }
+
+    function copyMyPeerId() {
+        if (myPeerId) {
+            navigator.clipboard.writeText(myPeerId);
+            alert(i18nData[currentLang].alert_copied + myPeerId);
+        }
     }
 
     function joinOnlineRoomPrompt() {
-        let code = prompt(i18nData[currentLang].alert_enter_code);
-        if(!code || !code.trim()) return;
-
-        code = code.trim();
-        conn = peer.connect(code);
-        myOnlinePlayerIndex = 1; // Guest is Player 1
-
-        setupConnectionHandlers();
-        
-        conn.on('open', () => {
+        let hostId = prompt(i18nData[currentLang].alert_enter_code);
+        if (hostId) {
+            peerConn = peer.connect(hostId.trim());
+            myOnlinePlayerIndex = 1;
+            setupConnectionListeners();
             alert(i18nData[currentLang].alert_joined);
-            startOnlineMatchAsGuest();
-        });
-    }
 
-    function setupConnectionHandlers() {
-        if(!conn) return;
-
-        conn.on('data', (data) => {
-            handleIncomingOnlineAction(data);
-        });
-
-        conn.on('close', () => {
-            alert(i18nData[currentLang].alert_peer_disconnected);
-            navigateTo('screen-lobby');
-        });
-    }
-
-    function sendOnlineAction(actionData) {
-        if(conn && conn.open) {
-            conn.send(actionData);
-        }
-    }
-
-    function startOnlineMatchAsHost() {
-        gameSetup.mode = 'online_p2p';
-        gameSetup.playerCount = 2;
-        gameSetup.rule = 'classic';
-        
-        gameSetup.players[0].name = currentUser.name || "Host";
-        gameSetup.players[1].name = "Guest";
-
-        startGame('online_p2p');
-        
-        // Send initial state to guest
-        sendOnlineAction({
-            type: 'START',
-            players: gameSetup.players,
-            rule: gameSetup.rule
-        });
-    }
-
-    function startOnlineMatchAsGuest() {
-        gameSetup.mode = 'online_p2p';
-        gameSetup.playerCount = 2;
-        gameSetup.rule = 'classic';
-        
-        // Wait for START packet from host
-    }
-
-    function handleIncomingOnlineAction(data) {
-        if(data.type === 'START') {
-            gameSetup.rule = data.rule;
-            gameSetup.players = data.players;
+            gameSetup.playerCount = 2;
+            gameSetup.players[0].name = i18nData[currentLang].host;
+            gameSetup.players[1].name = currentUser.name || `${i18nData[currentLang].player_label} 2`;
             startGame('online_p2p');
         }
-        else if(data.type === 'MOVE') {
+    }
+
+    function setupConnectionListeners() {
+        peerConn.on('data', function(data) {
+            handleRemoteAction(data);
+        });
+
+        peerConn.on('close', function() {
+            alert(i18nData[currentLang].alert_peer_disconnected);
+        });
+    }
+
+    function sendOnlineAction(action) {
+        if (peerConn && peerConn.open) {
+            peerConn.send(action);
+        }
+    }
+
+    function handleRemoteAction(data) {
+        if (data.type === 'MOVE') {
             let p = players[data.playerIndex];
             p.r = data.r;
             p.c = data.c;
-            
-            // Check win condition
-            if(p.r === 0 || p.r === 8 || p.c === 0 || p.c === 8) {
-                // Let local rendering catch up
+
+            if(gameSetup.rule === 'center_race' && p.r === 4 && p.c === 4) return endGame(p);
+            if(gameSetup.rule === 'finish_race' && p.r === 0) return endGame(p);
+            if(gameSetup.rule === 'classic') {
+                if (p.targetSide === 'top' && p.r === 0) return endGame(p);
+                if (p.targetSide === 'bottom' && p.r === 8) return endGame(p);
             }
+
             switchTurn();
-        }
-        else if(data.type === 'WALL') {
+        } else if (data.type === 'WALL') {
             placeWall(data.r, data.c, data.wallType);
-            players[data.playerIndex].walls--;
+            let p = players[data.playerIndex];
+            p.walls--;
             switchTurn();
         }
     }
-    // ======================================================
-// SUAL İŞARƏSİ (MYSTERY POWER CELL) MODULU - ƏLAVƏ HİSSƏ
-// ======================================================
-let questionCells = [];
-const POWERS = ['break_wall', 'fog_vision'];
-
-function pickRandomQuestionCells() {
-    questionCells = [];
-    let tries = 0;
-    while (questionCells.length < 1 && tries < 100) {
-        tries++;
-        let r = Math.floor(Math.random() * 9);
-        let c = Math.floor(Math.random() * 9);
-        let occupied = players.some(p => p.r === r && p.c === c);
-        let isCenter = (gameSetup.rule === 'center_race' && r === 4 && c === 4);
-        let isFinish = (gameSetup.rule === 'finish_race' && r === 0);
-        if (!occupied && !isCenter && !isFinish) questionCells.push({ r, c });
-    }
-}
-
-function renderQuestionCells() {
-    questionCells.forEach(q => {
-        let cell = getCellEl(q.r, q.c);
-        if (cell && !cell.querySelector('.question-mark')) {
-            let qm = document.createElement('div');
-            qm.className = 'question-mark';
-            qm.textContent = '❓';
-            cell.appendChild(qm);
-        }
-    });
-}
-
-function showPowerBanner(icon, title, desc) {
-    let toast = document.createElement('div');
-    toast.style.cssText = `position:fixed;top:20px;left:50%;transform:translateX(-50%);
-        background:#151924;border:1px solid #f59e0b;border-radius:14px;padding:14px 20px;
-        z-index:200;text-align:center;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,0.6);color:#fff;`;
-    toast.innerHTML = `<div style="font-size:24px;">${icon}</div>
-        <div style="font-weight:800;color:#f59e0b;margin-top:4px;">${title}</div>
-        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">${desc}</div>`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2500);
-}
-
-function triggerRandomPower(p) {
-    let power = POWERS[Math.floor(Math.random() * POWERS.length)];
-    if (power === 'break_wall') grantBreakWallPower(p);
-    else applyFogVision(p);
-}
-
-// --- GÜC 1: Divarı Qırma Bacarığı ---
-function grantBreakWallPower(p) {
-    p.breakWallCharges = (p.breakWallCharges || 0) + 1;
-    showPowerBanner('🔨', 'Divar Qırma Gücü!', '"Divar Qır" düyməsi ilə 1 divarı sil.');
-    renderBreakWallButton();
-}
-
-function renderBreakWallButton() {
-    let controls = document.querySelector('.controls');
-    if (!controls) return;
-    let existing = document.getElementById('btn-break-wall');
-    let p = players[turnIndex];
-    if (p && p.breakWallCharges > 0) {
-        if (!existing) {
-            let btn = document.createElement('button');
-            btn.id = 'btn-break-wall';
-            btn.className = 'btn-mode';
-            btn.style.borderColor = '#f59e0b';
-            btn.style.color = '#f59e0b';
-            btn.innerHTML = `💥 <span>Divar Qır (${p.breakWallCharges})</span>`;
-            btn.onclick = () => setMode('break_wall');
-            controls.appendChild(btn);
-        } else {
-            existing.querySelector('span').textContent = `Divar Qır (${p.breakWallCharges})`;
-            existing.style.display = 'flex';
-        }
-    } else if (existing) {
-        existing.style.display = 'none';
-    }
-}
-
-function highlightBreakableWalls() {
-    document.querySelectorAll('.wall-placed').forEach(w => {
-        w.classList.add('breakable-highlight');
-        w.onclick = (e) => {
-            e.stopPropagation();
-            if (activeMode !== 'break_wall') return;
-            handleWallBreakClick(w);
-        };
-    });
-}
-
-function handleWallBreakClick(wallEl) {
-    let p = players[turnIndex];
-    if (!p.breakWallCharges) return;
-    let r = parseInt(wallEl.dataset.r);
-    let c = parseInt(wallEl.dataset.c);
-    let type = wallEl.dataset.type;
-    if (type === 'H') hWalls[r][c] = false; else vWalls[r][c] = false;
-    wallEl.remove();
-    p.breakWallCharges--;
-    setMode('move');
-    renderBreakWallButton();
-    highlightValidMoves();
-}
-
-// --- GÜC 2: Görüş Zəifləməsi (Fog Vision) ---
-function applyFogVision(p) {
-    p.fogTurnsLeft = 2;
-    showPowerBanner('🌫️', 'Görüş Zəifləyir!', 'Yalnız ətrafındakı xanaları görəcəksən (2 növbə).');
-}
-
-function updateFogOverlay() {
-    document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('fog-dark'));
-    let p = players[turnIndex];
-    if (!p || !p.fogTurnsLeft) return;
-    document.querySelectorAll('.cell').forEach(cell => {
-        let r = parseInt(cell.dataset.r), c = parseInt(cell.dataset.c);
-        if (Math.abs(r - p.r) > 1 || Math.abs(c - p.c) > 1) cell.classList.add('fog-dark');
-    });
-}
-
-function clearFogOverlay() {
-    document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('fog-dark'));
-}
-
-// --- SUAL XANASI TETİKLƏYİCİSİ ---
-function checkQuestionCellTrigger(mover, r, c) {
-    if (document.getElementById('modal').classList.contains('active')) return;
-    if (mover.r !== r || mover.c !== c) return;
-    let idx = questionCells.findIndex(q => q.r === r && q.c === c);
-    if (idx === -1) return;
-    questionCells.splice(idx, 1);
-    let cell = getCellEl(r, c);
-    let qm = cell && cell.querySelector('.question-mark');
-    if (qm) qm.remove();
-    triggerRandomPower(mover);
-}
-
-// ============ MÖVCUD FUNKSİYALARIN "WRAP" EDİLMƏSİ ============
-const _originalInitBoard = initBoard;
-initBoard = function() {
-    _originalInitBoard();
-    pickRandomQuestionCells();
-    renderQuestionCells();
-};
-
-const _originalOnCellClick = onCellClick;
-onCellClick = function(r, c) {
-    let mover = players[turnIndex];
-    _originalOnCellClick(r, c);
-    checkQuestionCellTrigger(mover, r, c);
-};
-
-const _originalSetMode = setMode;
-setMode = function(mode) {
-    _originalSetMode(mode);
-    if (mode === 'break_wall') {
-        document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
-        let btn = document.getElementById('btn-break-wall');
-        if (btn) btn.classList.add('active');
-        highlightBreakableWalls();
-    } else {
-        document.querySelectorAll('.wall-placed').forEach(w => w.classList.remove('breakable-highlight'));
-    }
-};
-
-const _originalPlaceWall = placeWall;
-placeWall = function(r, c, type) {
-    _originalPlaceWall(r, c, type);
-    let walls = document.querySelectorAll('.wall-placed');
-    let lastWall = walls[walls.length - 1];
-    if (lastWall) {
-        lastWall.dataset.r = r;
-        lastWall.dataset.c = c;
-        lastWall.dataset.type = type;
-    }
-};
-
-const _originalSwitchTurn = switchTurn;
-switchTurn = function() {
-    let endedPlayer = players[turnIndex];
-    if (endedPlayer && endedPlayer.fogTurnsLeft > 0) endedPlayer.fogTurnsLeft--;
-    _originalSwitchTurn();
-};
-
-const _originalRenderPawns = renderPawns;
-renderPawns = function() {
-    _originalRenderPawns();
-    updateFogOverlay();
-    renderBreakWallButton();
-};
-
-const _originalRestartGame = restartGame;
-restartGame = function() {
-    _originalRestartGame();
-    let btn = document.getElementById('btn-break-wall');
-    if (btn) btn.remove();
-    clearFogOverlay();
-};
 </script>
 </body>
 </html>
+  
