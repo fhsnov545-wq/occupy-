@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Occupy - Dungeon Escape Multiplayer</title>
-    <!-- PeerJS Kitabxanası -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         * {
@@ -37,11 +36,9 @@
             position: relative;
         }
 
-        /* Screen Switcher */
         .screen { display: none; flex-direction: column; gap: 14px; width: 100%; }
         .screen.active { display: flex; }
 
-        /* Header Navigation Styles */
         .screen-header {
             display: flex;
             justify-content: space-between;
@@ -70,7 +67,6 @@
             position: relative;
         }
 
-        /* Language Switcher Styling */
         .lang-select-dropdown {
             background: #181c28;
             border: 1px solid #2d354b;
@@ -83,7 +79,6 @@
             cursor: pointer;
         }
 
-        /* LOGIN SCREEN STYLES */
         .login-card {
             background: #151924;
             border: 1px solid #283044;
@@ -128,7 +123,6 @@
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
         }
 
-        /* MAIN MENU STYLES */
         .profile-header {
             display: flex;
             justify-content: space-between;
@@ -219,7 +213,6 @@
             font-size: 18px;
         }
 
-        /* PASS & PLAY SETUP STYLES */
         .mode-toggle-container {
             display: flex;
             background: #151924;
@@ -281,7 +274,6 @@
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
-        /* DIFFICULTY STYLES */
         .diff-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -367,7 +359,6 @@
             box-shadow: 0 0 8px rgba(255,255,255,0.4);
         }
 
-        /* ONLINE LOBBY STYLES */
         .user-stats-card {
             background: #151924;
             border: 1px solid #283044;
@@ -449,7 +440,6 @@
             cursor: pointer;
         }
 
-        /* ACCOUNT STYLES */
         .account-menu {
             display: flex;
             flex-direction: column;
@@ -477,7 +467,6 @@
 
         .danger-text { color: #ef4444; }
 
-        /* LEADERBOARD & STATS STYLES */
         .stats-summary {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -532,7 +521,6 @@
         .lb-user { font-size: 13px; font-weight: 700; }
         .lb-score { font-size: 13px; font-weight: 800; color: #f59e0b; }
 
-        /* GAME PLAY STYLES (DUNGEON THEME) */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -602,7 +590,6 @@
 
         .wall-pill-icon { width: 3px; height: 10px; border-radius: 2px; }
 
-        /* Dungeon Board Styling */
         #board-wrapper {
             position: relative;
             background: #121620;
@@ -686,7 +673,6 @@
             z-index: 5;
         }
 
-        /* Wall / Rock Barricade Styling */
         .wall-placed {
             position: absolute;
             background: linear-gradient(135deg, #7f1d1d, #450a0a) !important;
@@ -696,7 +682,6 @@
             z-index: 10;
         }
 
-        /* DRAGGABLE WALL PREVIEW */
         .draggable-wall-ghost {
             position: absolute;
             background: linear-gradient(135deg, #f59e0b, #b45309);
@@ -739,7 +724,6 @@
             box-shadow: 0 4px 12px rgba(180, 83, 9, 0.4);
         }
 
-        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -785,7 +769,7 @@
 
   <div class="app-container">
 
-    <!-- 0. LOGIN / ACCOUNT CREATION SCREEN -->
+    <!-- LOGIN -->
     <div id="screen-login" class="screen active">
       <div style="display: flex; justify-content: flex-end; width: 100%;">
         <select class="lang-select-dropdown" onchange="changeLanguage(this.value)">
@@ -817,7 +801,7 @@
       </div>
     </div>
 
-    <!-- 1. MAIN MENU SCREEN -->
+    <!-- MAIN MENU -->
     <div id="screen-menu" class="screen">
       <div class="profile-header">
         <div class="user-info">
@@ -882,7 +866,7 @@
       </div>
     </div>
 
-    <!-- 1.5 SETUP SCREEN (BOT & MULTI PLAYERS) -->
+    <!-- SETUP -->
     <div id="screen-pass-setup" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
@@ -893,14 +877,12 @@
         <div></div>
       </div>
 
-      <!-- Player Count Selector -->
       <div class="player-count-container" id="player-count-box">
         <button class="player-count-btn active" id="btn-count-2" onclick="setPlayerCount(2)"><span data-i18n="p_count_2">2 Oyunçu</span></button>
         <button class="player-count-btn" id="btn-count-3" onclick="setPlayerCount(3)"><span data-i18n="p_count_3">3 Oyunçu</span></button>
         <button class="player-count-btn" id="btn-count-4" onclick="setPlayerCount(4)"><span data-i18n="p_count_4">4 Oyunçu</span></button>
       </div>
 
-      <!-- Mode Selector -->
       <div class="mode-toggle-container">
         <button class="mode-toggle-btn active" id="btn-mode-classic" onclick="setGameRule('classic')">
             <span>🗡️</span> <span data-i18n="rule_escape">Escape</span>
@@ -913,7 +895,6 @@
         </button>
       </div>
 
-      <!-- Bot Difficulty Selector -->
       <div id="bot-difficulty-box" style="display: none; flex-direction: column; gap: 6px;">
         <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;" data-i18n="diff_label">ÇƏTİNLİK SEVİYYƏSİ</div>
         <div class="diff-grid">
@@ -924,15 +905,12 @@
         </div>
       </div>
 
-      <!-- Player Config Container -->
-      <div id="players-config-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto;">
-        <!-- Dynamic Player Cards Will Render Here -->
-      </div>
+      <div id="players-config-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto;"></div>
 
       <button class="btn-submit" style="margin-top: 6px;" onclick="confirmAndStartGame()" data-i18n="btn_start">Oyuna Başla</button>
     </div>
 
-    <!-- 2. ONLINE LOBBY SCREEN -->
+    <!-- LOBBY -->
     <div id="screen-lobby" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
@@ -980,7 +958,7 @@
       </div>
     </div>
 
-    <!-- 3. MY ACCOUNT SCREEN -->
+    <!-- ACCOUNT -->
     <div id="screen-account" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
@@ -1009,7 +987,7 @@
       </div>
     </div>
 
-    <!-- 4. LEADERBOARD & STATS SCREEN -->
+    <!-- STATS -->
     <div id="screen-stats" class="screen">
       <div class="screen-header">
         <button class="icon-btn-rounded" onclick="navigateTo('screen-menu')">←</button>
@@ -1055,7 +1033,7 @@
       </div>
     </div>
 
-    <!-- 5. GAME PLAY SCREEN -->
+    <!-- GAME -->
     <div id="screen-game" class="screen">
       <div class="game-header">
         <button class="icon-btn" onclick="navigateTo('screen-menu')">←</button>
@@ -1068,15 +1046,12 @@
           <div class="dot-indicator" id="turn-dot"></div>
           <span id="turn-text">Sizin növbəniz</span>
         </div>
-        <div class="wall-counters" id="wall-counters-container">
-          <!-- Dynamic Wall Counters -->
-        </div>
+        <div class="wall-counters" id="wall-counters-container"></div>
       </div>
 
       <div id="board-wrapper">
         <div class="finish-banner" id="finish-banner" data-i18n="finish_banner">🚪 ÇIXIŞ QAPISI 🚪</div>
         <div id="board"></div>
-        <!-- Sürütlənə bilən Barrikada Kölgəsi (Interactive Drag Ghost) -->
         <div id="draggable-wall-ghost" class="draggable-wall-ghost"></div>
       </div>
 
@@ -1089,7 +1064,7 @@
 
   </div>
 
-  <!-- GAME END MODAL -->
+  <!-- MODAL -->
   <div class="modal-overlay" id="modal">
       <div class="modal">
           <h2 id="modal-title" data-i18n="modal_win_title">Qələbə! 🎉</h2>
@@ -1099,476 +1074,203 @@
   </div>
 
 <script>
-    // TRANSLATION DICTIONARY FOR ALL 7 LANGUAGES
+    // ==================== i18n ====================
     const i18nData = {
         az: {
-            login_title: "Zindana Daxil Olun",
-            login_desc: "Oyuna başlamaq üçün ləqəbinizi daxil edin",
-            input_placeholder: "Macəraçı adınız...",
-            btn_start: "Oyuna Başla",
-            btn_guest: "Təsadüfi Ad İlə Gir",
-            menu_online_title: "Play Online",
-            menu_online_sub: "Digər macəraçılarla mübarizə apar",
-            menu_bot_title: "Canavar İlə Oyna",
-            menu_bot_sub: "Tək Oyunçu",
-            menu_multi_title: "Çox Oyunçu",
-            menu_multi_sub: "2, 3 və ya 4 Oyunçu",
+            login_title: "Zindana Daxil Olun", login_desc: "Oyuna başlamaq üçün ləqəbinizi daxil edin",
+            input_placeholder: "Macəraçı adınız...", btn_start: "Oyuna Başla", btn_guest: "Təsadüfi Ad İlə Gir",
+            menu_online_title: "Play Online", menu_online_sub: "Digər macəraçılarla mübarizə apar",
+            menu_bot_title: "Canavar İlə Oyna", menu_bot_sub: "Tək Oyunçu",
+            menu_multi_title: "Çox Oyunçu", menu_multi_sub: "2, 3 və ya 4 Oyunçu",
             menu_leaderboard: "Liderlər Lövhəsi",
-            setup_title_bot: "Canavar Oyunu Parametrləri",
-            setup_title_multi: "Çox Oyunçulu Rejim",
+            setup_title_bot: "Canavar Oyunu Parametrləri", setup_title_multi: "Çox Oyunçulu Rejim",
             setup_sub: "Rejim və ayarları seçin",
-            p_count_2: "2 Oyunçu",
-            p_count_3: "3 Oyunçu",
-            p_count_4: "4 Oyunçu",
-            rule_escape: "Escape",
-            rule_occupy: "Occupy",
-            rule_gate: "Gate",
-            diff_label: "ÇƏTİNLİK SEVİYYƏSİ",
-            diff_easy: "Asan",
-            diff_medium: "Orta",
-            diff_hard: "Çətin",
-            diff_master: "Master",
-            player_label: "Oyunçu",
-            bot_label: "Zindan Canavarı",
-            color_label: "RƏNG SEÇİMİ",
-            lobby_title: "Online Lobi",
-            lobby_ready: "Qələbə Hazırdır",
-            lobby_create: "Otaq Yarat",
-            lobby_join: "Koda Göre Qoşul",
-            lobby_status_label: "CANLI ŞƏBƏKƏ STATUSU",
-            lobby_your_id: "Onlayn Şəbəkə ID-niz",
-            lobby_loading: "Yüklənir...",
-            btn_copy: "Kopyala",
-            account_title: "Hesabım",
-            account_pname: "Macəraçı Adı",
-            account_logout: "Hesabdan Çıx",
-            stats_title: "Statistika",
-            stat_score: "XAL",
-            stat_games: "OYUN",
-            stat_wins: "QƏLƏBƏ",
-            finish_banner: "🚪 ÇIXIŞ QAPISI 🚪",
-            ctrl_step: "Addım",
-            ctrl_horiz: "Yatay Barrikada",
-            ctrl_vert: "Dikey Barrikada",
-            modal_win_title: "Qələbə! 🎉",
-            modal_win_desc: "Siz qazandınız!",
-            modal_restart: "Yenidən Başla",
-            turn_suffix: "Sırası",
-            monster: "Canavar",
-            opponent: "Rəqib Oyunçu",
-            host: "Otaq Sahibi",
+            p_count_2: "2 Oyunçu", p_count_3: "3 Oyunçu", p_count_4: "4 Oyunçu",
+            rule_escape: "Escape", rule_occupy: "Occupy", rule_gate: "Gate",
+            diff_label: "ÇƏTİNLİK SEVİYYƏSİ", diff_easy: "Asan", diff_medium: "Orta", diff_hard: "Çətin", diff_master: "Master",
+            player_label: "Oyunçu", bot_label: "Zindan Canavarı", color_label: "RƏNG SEÇİMİ",
+            lobby_title: "Online Lobi", lobby_ready: "Qələbə Hazırdır", lobby_create: "Otaq Yarat", lobby_join: "Koda Göre Qoşul",
+            lobby_status_label: "CANLI ŞƏBƏKƏ STATUSU", lobby_your_id: "Onlayn Şəbəkə ID-niz", lobby_loading: "Yüklənir...",
+            btn_copy: "Kopyala", account_title: "Hesabım", account_pname: "Macəraçı Adı", account_logout: "Hesabdan Çıx",
+            stats_title: "Statistika", stat_score: "XAL", stat_games: "OYUN", stat_wins: "QƏLƏBƏ",
+            finish_banner: "🚪 ÇIXIŞ QAPISI 🚪", ctrl_step: "Addım", ctrl_horiz: "Yatay Barrikada", ctrl_vert: "Dikey Barrikada",
+            modal_win_title: "Qələbə! 🎉", modal_win_desc: "Siz qazandınız!", modal_restart: "Yenidən Başla",
+            turn_suffix: "Sırası", monster: "Canavar", opponent: "Rəqib Oyunçu", host: "Otaq Sahibi",
             alert_name_short: "Zəhmət olmasa ən azı 2 hərfdən ibarət ad yazın.",
             alert_peer_wait: "Şəbəkəyə qoşulunur, bir neçə saniyə sonra yenidən cəhd edin.",
             alert_room_created: "Otaq Kodunuz Kopyalandı!\n\nKod: ",
             alert_room_created_sub: "\n\nBu kodu dostunuza göndərin, 'Koda Göre Qoşul' düyməsinə yazsın.",
-            alert_copied: "Otaq ID kopyalandı: ",
-            alert_enter_code: "Dostunuzun verdiyi Otaq Kodunu daxil edin:",
-            alert_joined: "Otağa qoşulundu! Oyun başlayır.",
-            alert_peer_connected: "İkinci oyunçu otağınıza qoşuldu! Oyun başlayır.",
-            alert_peer_disconnected: "Rəqibin internet əlaqəsi kəsildi.",
-            escaped_text: "zindandan qaçdı!"
+            alert_copied: "Otaq ID kopyalandı: ", alert_enter_code: "Dostunuzun verdiyi Otaq Kodunu daxil edin:",
+            alert_joined: "Otağa qoşulundu! Oyun başlayır.", alert_peer_connected: "İkinci oyunçu otağınıza qoşuldu! Oyun başlayır.",
+            alert_peer_disconnected: "Rəqibin internet əlaqəsi kəsildi.", escaped_text: "zindandan qaçdı!"
         },
         en: {
-            login_title: "Enter the Dungeon",
-            login_desc: "Enter your nickname to start the game",
-            input_placeholder: "Adventurer name...",
-            btn_start: "Start Game",
-            btn_guest: "Play as Guest",
-            menu_online_title: "Play Online",
-            menu_online_sub: "Compete with other adventurers",
-            menu_bot_title: "Play vs Monster",
-            menu_bot_sub: "Single Player",
-            menu_multi_title: "Multiplayer",
-            menu_multi_sub: "2, 3 or 4 Players",
+            login_title: "Enter the Dungeon", login_desc: "Enter your nickname to start the game",
+            input_placeholder: "Adventurer name...", btn_start: "Start Game", btn_guest: "Play as Guest",
+            menu_online_title: "Play Online", menu_online_sub: "Compete with other adventurers",
+            menu_bot_title: "Play vs Monster", menu_bot_sub: "Single Player",
+            menu_multi_title: "Multiplayer", menu_multi_sub: "2, 3 or 4 Players",
             menu_leaderboard: "Leaderboard",
-            setup_title_bot: "Monster Mode Settings",
-            setup_title_multi: "Multiplayer Settings",
+            setup_title_bot: "Monster Mode Settings", setup_title_multi: "Multiplayer Settings",
             setup_sub: "Select modes and options",
-            p_count_2: "2 Players",
-            p_count_3: "3 Players",
-            p_count_4: "4 Players",
-            rule_escape: "Escape",
-            rule_occupy: "Occupy",
-            rule_gate: "Gate",
-            diff_label: "DIFFICULTY LEVEL",
-            diff_easy: "Easy",
-            diff_medium: "Medium",
-            diff_hard: "Hard",
-            diff_master: "Master",
-            player_label: "Player",
-            bot_label: "Dungeon Monster",
-            color_label: "COLOR SELECTION",
-            lobby_title: "Online Lobby",
-            lobby_ready: "Ready for Victory",
-            lobby_create: "Create Room",
-            lobby_join: "Join with Code",
-            lobby_status_label: "LIVE NETWORK STATUS",
-            lobby_your_id: "Your Online Network ID",
-            lobby_loading: "Loading...",
-            btn_copy: "Copy",
-            account_title: "My Account",
-            account_pname: "Adventurer Name",
-            account_logout: "Logout",
-            stats_title: "Statistics",
-            stat_score: "SCORE",
-            stat_games: "GAMES",
-            stat_wins: "WINS",
-            finish_banner: "🚪 EXIT GATE 🚪",
-            ctrl_step: "Move",
-            ctrl_horiz: "Horizontal Wall",
-            ctrl_vert: "Vertical Wall",
-            modal_win_title: "Victory! 🎉",
-            modal_win_desc: "You won!",
-            modal_restart: "Play Again",
-            turn_suffix: "'s Turn",
-            monster: "Monster",
-            opponent: "Opponent Player",
-            host: "Room Host",
+            p_count_2: "2 Players", p_count_3: "3 Players", p_count_4: "4 Players",
+            rule_escape: "Escape", rule_occupy: "Occupy", rule_gate: "Gate",
+            diff_label: "DIFFICULTY LEVEL", diff_easy: "Easy", diff_medium: "Medium", diff_hard: "Hard", diff_master: "Master",
+            player_label: "Player", bot_label: "Dungeon Monster", color_label: "COLOR SELECTION",
+            lobby_title: "Online Lobby", lobby_ready: "Ready for Victory", lobby_create: "Create Room", lobby_join: "Join with Code",
+            lobby_status_label: "LIVE NETWORK STATUS", lobby_your_id: "Your Online Network ID", lobby_loading: "Loading...",
+            btn_copy: "Copy", account_title: "My Account", account_pname: "Adventurer Name", account_logout: "Logout",
+            stats_title: "Statistics", stat_score: "SCORE", stat_games: "GAMES", stat_wins: "WINS",
+            finish_banner: "🚪 EXIT GATE 🚪", ctrl_step: "Move", ctrl_horiz: "Horizontal Wall", ctrl_vert: "Vertical Wall",
+            modal_win_title: "Victory! 🎉", modal_win_desc: "You won!", modal_restart: "Play Again",
+            turn_suffix: "'s Turn", monster: "Monster", opponent: "Opponent Player", host: "Room Host",
             alert_name_short: "Please enter a name with at least 2 letters.",
             alert_peer_wait: "Connecting to network, please try again in a few seconds.",
             alert_room_created: "Room Code Copied!\n\nCode: ",
             alert_room_created_sub: "\n\nSend this code to your friend to join via 'Join with Code'.",
-            alert_copied: "Room ID copied: ",
-            alert_enter_code: "Enter the Room Code provided by your friend:",
-            alert_joined: "Joined the room! Game starting.",
-            alert_peer_connected: "Second player joined your room! Game starting.",
-            alert_peer_disconnected: "Opponent disconnected.",
-            escaped_text: "escaped the dungeon!"
+            alert_copied: "Room ID copied: ", alert_enter_code: "Enter the Room Code provided by your friend:",
+            alert_joined: "Joined the room! Game starting.", alert_peer_connected: "Second player joined your room! Game starting.",
+            alert_peer_disconnected: "Opponent disconnected.", escaped_text: "escaped the dungeon!"
         },
         tr: {
-            login_title: "Zindana Giriş Yap",
-            login_desc: "Oyuna başlamak için takma adınızı girin",
-            input_placeholder: "Maceracı adınız...",
-            btn_start: "Oyuna Başla",
-            btn_guest: "Rastgele Ad İle Gir",
-            menu_online_title: "Çevrimiçi Oyna",
-            menu_online_sub: "Diğer maceracılarla mücadele et",
-            menu_bot_title: "Canavar İle Oyna",
-            menu_bot_sub: "Tek Oyunculu",
-            menu_multi_title: "Çok Oyunculu",
-            menu_multi_sub: "2, 3 veya 4 Oyuncu",
+            login_title: "Zindana Giriş Yap", login_desc: "Oyuna başlamak için takma adınızı girin",
+            input_placeholder: "Maceracı adınız...", btn_start: "Oyuna Başla", btn_guest: "Rastgele Ad İle Gir",
+            menu_online_title: "Çevrimiçi Oyna", menu_online_sub: "Diğer maceracılarla mücadele et",
+            menu_bot_title: "Canavar İle Oyna", menu_bot_sub: "Tek Oyunculu",
+            menu_multi_title: "Çok Oyunculu", menu_multi_sub: "2, 3 veya 4 Oyuncu",
             menu_leaderboard: "Liderlik Tablosu",
-            setup_title_bot: "Canavar Oyunu Ayarları",
-            setup_title_multi: "Çok Oyunculu Mod",
+            setup_title_bot: "Canavar Oyunu Ayarları", setup_title_multi: "Çok Oyunculu Mod",
             setup_sub: "Mod ve ayarları seçin",
-            p_count_2: "2 Oyuncu",
-            p_count_3: "3 Oyuncu",
-            p_count_4: "4 Oyuncu",
-            rule_escape: "Escape",
-            rule_occupy: "Occupy",
-            rule_gate: "Gate",
-            diff_label: "ZORLUK SEVİYESİ",
-            diff_easy: "Kolay",
-            diff_medium: "Orta",
-            diff_hard: "Zor",
-            diff_master: "Usta",
-            player_label: "Oyuncu",
-            bot_label: "Zindan Canavarı",
-            color_label: "RENK SEÇİMİ",
-            lobby_title: "Çevrimiçi Lobi",
-            lobby_ready: "Zafer Hazır",
-            lobby_create: "Oda Oluştur",
-            lobby_join: "Kod İle Katıl",
-            lobby_status_label: "CANLI AĞ DURUMU",
-            lobby_your_id: "Çevrimiçi Ağ ID'niz",
-            lobby_loading: "Yükleniyor...",
-            btn_copy: "Kopyala",
-            account_title: "Hesabım",
-            account_pname: "Maceracı Adı",
-            account_logout: "Çıkış Yap",
-            stats_title: "İstatistikler",
-            stat_score: "PUAN",
-            stat_games: "OYUN",
-            stat_wins: "ZAFER",
-            finish_banner: "🚪 ÇIKIŞ KAPISI 🚪",
-            ctrl_step: "Adım",
-            ctrl_horiz: "Yatay Barikat",
-            ctrl_vert: "Dikey Barikat",
-            modal_win_title: "Zafer! 🎉",
-            modal_win_desc: "Kazandınız!",
-            modal_restart: "Yeniden Başla",
-            turn_suffix: "Sırası",
-            monster: "Canavar",
-            opponent: "Rakip Oyuncu",
-            host: "Oda Sahibi",
+            p_count_2: "2 Oyuncu", p_count_3: "3 Oyuncu", p_count_4: "4 Oyuncu",
+            rule_escape: "Escape", rule_occupy: "Occupy", rule_gate: "Gate",
+            diff_label: "ZORLUK SEVİYESİ", diff_easy: "Kolay", diff_medium: "Orta", diff_hard: "Zor", diff_master: "Usta",
+            player_label: "Oyuncu", bot_label: "Zindan Canavarı", color_label: "RENK SEÇİMİ",
+            lobby_title: "Çevrimiçi Lobi", lobby_ready: "Zafer Hazır", lobby_create: "Oda Oluştur", lobby_join: "Kod İle Katıl",
+            lobby_status_label: "CANLI AĞ DURUMU", lobby_your_id: "Çevrimiçi Ağ ID'niz", lobby_loading: "Yükleniyor...",
+            btn_copy: "Kopyala", account_title: "Hesabım", account_pname: "Maceracı Adı", account_logout: "Çıkış Yap",
+            stats_title: "İstatistikler", stat_score: "PUAN", stat_games: "OYUN", stat_wins: "ZAFER",
+            finish_banner: "🚪 ÇIKIŞ KAPISI 🚪", ctrl_step: "Adım", ctrl_horiz: "Yatay Barikat", ctrl_vert: "Dikey Barikat",
+            modal_win_title: "Zafer! 🎉", modal_win_desc: "Kazandınız!", modal_restart: "Yeniden Başla",
+            turn_suffix: "Sırası", monster: "Canavar", opponent: "Rakip Oyuncu", host: "Oda Sahibi",
             alert_name_short: "Lütfen en az 2 harften oluşan bir isim girin.",
             alert_peer_wait: "Ağa bağlanılıyor, birkaç saniye sonra tekrar deneyin.",
             alert_room_created: "Oda Kodunuz Kopyalandı!\n\nKod: ",
             alert_room_created_sub: "\n\nBu kodu arkadaşınıza gönderin, 'Kod İle Katıl' butonuna yazsın.",
-            alert_copied: "Oda ID kopyalandı: ",
-            alert_enter_code: "Arkadaşınızın verdiği Oda Kodunu girin:",
-            alert_joined: "Odaya katılındı! Oyun başlıyor.",
-            alert_peer_connected: "İkinci oyuncu odaya katıldı! Oyun başlıyor.",
-            alert_peer_disconnected: "Rakibin internet bağlantısı kesildi.",
-            escaped_text: "zindandan kaçtı!"
+            alert_copied: "Oda ID kopyalandı: ", alert_enter_code: "Arkadaşınızın verdiği Oda Kodunu girin:",
+            alert_joined: "Odaya katılındı! Oyun başlıyor.", alert_peer_connected: "İkinci oyuncu odaya katıldı! Oyun başlıyor.",
+            alert_peer_disconnected: "Rakibin internet bağlantısı kesildi.", escaped_text: "zindandan kaçtı!"
         },
         ru: {
-            login_title: "Войти в подземелье",
-            login_desc: "Введите свой ник, чтобы начать игру",
-            input_placeholder: "Имя искателя приключений...",
-            btn_start: "Начать игру",
-            btn_guest: "Случайное имя",
-            menu_online_title: "Играть онлайн",
-            menu_online_sub: "Соревнуйтесь с другими игроками",
-            menu_bot_title: "Играть против монстра",
-            menu_bot_sub: "Одиночная игра",
-            menu_multi_title: "Мультиплеер",
-            menu_multi_sub: "2, 3 или 4 игрока",
+            login_title: "Войти в подземелье", login_desc: "Введите свой ник, чтобы начать игру",
+            input_placeholder: "Имя искателя приключений...", btn_start: "Начать игру", btn_guest: "Случайное имя",
+            menu_online_title: "Играть онлайн", menu_online_sub: "Соревнуйтесь с другими игроками",
+            menu_bot_title: "Играть против монстра", menu_bot_sub: "Одиночная игра",
+            menu_multi_title: "Мультиплеер", menu_multi_sub: "2, 3 или 4 игрока",
             menu_leaderboard: "Таблица лидеров",
-            setup_title_bot: "Настройки игры с монстром",
-            setup_title_multi: "Многопользовательский режим",
+            setup_title_bot: "Настройки игры с монстром", setup_title_multi: "Многопользовательский режим",
             setup_sub: "Выберите режим и настройки",
-            p_count_2: "2 Игрока",
-            p_count_3: "3 Игрока",
-            p_count_4: "4 Игрока",
-            rule_escape: "Escape",
-            rule_occupy: "Occupy",
-            rule_gate: "Gate",
-            diff_label: "УРОВЕНЬ СЛОЖНОСТИ",
-            diff_easy: "Легко",
-            diff_medium: "Средне",
-            diff_hard: "Сложно",
-            diff_master: "Мастер",
-            player_label: "Игрок",
-            bot_label: "Монстр подземелья",
-            color_label: "ВЫБОР ЦВЕТА",
-            lobby_title: "Онлайн лобби",
-            lobby_ready: "Готов к победе",
-            lobby_create: "Создать комнату",
-            lobby_join: "Войти по коду",
-            lobby_status_label: "СТАТУС СЕТИ",
-            lobby_your_id: "Ваш сетевой ID",
-            lobby_loading: "Загрузка...",
-            btn_copy: "Копировать",
-            account_title: "Мой аккаунт",
-            account_pname: "Имя игрока",
-            account_logout: "Выйти",
-            stats_title: "Статистика",
-            stat_score: "ОЧКИ",
-            stat_games: "ИГРЫ",
-            stat_wins: "ПОБЕДЫ",
-            finish_banner: "🚪 ВЫХОДНЫЕ ВОРОТА 🚪",
-            ctrl_step: "Шаг",
-            ctrl_horiz: "Гориз. барьер",
-            ctrl_vert: "Верт. барьер",
-            modal_win_title: "Победа! 🎉",
-            modal_win_desc: "Вы победили!",
-            modal_restart: "Начать заново",
-            turn_suffix: " Ход",
-            monster: "Монстр",
-            opponent: "Соперник",
-            host: "Создатель комнаты",
+            p_count_2: "2 Игрока", p_count_3: "3 Игрока", p_count_4: "4 Игрока",
+            rule_escape: "Escape", rule_occupy: "Occupy", rule_gate: "Gate",
+            diff_label: "УРОВЕНЬ СЛОЖНОСТИ", diff_easy: "Легко", diff_medium: "Средне", diff_hard: "Сложно", diff_master: "Мастер",
+            player_label: "Игрок", bot_label: "Монстр подземелья", color_label: "ВЫБОР ЦВЕТА",
+            lobby_title: "Онлайн лобби", lobby_ready: "Готов к победе", lobby_create: "Создать комнату", lobby_join: "Войти по коду",
+            lobby_status_label: "СТАТУС СЕТИ", lobby_your_id: "Ваш сетевой ID", lobby_loading: "Загрузка...",
+            btn_copy: "Копировать", account_title: "Мой аккаунт", account_pname: "Имя игрока", account_logout: "Выйти",
+            stats_title: "Статистика", stat_score: "ОЧКИ", stat_games: "ИГРЫ", stat_wins: "ПОБЕДЫ",
+            finish_banner: "🚪 ВЫХОДНЫЕ ВОРОТА 🚪", ctrl_step: "Шаг", ctrl_horiz: "Гориз. барьер", ctrl_vert: "Верт. барьер",
+            modal_win_title: "Победа! 🎉", modal_win_desc: "Вы победили!", modal_restart: "Начать заново",
+            turn_suffix: " Ход", monster: "Монстр", opponent: "Соперник", host: "Создатель комнаты",
             alert_name_short: "Пожалуйста, введите имя минимум из 2 букв.",
             alert_peer_wait: "Подключение к сети, попробуйте снова через несколько секунд.",
             alert_room_created: "Код комнаты скопирован!\n\nКод: ",
             alert_room_created_sub: "\n\nОтправьте этот код другу для подключения.",
-            alert_copied: "ID комнаты скопирован: ",
-            alert_enter_code: "Введите код комнаты вашего друга:",
-            alert_joined: "Подключено к комнате! Игра начинается.",
-            alert_peer_connected: "Второй игрок подключился! Игра начинается.",
-            alert_peer_disconnected: "Соединение с соперником потеряно.",
-            escaped_text: "сбежал из подземелья!"
+            alert_copied: "ID комнаты скопирован: ", alert_enter_code: "Введите код комнаты вашего друга:",
+            alert_joined: "Подключено к комнате! Игра начинается.", alert_peer_connected: "Второй игрок подключился! Игра начинается.",
+            alert_peer_disconnected: "Соединение с соперником потеряно.", escaped_text: "сбежал из подземелья!"
         },
         es: {
-            login_title: "Entra a la Mazmorra",
-            login_desc: "Ingresa tu apodo para comenzar el juego",
-            input_placeholder: "Nombre de aventurero...",
-            btn_start: "Comenzar Juego",
-            btn_guest: "Jugar como Invitado",
-            menu_online_title: "Jugar en Línea",
-            menu_online_sub: "Compite con otros aventureros",
-            menu_bot_title: "Jugar vs Monstruo",
-            menu_bot_sub: "Un Jugador",
-            menu_multi_title: "Multijugador",
-            menu_multi_sub: "2, 3 o 4 Jugadores",
+            login_title: "Entra a la Mazmorra", login_desc: "Ingresa tu apodo para comenzar el juego",
+            input_placeholder: "Nombre de aventurero...", btn_start: "Comenzar Juego", btn_guest: "Jugar como Invitado",
+            menu_online_title: "Jugar en Línea", menu_online_sub: "Compite con otros aventureros",
+            menu_bot_title: "Jugar vs Monstruo", menu_bot_sub: "Un Jugador",
+            menu_multi_title: "Multijugador", menu_multi_sub: "2, 3 o 4 Jugadores",
             menu_leaderboard: "Tabla de Clasificación",
-            setup_title_bot: "Ajustes Modo Monstruo",
-            setup_title_multi: "Ajustes Multijugador",
+            setup_title_bot: "Ajustes Modo Monstruo", setup_title_multi: "Ajustes Multijugador",
             setup_sub: "Selecciona modos y opciones",
-            p_count_2: "2 Jugadores",
-            p_count_3: "3 Jugadores",
-            p_count_4: "4 Jugadores",
-            rule_escape: "Escape",
-            rule_occupy: "Occupy",
-            rule_gate: "Gate",
-            diff_label: "NIVEL DE DIFICULTAD",
-            diff_easy: "Fácil",
-            diff_medium: "Medio",
-            diff_hard: "Difícil",
-            diff_master: "Maestro",
-            player_label: "Jugador",
-            bot_label: "Monstruo Mazmorra",
-            color_label: "SELECCIÓN DE COLOR",
-            lobby_title: "Lobby en Línea",
-            lobby_ready: "Listo para la Victoria",
-            lobby_create: "Crear Sala",
-            lobby_join: "Unirse con Código",
-            lobby_status_label: "ESTADO DE LA RED",
-            lobby_your_id: "Tu ID de Red",
-            lobby_loading: "Cargando...",
-            btn_copy: "Copiar",
-            account_title: "Mi Cuenta",
-            account_pname: "Nombre Aventurero",
-            account_logout: "Cerrar Sesión",
-            stats_title: "Estadísticas",
-            stat_score: "PUNTOS",
-            stat_games: "JUEGOS",
-            stat_wins: "VICTORIAS",
-            finish_banner: "🚪 PUERTA DE SALIDA 🚪",
-            ctrl_step: "Mover",
-            ctrl_horiz: "Muro Horizontal",
-            ctrl_vert: "Muro Vertical",
-            modal_win_title: "¡Victoria! 🎉",
-            modal_win_desc: "¡Has ganado!",
-            modal_restart: "Jugar de Nuevo",
-            turn_suffix: " Turno",
-            monster: "Monstruo",
-            opponent: "Oponente",
-            host: "Anfitrión",
+            p_count_2: "2 Jugadores", p_count_3: "3 Jugadores", p_count_4: "4 Jugadores",
+            rule_escape: "Escape", rule_occupy: "Occupy", rule_gate: "Gate",
+            diff_label: "NIVEL DE DIFICULTAD", diff_easy: "Fácil", diff_medium: "Medio", diff_hard: "Difícil", diff_master: "Maestro",
+            player_label: "Jugador", bot_label: "Monstruo Mazmorra", color_label: "SELECCIÓN DE COLOR",
+            lobby_title: "Lobby en Línea", lobby_ready: "Listo para la Victoria", lobby_create: "Crear Sala", lobby_join: "Unirse con Código",
+            lobby_status_label: "ESTADO DE LA RED", lobby_your_id: "Tu ID de Red", lobby_loading: "Cargando...",
+            btn_copy: "Copiar", account_title: "Mi Cuenta", account_pname: "Nombre Aventurero", account_logout: "Cerrar Sesión",
+            stats_title: "Estadísticas", stat_score: "PUNTOS", stat_games: "JUEGOS", stat_wins: "VICTORIAS",
+            finish_banner: "🚪 PUERTA DE SALIDA 🚪", ctrl_step: "Mover", ctrl_horiz: "Muro Horizontal", ctrl_vert: "Muro Vertical",
+            modal_win_title: "¡Victoria! 🎉", modal_win_desc: "¡Has ganado!", modal_restart: "Jugar de Nuevo",
+            turn_suffix: " Turno", monster: "Monstruo", opponent: "Oponente", host: "Anfitrión",
             alert_name_short: "Por favor ingresa un nombre de al menos 2 letras.",
             alert_peer_wait: "Conectando a la red, intenta de nuevo en unos segundos.",
             alert_room_created: "¡Código de Sala Copiado!\n\nCódigo: ",
             alert_room_created_sub: "\n\nEnvía este código a tu amigo para unirse.",
-            alert_copied: "ID de sala copiado: ",
-            alert_enter_code: "Ingresa el código proporcionado por tu amigo:",
-            alert_joined: "¡Unido a la sala! El juego comienza.",
-            alert_peer_connected: "¡Segundo jugador conectado! El juego comienza.",
-            alert_peer_disconnected: "Oponente desconectado.",
-            escaped_text: "¡escapó de la mazmorra!"
+            alert_copied: "ID de sala copiado: ", alert_enter_code: "Ingresa el código proporcionado por tu amigo:",
+            alert_joined: "¡Unido a la sala! El juego comienza.", alert_peer_connected: "¡Segundo jugador conectado! El juego comienza.",
+            alert_peer_disconnected: "Oponente desconectado.", escaped_text: "¡escapó de la mazmorra!"
         },
         de: {
-            login_title: "Betritt das Verlies",
-            login_desc: "Gib deinen Spitznamen ein, um zu starten",
-            input_placeholder: "Abenteurer-Name...",
-            btn_start: "Spiel Starten",
-            btn_guest: "Als Gast Spielen",
-            menu_online_title: "Online Spielen",
-            menu_online_sub: "Miss dich mit anderen Abenteurern",
-            menu_bot_title: "Gegen Monster",
-            menu_bot_sub: "Einzelspieler",
-            menu_multi_title: "Mehrspieler",
-            menu_multi_sub: "2, 3 oder 4 Spieler",
+            login_title: "Betritt das Verlies", login_desc: "Gib deinen Spitznamen ein, um zu starten",
+            input_placeholder: "Abenteurer-Name...", btn_start: "Spiel Starten", btn_guest: "Als Gast Spielen",
+            menu_online_title: "Online Spielen", menu_online_sub: "Miss dich mit anderen Abenteurern",
+            menu_bot_title: "Gegen Monster", menu_bot_sub: "Einzelspieler",
+            menu_multi_title: "Mehrspieler", menu_multi_sub: "2, 3 oder 4 Spieler",
             menu_leaderboard: "Bestenliste",
-            setup_title_bot: "Monster-Modus Einstellungen",
-            setup_title_multi: "Mehrspieler Einstellungen",
+            setup_title_bot: "Monster-Modus Einstellungen", setup_title_multi: "Mehrspieler Einstellungen",
             setup_sub: "Wähle Modus und Optionen",
-            p_count_2: "2 Spieler",
-            p_count_3: "3 Spieler",
-            p_count_4: "4 Spieler",
-            rule_escape: "Escape",
-            rule_occupy: "Occupy",
-            rule_gate: "Gate",
-            diff_label: "SCHWIERIGKEITSGRAD",
-            diff_easy: "Einfach",
-            diff_medium: "Mittel",
-            diff_hard: "Schwer",
-            diff_master: "Meister",
-            player_label: "Spieler",
-            bot_label: "Verlies-Monster",
-            color_label: "FARBAUSWAHL",
-            lobby_title: "Online-Lobby",
-            lobby_ready: "Bereit für den Sieg",
-            lobby_create: "Raum Erstellen",
-            lobby_join: "Mit Code Beitreten",
-            lobby_status_label: "NETZWERK-STATUS",
-            lobby_your_id: "Deine Netzwerk-ID",
-            lobby_loading: "Laden...",
-            btn_copy: "Kopieren",
-            account_title: "Mein Konto",
-            account_pname: "Abenteurer-Name",
-            account_logout: "Abmelden",
-            stats_title: "Statistiken",
-            stat_score: "PUNKTE",
-            stat_games: "SPIELE",
-            stat_wins: "SIEGE",
-            finish_banner: "🚪 AUSGANGSTOR 🚪",
-            ctrl_step: "Zug",
-            ctrl_horiz: "Horizontale Wand",
-            ctrl_vert: "Vertikale Wand",
-            modal_win_title: "Sieg! 🎉",
-            modal_win_desc: "Du hast gewonnen!",
-            modal_restart: "Erneut Spielen",
-            turn_suffix: " am Zug",
-            monster: "Monster",
-            opponent: "Gegner",
-            host: "Gastgeber",
+            p_count_2: "2 Spieler", p_count_3: "3 Spieler", p_count_4: "4 Spieler",
+            rule_escape: "Escape", rule_occupy: "Occupy", rule_gate: "Gate",
+            diff_label: "SCHWIERIGKEITSGRAD", diff_easy: "Einfach", diff_medium: "Mittel", diff_hard: "Schwer", diff_master: "Meister",
+            player_label: "Spieler", bot_label: "Verlies-Monster", color_label: "FARBAUSWAHL",
+            lobby_title: "Online-Lobby", lobby_ready: "Bereit für den Sieg", lobby_create: "Raum Erstellen", lobby_join: "Mit Code Beitreten",
+            lobby_status_label: "NETZWERK-STATUS", lobby_your_id: "Deine Netzwerk-ID", lobby_loading: "Laden...",
+            btn_copy: "Kopieren", account_title: "Mein Konto", account_pname: "Abenteurer-Name", account_logout: "Abmelden",
+            stats_title: "Statistiken", stat_score: "PUNKTE", stat_games: "SPIELE", stat_wins: "SIEGE",
+            finish_banner: "🚪 AUSGANGSTOR 🚪", ctrl_step: "Zug", ctrl_horiz: "Horizontale Wand", ctrl_vert: "Vertikale Wand",
+            modal_win_title: "Sieg! 🎉", modal_win_desc: "Du hast gewonnen!", modal_restart: "Erneut Spielen",
+            turn_suffix: " am Zug", monster: "Monster", opponent: "Gegner", host: "Gastgeber",
             alert_name_short: "Bitte gib einen Namen mit mindestens 2 Buchstaben ein.",
             alert_peer_wait: "Verbindung wird hergestellt, bitte versuche es gleich erneut.",
             alert_room_created: "Raumcode kopiert!\n\nCode: ",
             alert_room_created_sub: "\n\nSende diesen Code an deinen Freund zum Beitreten.",
-            alert_copied: "Raum-ID kopiert: ",
-            alert_enter_code: "Gib den Raumcode deines Freundes ein:",
-            alert_joined: "Raum beigetreten! Spiel startet.",
-            alert_peer_connected: "Zweiter Spieler beigetreten! Spiel startet.",
-            alert_peer_disconnected: "Verbindung zum Gegner getrennt.",
-            escaped_text: "ist aus dem Verlies entkommen!"
+            alert_copied: "Raum-ID kopiert: ", alert_enter_code: "Gib den Raumcode deines Freundes ein:",
+            alert_joined: "Raum beigetreten! Spiel startet.", alert_peer_connected: "Zweiter Spieler beigetreten! Spiel startet.",
+            alert_peer_disconnected: "Verbindung zum Gegner getrennt.", escaped_text: "ist aus dem Verlies entkommen!"
         },
         fr: {
-            login_title: "Entrez dans le Donjon",
-            login_desc: "Entrez votre pseudo pour commencer la partie",
-            input_placeholder: "Nom d'aventurier...",
-            btn_start: "Commencer la partie",
-            btn_guest: "Jouer en tant qu'invité",
-            menu_online_title: "Jouer en Ligne",
-            menu_online_sub: "Affrontez d'autres aventuriers",
-            menu_bot_title: "Jouer contre le Monstre",
-            menu_bot_sub: "Joueur Solo",
-            menu_multi_title: "Multijoueur",
-            menu_multi_sub: "2, 3 ou 4 Joueurs",
+            login_title: "Entrez dans le Donjon", login_desc: "Entrez votre pseudo pour commencer la partie",
+            input_placeholder: "Nom d'aventurier...", btn_start: "Commencer la partie", btn_guest: "Jouer en tant qu'invité",
+            menu_online_title: "Jouer en Ligne", menu_online_sub: "Affrontez d'autres aventuriers",
+            menu_bot_title: "Jouer contre le Monstre", menu_bot_sub: "Joueur Solo",
+            menu_multi_title: "Multijoueur", menu_multi_sub: "2, 3 ou 4 Joueurs",
             menu_leaderboard: "Classement",
-            setup_title_bot: "Paramètres Mode Monstre",
-            setup_title_multi: "Paramètres Multijoueur",
+            setup_title_bot: "Paramètres Mode Monstre", setup_title_multi: "Paramètres Multijoueur",
             setup_sub: "Sélectionnez le mode et les options",
-            p_count_2: "2 Joueurs",
-            p_count_3: "3 Joueurs",
-            p_count_4: "4 Joueurs",
-            rule_escape: "Escape",
-            rule_occupy: "Occupy",
-            rule_gate: "Gate",
-            diff_label: "NIVEAU DE DIFFICULTÉ",
-            diff_easy: "Facile",
-            diff_medium: "Moyen",
-            diff_hard: "Difficile",
-            diff_master: "Maître",
-            player_label: "Joueur",
-            bot_label: "Monstre du Donjon",
-            color_label: "SÉLECTION DE COULEUR",
-            lobby_title: "Lobby en Ligne",
-            lobby_ready: "Prêt pour la Victoire",
-            lobby_create: "Créer un Salon",
-            lobby_join: "Rejoindre avec Code",
-            lobby_status_label: "STATUT DU RÉSEAU",
-            lobby_your_id: "Votre ID Réseau",
-            lobby_loading: "Chargement...",
-            btn_copy: "Copier",
-            account_title: "Mon Compte",
-            account_pname: "Nom d'Aventurier",
-            account_logout: "Déconnexion",
-            stats_title: "Statistiques",
-            stat_score: "POINTS",
-            stat_games: "PARTIES",
-            stat_wins: "VICTOIRES",
-            finish_banner: "🚪 PORTE DE SORTIE 🚪",
-            ctrl_step: "Déplacer",
-            ctrl_horiz: "Mur Horizontal",
-            ctrl_vert: "Mur Vertical",
-            modal_win_title: "Victoire! 🎉",
-            modal_win_desc: "Vous avez gagné!",
-            modal_restart: "Rejouer",
-            turn_suffix: " Tour",
-            monster: "Monstre",
-            opponent: "Adversaire",
-            host: "Hôte",
+            p_count_2: "2 Joueurs", p_count_3: "3 Joueurs", p_count_4: "4 Joueurs",
+            rule_escape: "Escape", rule_occupy: "Occupy", rule_gate: "Gate",
+            diff_label: "NIVEAU DE DIFFICULTÉ", diff_easy: "Facile", diff_medium: "Moyen", diff_hard: "Difficile", diff_master: "Maître",
+            player_label: "Joueur", bot_label: "Monstre du Donjon", color_label: "SÉLECTION DE COULEUR",
+            lobby_title: "Lobby en Ligne", lobby_ready: "Prêt pour la Victoire", lobby_create: "Créer un Salon", lobby_join: "Rejoindre avec Code",
+            lobby_status_label: "STATUT DU RÉSEAU", lobby_your_id: "Votre ID Réseau", lobby_loading: "Chargement...",
+            btn_copy: "Copier", account_title: "Mon Compte", account_pname: "Nom d'Aventurier", account_logout: "Déconnexion",
+            stats_title: "Statistiques", stat_score: "POINTS", stat_games: "PARTIES", stat_wins: "VICTOIRES",
+            finish_banner: "🚪 PORTE DE SORTIE 🚪", ctrl_step: "Déplacer", ctrl_horiz: "Mur Horizontal", ctrl_vert: "Mur Vertical",
+            modal_win_title: "Victoire! 🎉", modal_win_desc: "Vous avez gagné!", modal_restart: "Rejouer",
+            turn_suffix: " Tour", monster: "Monstre", opponent: "Adversaire", host: "Hôte",
             alert_name_short: "Veuillez entrer un nom d'au moins 2 lettres.",
             alert_peer_wait: "Connexion au réseau, réessayez dans quelques secondes.",
             alert_room_created: "Code de salon copié!\n\nCode: ",
             alert_room_created_sub: "\n\nEnvoyez ce code à votre ami pour qu'il rejoigne.",
-            alert_copied: "ID du salon copié: ",
-            alert_enter_code: "Entrez le code de salon fourni par votre ami:",
-            alert_joined: "Salon rejoint! La partie commence.",
-            alert_peer_connected: "Le deuxième joueur a rejoint! La partie commence.",
-            alert_peer_disconnected: "L'adversaire s'est déconnecté.",
-            escaped_text: "s'est échappé du donjon!"
+            alert_copied: "ID du salon copié: ", alert_enter_code: "Entrez le code de salon fourni par votre ami:",
+            alert_joined: "Salon rejoint! La partie commence.", alert_peer_connected: "Le deuxième joueur a rejoint! La partie commence.",
+            alert_peer_disconnected: "L'adversaire s'est déconnecté.", escaped_text: "s'est échappé du donjon!"
         }
     };
 
@@ -1578,54 +1280,34 @@
         if (!i18nData[lang]) return;
         currentLang = lang;
 
-        // Apply text elements
         document.querySelectorAll('[data-i18n]').forEach(el => {
-            let key = el.getAttribute('data-i18n');
-            if (i18nData[lang][key]) {
-                el.textContent = i18nData[lang][key];
-            }
+            const key = el.getAttribute('data-i18n');
+            if (i18nData[lang][key]) el.textContent = i18nData[lang][key];
         });
 
-        // Apply placeholders
         document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-            let key = el.getAttribute('data-i18n-ph');
-            if (i18nData[lang][key]) {
-                el.placeholder = i18nData[lang][key];
-            }
+            const key = el.getAttribute('data-i18n-ph');
+            if (i18nData[lang][key]) el.placeholder = i18nData[lang][key];
         });
 
-        // Sync dropdown selectors
-        document.querySelectorAll('.lang-select-dropdown').forEach(sel => {
-            sel.value = lang;
-        });
+        document.querySelectorAll('.lang-select-dropdown').forEach(sel => sel.value = lang);
 
-        // Dynamic setup titles & player cards reload if open
-        if(document.getElementById('screen-pass-setup').classList.contains('active')) {
-            let titleEl = document.getElementById('setup-title');
-            if(gameSetup.mode === 'vs_bot') {
-                titleEl.textContent = i18nData[currentLang].setup_title_bot;
-            } else {
-                titleEl.textContent = i18nData[currentLang].setup_title_multi;
-            }
+        if (document.getElementById('screen-pass-setup').classList.contains('active')) {
+            const titleEl = document.getElementById('setup-title');
+            titleEl.textContent = gameSetup.mode === 'vs_bot' 
+                ? i18nData[currentLang].setup_title_bot 
+                : i18nData[currentLang].setup_title_multi;
             renderPlayersSetupUI();
         }
 
-        // Active game interface reload if in game
-        if(document.getElementById('screen-game').classList.contains('active')) {
+        if (document.getElementById('screen-game').classList.contains('active')) {
             updateUI();
         }
     }
 
-    // USER STATE
-    let currentUser = {
-        name: "",
-        score: 0,
-        games: 0,
-        wins: 0,
-        streak: 0
-    };
+    // ==================== USER ====================
+    let currentUser = { name: "", score: 0, games: 0, wins: 0, streak: 0 };
 
-    // SETUP STATE
     const COLOR_OPTIONS = [
         '#f59e0b', '#ef4444', '#10b981', '#3b82f6', 
         '#ec4899', '#06b6d4', '#ffffff', '#8b5cf6', 
@@ -1633,10 +1315,10 @@
     ];
 
     let gameSetup = {
-        mode: 'multi_players', // 'vs_bot' or 'multi_players'
-        playerCount: 2,       // 2, 3, or 4
-        rule: 'classic',      // 'classic', 'center_race', or 'finish_race'
-        difficulty: 'medium', // 'easy', 'medium', 'hard', 'master'
+        mode: 'multi_players',
+        playerCount: 2,
+        rule: 'classic',
+        difficulty: 'medium',
         players: [
             { name: 'Oyunçu 1', color: '#f59e0b' },
             { name: 'Oyunçu 2', color: '#ef4444' },
@@ -1645,10 +1327,9 @@
         ]
     };
 
-    // Auto load user if saved before
     window.onload = function() {
-        let savedUser = localStorage.getItem('occupy_user');
-        if(savedUser) {
+        const savedUser = localStorage.getItem('occupy_user');
+        if (savedUser) {
             currentUser = JSON.parse(savedUser);
             updateUserUI();
             navigateTo('screen-menu');
@@ -1663,8 +1344,8 @@
     }
 
     function loginUser() {
-        let inputName = document.getElementById('input-username').value.trim();
-        if(inputName.length < 2) {
+        const inputName = document.getElementById('input-username').value.trim();
+        if (inputName.length < 2) {
             alert(i18nData[currentLang].alert_name_short);
             return;
         }
@@ -1689,16 +1370,14 @@
     }
 
     function updateUserUI() {
-        const nameEls = ['display-username', 'lobby-username', 'account-username', 'stats-username', 'lb-current-user'];
-        nameEls.forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.textContent = currentUser.name;
+        ['display-username', 'lobby-username', 'account-username', 'stats-username', 'lb-current-user'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = currentUser.name;
         });
 
-        const avatarEls = ['user-avatar', 'lobby-avatar', 'account-avatar', 'stats-avatar'];
-        avatarEls.forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.textContent = currentUser.name.charAt(0).toUpperCase();
+        ['user-avatar', 'lobby-avatar', 'account-avatar', 'stats-avatar'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = currentUser.name.charAt(0).toUpperCase();
         });
 
         document.getElementById('stats-score').textContent = currentUser.score;
@@ -1708,31 +1387,31 @@
         document.getElementById('lb-current-score').textContent = currentUser.score;
     }
 
-    // SETUP FUNCTIONS FOR BOTH BOT AND MULTI PLAYERS
+    // ==================== SETUP ====================
     function renderPlayersSetupUI() {
         const container = document.getElementById('players-config-list');
         container.innerHTML = '';
 
-        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
+        const count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
 
         for (let i = 0; i < count; i++) {
-            let p = gameSetup.players[i];
-            let isBot = (gameSetup.mode === 'vs_bot' && i === 1);
+            const p = gameSetup.players[i];
+            const isBot = (gameSetup.mode === 'vs_bot' && i === 1);
 
-            let card = document.createElement('div');
+            const card = document.createElement('div');
             card.className = 'player-setup-card';
             
-            let pTitle = isBot ? `${i18nData[currentLang].bot_label} (${i18nData[currentLang]['diff_' + gameSetup.difficulty].toUpperCase()})` : `${i18nData[currentLang].player_label} ${i + 1}`;
+            const pTitle = isBot 
+                ? `\( {i18nData[currentLang].bot_label} ( \){i18nData[currentLang]['diff_' + gameSetup.difficulty].toUpperCase()})` 
+                : `${i18nData[currentLang].player_label} ${i + 1}`;
             
             card.innerHTML = `
                 <div class="player-setup-header">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <div class="player-badge" style="background: ${p.color}; color: #fff;">${i + 1}</div>
-                        <div>
-                            <div style="font-size: 13px; font-weight: 800;">${pTitle}</div>
-                        </div>
+                        <div class="player-badge" style="background: \( {p.color}; color: #fff;"> \){i + 1}</div>
+                        <div style="font-size: 13px; font-weight: 800;">${pTitle}</div>
                     </div>
-                    <div id="p-preview-${i}" style="width: 14px; height: 14px; border-radius: 50%; background: ${p.color};"></div>
+                    <div style="width: 14px; height: 14px; border-radius: 50%; background: ${p.color};"></div>
                 </div>
                 <div>
                     <input type="text" id="p-name-input-${i}" class="username-input" style="text-align: left; padding: 8px 12px; font-size: 12px;" 
@@ -1745,10 +1424,9 @@
             `;
             container.appendChild(card);
 
-            // Palette Circles
-            let pal = card.querySelector(`#p-palette-${i}`);
+            const pal = card.querySelector(`#p-palette-${i}`);
             COLOR_OPTIONS.forEach(color => {
-                let c = document.createElement('div');
+                const c = document.createElement('div');
                 c.className = `color-circle ${color === p.color ? 'selected' : ''}`;
                 c.style.background = color;
                 c.onclick = () => selectColorForPlayer(i, color);
@@ -1759,15 +1437,13 @@
 
     function openSetup(mode) {
         gameSetup.mode = mode;
-        if(currentUser.name) {
-            gameSetup.players[0].name = currentUser.name;
-        }
+        if (currentUser.name) gameSetup.players[0].name = currentUser.name;
 
-        let titleEl = document.getElementById('setup-title');
-        let countBox = document.getElementById('player-count-box');
-        let diffBox = document.getElementById('bot-difficulty-box');
+        const titleEl = document.getElementById('setup-title');
+        const countBox = document.getElementById('player-count-box');
+        const diffBox = document.getElementById('bot-difficulty-box');
 
-        if(mode === 'vs_bot') {
+        if (mode === 'vs_bot') {
             titleEl.textContent = i18nData[currentLang].setup_title_bot;
             countBox.style.display = 'none';
             diffBox.style.display = 'flex';
@@ -1809,25 +1485,23 @@
     }
 
     function confirmAndStartGame() {
-        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
+        const count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
         for (let i = 0; i < count; i++) {
-            let inp = document.getElementById(`p-name-input-${i}`);
-            if (inp && inp.value.trim()) {
-                gameSetup.players[i].name = inp.value.trim();
-            }
+            const inp = document.getElementById(`p-name-input-${i}`);
+            if (inp && inp.value.trim()) gameSetup.players[i].name = inp.value.trim();
         }
         startGame(gameSetup.mode);
     }
 
-    // GAME LOGIC
+    // ==================== GAME CORE ====================
     const BOARD_SIZE = 9;
     let players = [];
     let turnIndex = 0; 
     let activeMode = 'move';
     let currentGameMode = 'vs_bot';
 
-    let hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-    let vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
+    let hWalls = Array(8).fill(0).map(() => Array(9).fill(false)); // 8 rows x 9 possible positions
+    let vWalls = Array(9).fill(0).map(() => Array(8).fill(false)); // 9 rows x 8 possible positions
 
     let boardEl = document.getElementById('board');
     let ghostWall = document.getElementById('draggable-wall-ghost');
@@ -1852,37 +1526,28 @@
             modeText = 'Gate Race';
         } else if (mode === 'vs_bot') {
             icon = '👹';
-            modeText = `vs ${i18nData[currentLang].monster} (${i18nData[currentLang]['diff_' + gameSetup.difficulty].toUpperCase()})`;
+            modeText = `vs \( {i18nData[currentLang].monster} ( \){i18nData[currentLang]['diff_' + gameSetup.difficulty].toUpperCase()})`;
         } else if (mode === 'online_p2p') {
             icon = '🌐';
             modeText = 'Live Online Match';
         }
 
         document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
-
         restartGame();
     }
 
     function initBoard() {
         boardEl.innerHTML = '';
-        let finishBanner = document.getElementById('finish-banner');
-        if (gameSetup.rule === 'finish_race') {
-            finishBanner.style.display = 'block';
-        } else {
-            finishBanner.style.display = 'none';
-        }
+        const finishBanner = document.getElementById('finish-banner');
+        finishBanner.style.display = gameSetup.rule === 'finish_race' ? 'block' : 'none';
 
         for (let r = 0; r < BOARD_SIZE; r++) {
             for (let c = 0; c < BOARD_SIZE; c++) {
-                let cell = document.createElement('div');
+                const cell = document.createElement('div');
                 cell.className = 'cell';
                 
-                if(gameSetup.rule === 'center_race' && r === 4 && c === 4) {
-                    cell.classList.add('center-cell');
-                }
-                if(gameSetup.rule === 'finish_race' && r === 0) {
-                    cell.classList.add('finish-cell');
-                }
+                if (gameSetup.rule === 'center_race' && r === 4 && c === 4) cell.classList.add('center-cell');
+                if (gameSetup.rule === 'finish_race' && r === 0) cell.classList.add('finish-cell');
 
                 cell.dataset.r = r;
                 cell.dataset.c = c;
@@ -1898,9 +1563,9 @@
         document.querySelectorAll('.pawn').forEach(p => p.remove());
         
         players.forEach(p => {
-            let cell = getCellEl(p.r, p.c);
+            const cell = getCellEl(p.r, p.c);
             if (cell) {
-                let pawn = document.createElement('div');
+                const pawn = document.createElement('div');
                 pawn.className = 'pawn';
                 pawn.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${p.color})`;
                 pawn.style.border = `2px solid ${p.color}`;
@@ -1913,7 +1578,7 @@
     }
 
     function getCellEl(r, c) {
-        return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+        return document.querySelector(`.cell[data-r="\( {r}"][data-c=" \){c}"]`);
     }
 
     function highlightValidMoves() {
@@ -1922,34 +1587,59 @@
         if (currentGameMode === 'online_p2p' && turnIndex !== myOnlinePlayerIndex) return;
         if (activeMode !== 'move') return;
 
-        let currP = players[turnIndex];
-        let moves = getValidMoves(currP);
+        const currP = players[turnIndex];
+        const moves = getValidMoves(currP);
         moves.forEach(m => {
-            let el = getCellEl(m.r, m.c);
+            const el = getCellEl(m.r, m.c);
             if (el) el.classList.add('valid-move');
         });
     }
 
+    // ==================== FIXED MOVE + JUMP LOGIC ====================
     function getValidMoves(p) {
-        let moves = [];
-        let dr = [-1, 1, 0, 0];
-        let dc = [0, 0, -1, 1];
+        const moves = [];
+        const directions = [
+            { dr: -1, dc: 0 },
+            { dr: 1,  dc: 0 },
+            { dr: 0,  dc: -1 },
+            { dr: 0,  dc: 1 }
+        ];
 
-        for (let i = 0; i < 4; i++) {
-            let nr = p.r + dr[i];
-            let nc = p.c + dc[i];
+        for (const dir of directions) {
+            const nr = p.r + dir.dr;
+            const nc = p.c + dir.dc;
 
-            if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
-                if (!isWallBetween(p.r, p.c, nr, nc)) {
-                    let occupiedP = players.find(other => other.r === nr && other.c === nc);
-                    if (occupiedP) {
-                        let jx = nr + dr[i];
-                        let jy = nc + dc[i];
-                        if (jx >= 0 && jx < BOARD_SIZE && jy >= 0 && jy < BOARD_SIZE && !isWallBetween(nr, nc, jx, jy)) {
-                            moves.push({ r: jx, c: jy });
+            if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) continue;
+            if (isWallBetween(p.r, p.c, nr, nc)) continue;
+
+            const occupied = players.find(other => other.r === nr && other.c === nc);
+
+            if (!occupied) {
+                moves.push({ r: nr, c: nc });
+            } else {
+                // Straight jump
+                const jumpR = nr + dir.dr;
+                const jumpC = nc + dir.dc;
+
+                if (jumpR >= 0 && jumpR < BOARD_SIZE && jumpC >= 0 && jumpC < BOARD_SIZE &&
+                    !isWallBetween(nr, nc, jumpR, jumpC) &&
+                    !players.some(pl => pl.r === jumpR && pl.c === jumpC)) {
+                    moves.push({ r: jumpR, c: jumpC });
+                } else {
+                    // Side jumps
+                    const sideDirs = dir.dr !== 0
+                        ? [{ dr: 0, dc: -1 }, { dr: 0, dc: 1 }]
+                        : [{ dr: -1, dc: 0 }, { dr: 1, dc: 0 }];
+
+                    for (const side of sideDirs) {
+                        const sideR = nr + side.dr;
+                        const sideC = nc + side.dc;
+
+                        if (sideR >= 0 && sideR < BOARD_SIZE && sideC >= 0 && sideC < BOARD_SIZE &&
+                            !isWallBetween(nr, nc, sideR, sideC) &&
+                            !players.some(pl => pl.r === sideR && pl.c === sideC)) {
+                            moves.push({ r: sideR, c: sideC });
                         }
-                    } else {
-                        moves.push({ r: nr, c: nc });
                     }
                 }
             }
@@ -1957,15 +1647,18 @@
         return moves;
     }
 
+    // ==================== FIXED WALL BETWEEN ====================
     function isWallBetween(r1, c1, r2, c2) {
-        if (r1 === r2) {
-            let minC = Math.min(c1, c2);
-            if (r1 > 0 && vWalls[r1 - 1][minC]) return true;
-            if (r1 < 8 && vWalls[r1][minC]) return true;
-        } else if (c1 === c2) {
-            let minR = Math.min(r1, r2);
-            if (c1 > 0 && hWalls[minR][c1 - 1]) return true;
-            if (c1 < 8 && hWalls[minR][c1]) return true;
+        if (r1 === r2) { // horizontal move
+            const minC = Math.min(c1, c2);
+            // Check vertical walls
+            if (r1 > 0 && vWalls[r1 - 1] && vWalls[r1 - 1][minC]) return true;
+            if (r1 < 8 && vWalls[r1] && vWalls[r1][minC]) return true;
+        } else if (c1 === c2) { // vertical move
+            const minR = Math.min(r1, r2);
+            // Check horizontal walls
+            if (c1 > 0 && hWalls[minR] && hWalls[minR][c1 - 1]) return true;
+            if (c1 < 8 && hWalls[minR] && hWalls[minR][c1]) return true;
         }
         return false;
     }
@@ -1974,29 +1667,19 @@
         if (currentGameMode === 'vs_bot' && turnIndex !== 0) return;
         if (currentGameMode === 'online_p2p' && turnIndex !== myOnlinePlayerIndex) return;
 
-        let currP = players[turnIndex];
+        const currP = players[turnIndex];
 
         if (activeMode === 'move') {
-            let validMoves = getValidMoves(currP);
+            const validMoves = getValidMoves(currP);
             if (validMoves.some(m => m.r === r && m.c === c)) {
-                currP.r = r; currP.c = c;
+                currP.r = r;
+                currP.c = c;
                 
                 if (currentGameMode === 'online_p2p') {
-                    sendOnlineAction({ type: 'MOVE', r: r, c: c, playerIndex: myOnlinePlayerIndex });
+                    sendOnlineAction({ type: 'MOVE', r, c, playerIndex: myOnlinePlayerIndex });
                 }
 
-                // WIN CONDITIONS
-                if(gameSetup.rule === 'center_race') {
-                    if (currP.r === 4 && currP.c === 4) return endGame(currP);
-                } else if(gameSetup.rule === 'finish_race') {
-                    if (currP.r === 0) return endGame(currP);
-                } else {
-                    if (currP.targetSide === 'top' && currP.r === 0) return endGame(currP);
-                    if (currP.targetSide === 'bottom' && currP.r === 8) return endGame(currP);
-                    if (currP.targetSide === 'right' && currP.c === 8) return endGame(currP);
-                    if (currP.targetSide === 'left' && currP.c === 0) return endGame(currP);
-                }
-
+                if (checkWinCondition(currP)) return;
                 switchTurn();
             }
         }
@@ -2013,44 +1696,69 @@
         highlightValidMoves();
     }
 
+    // ==================== FIXED WALL PLACEMENT ====================
     function canPlaceWall(r, c, type) {
-        let currP = players[turnIndex];
-        if (currP.walls <= 0) return false;
-        if (r < 0 || r >= 8 || c < 0 || c >= 8) return false;
+        const currP = players[turnIndex];
+        if (!currP || currP.walls <= 0) return false;
+        if (r < 0 || r > 7 || c < 0 || c > 7) return false;
 
         if (type === 'H') {
-            if (hWalls[r][c] || (c > 0 && hWalls[r][c - 1]) || (c < 7 && hWalls[r][c + 1]) || vWalls[r][c]) return false;
+            // Horizontal wall covers two cells: (r,c) and (r,c+1)
+            if (c > 7) return false;
+            if (hWalls[r][c] || hWalls[r][c + 1]) return false;
+            // Crossing with vertical wall
+            if (vWalls[r] && vWalls[r][c]) return false;
         } else {
-            if (vWalls[r][c] || (r > 0 && vWalls[r - 1][c]) || (r < 7 && vWalls[r + 1][c]) || hWalls[r][c]) return false;
+            // Vertical wall covers two cells: (r,c) and (r+1,c)
+            if (r > 7) return false;
+            if (vWalls[r][c] || vWalls[r + 1][c]) return false;
+            // Crossing with horizontal wall
+            if (hWalls[r] && hWalls[r][c]) return false;
         }
 
-        if (type === 'H') hWalls[r][c] = true;
-        else vWalls[r][c] = true;
+        // Temporarily place
+        if (type === 'H') {
+            hWalls[r][c] = true;
+            hWalls[r][c + 1] = true;
+        } else {
+            vWalls[r][c] = true;
+            vWalls[r + 1][c] = true;
+        }
 
         let pathBlocked = false;
-        for (let p of players) {
+        for (const p of players) {
             if (getShortestPathLength(p) === Infinity) {
                 pathBlocked = true;
                 break;
             }
         }
 
-        if (type === 'H') hWalls[r][c] = false;
-        else vWalls[r][c] = false;
+        // Undo
+        if (type === 'H') {
+            hWalls[r][c] = false;
+            hWalls[r][c + 1] = false;
+        } else {
+            vWalls[r][c] = false;
+            vWalls[r + 1][c] = false;
+        }
 
         return !pathBlocked;
     }
 
     function placeWall(r, c, type) {
-        if (type === 'H') hWalls[r][c] = true;
-        else vWalls[r][c] = true;
+        if (type === 'H') {
+            hWalls[r][c] = true;
+            hWalls[r][c + 1] = true;
+        } else {
+            vWalls[r][c] = true;
+            vWalls[r + 1][c] = true;
+        }
 
-        let currP = players[turnIndex];
-        let wallEl = document.createElement('div');
+        const wallEl = document.createElement('div');
         wallEl.className = 'wall-placed';
-        
-        let cellW = (340 - 80) / 9;
-        let gap = 10;
+
+        const cellW = (340 - 80) / 9;
+        const gap = 10;
 
         if (type === 'H') {
             wallEl.style.width = `${cellW * 2 + gap}px`;
@@ -2067,23 +1775,21 @@
         boardEl.appendChild(wallEl);
     }
 
-    // ====================================================
-    // BARİKADALARI SÜRÜTLƏYİB QOYMA SİSTEMİ (DRAG & DROP)
-    // ====================================================
+    // ==================== DRAG & DROP ====================
     let isDraggingWall = false;
     let dragPos = { r: 3, c: 3 };
 
     function updateGhostWallDisplay() {
-        let currP = players[turnIndex];
-        if (activeMode === 'move' || currP.walls <= 0) {
+        const currP = players[turnIndex];
+        if (!currP || activeMode === 'move' || currP.walls <= 0) {
             ghostWall.style.display = 'none';
             return;
         }
         if (currentGameMode === 'vs_bot' && turnIndex !== 0) return;
         if (currentGameMode === 'online_p2p' && turnIndex !== myOnlinePlayerIndex) return;
 
-        let cellW = (340 - 80) / 9;
-        let gap = 10;
+        const cellW = (340 - 80) / 9;
+        const gap = 10;
         ghostWall.style.display = 'block';
 
         if (activeMode === 'H') {
@@ -2098,24 +1804,21 @@
             ghostWall.style.top = `${10 + dragPos.r * (cellW + gap)}px`;
         }
 
-        let valid = canPlaceWall(dragPos.r, dragPos.c, activeMode);
+        const valid = canPlaceWall(dragPos.r, dragPos.c, activeMode);
         ghostWall.style.background = valid ? 'linear-gradient(135deg, #f59e0b, #b45309)' : 'linear-gradient(135deg, #ef4444, #991b1b)';
         ghostWall.style.borderColor = valid ? '#fef08a' : '#fca5a5';
     }
 
     function initDragAndDropSystem() {
-        let wrapper = document.getElementById('board-wrapper');
-
         function handlePointerMove(e) {
             if (!isDraggingWall) return;
-            let rect = boardEl.getBoundingClientRect();
-            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
-            let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            const rect = boardEl.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            if (!clientX || !clientY) return;
 
-            if(!clientX || !clientY) return;
-
-            let x = clientX - rect.left - 10;
-            let y = clientY - rect.top - 10;
+            const x = clientX - rect.left - 10;
+            const y = clientY - rect.top - 10;
 
             let col = Math.floor(x / 36);
             let row = Math.floor(y / 36);
@@ -2131,13 +1834,19 @@
             if (!isDraggingWall) return;
             isDraggingWall = false;
 
-            let currP = players[turnIndex];
+            const currP = players[turnIndex];
             if (canPlaceWall(dragPos.r, dragPos.c, activeMode)) {
                 placeWall(dragPos.r, dragPos.c, activeMode);
                 currP.walls--;
 
                 if (currentGameMode === 'online_p2p') {
-                    sendOnlineAction({ type: 'WALL', r: dragPos.r, c: dragPos.c, wallType: activeMode, playerIndex: myOnlinePlayerIndex });
+                    sendOnlineAction({ 
+                        type: 'WALL', 
+                        r: dragPos.r, 
+                        c: dragPos.c, 
+                        wallType: activeMode, 
+                        playerIndex: myOnlinePlayerIndex 
+                    });
                 }
 
                 setMode('move');
@@ -2152,7 +1861,6 @@
 
         window.addEventListener('mousemove', handlePointerMove);
         window.addEventListener('touchmove', handlePointerMove, { passive: false });
-
         window.addEventListener('mouseup', handlePointerUp);
         window.addEventListener('touchend', handlePointerUp);
     }
@@ -2168,10 +1876,10 @@
     }
 
     function updateUI() {
-        let wallContainer = document.getElementById('wall-counters-container');
+        const wallContainer = document.getElementById('wall-counters-container');
         wallContainer.innerHTML = '';
-        players.forEach((p) => {
-            let pill = document.createElement('div');
+        players.forEach(p => {
+            const pill = document.createElement('div');
             pill.className = 'wall-pill';
             pill.innerHTML = `
                 <div class="wall-pill-icon" style="background: ${p.color}"></div>
@@ -2180,15 +1888,17 @@
             wallContainer.appendChild(pill);
         });
 
-        let currP = players[turnIndex];
-        let dot = document.getElementById('turn-dot');
-        let txt = document.getElementById('turn-text');
+        const currP = players[turnIndex];
+        if (!currP) return;
+
+        const dot = document.getElementById('turn-dot');
+        const txt = document.getElementById('turn-text');
 
         dot.style.backgroundColor = currP.color;
         dot.style.boxShadow = `0 0 8px ${currP.color}`;
         
         if (['en', 'de', 'fr', 'es'].includes(currentLang)) {
-            txt.textContent = `${currP.name}${i18nData[currentLang].turn_suffix}`;
+            txt.textContent = `\( {currP.name} \){i18nData[currentLang].turn_suffix}`;
         } else {
             txt.textContent = `${currP.name} ${i18nData[currentLang].turn_suffix}`;
         }
@@ -2196,20 +1906,17 @@
         updateGhostWallDisplay();
     }
 
-    // ==========================================
-    // CANAVAR ALQORİTMİ (BFS - Pathfinding AI)
-    // ==========================================
-
+    // ==================== PATHFINDING ====================
     function getShortestPathLength(p) {
-        let queue = [{ r: p.r, c: p.c, dist: 0 }];
-        let visited = Array(9).fill(0).map(() => Array(9).fill(false));
+        const queue = [{ r: p.r, c: p.c, dist: 0 }];
+        const visited = Array(9).fill(0).map(() => Array(9).fill(false));
         visited[p.r][p.c] = true;
 
-        let dr = [-1, 1, 0, 0];
-        let dc = [0, 0, -1, 1];
+        const dr = [-1, 1, 0, 0];
+        const dc = [0, 0, -1, 1];
 
         while (queue.length > 0) {
-            let curr = queue.shift();
+            const curr = queue.shift();
 
             if (gameSetup.rule === 'center_race' && curr.r === 4 && curr.c === 4) return curr.dist;
             if (gameSetup.rule === 'finish_race' && curr.r === 0) return curr.dist;
@@ -2221,8 +1928,8 @@
             }
 
             for (let i = 0; i < 4; i++) {
-                let nr = curr.r + dr[i];
-                let nc = curr.c + dc[i];
+                const nr = curr.r + dr[i];
+                const nc = curr.c + dc[i];
 
                 if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && !visited[nr][nc]) {
                     if (!isWallBetween(curr.r, curr.c, nr, nc)) {
@@ -2235,13 +1942,14 @@
         return Infinity;
     }
 
+    // ==================== AI ====================
     function aiTurn() {
-        let botP = players[1];
-        let humanP = players[0];
-        let diff = gameSetup.difficulty;
+        const botP = players[1];
+        const humanP = players[0];
+        const diff = gameSetup.difficulty;
 
-        let botDist = getShortestPathLength(botP);
-        let humanDist = getShortestPathLength(humanP);
+        const botDist = getShortestPathLength(botP);
+        const humanDist = getShortestPathLength(humanP);
 
         if (diff === 'easy') {
             if (Math.random() < 0.3 && botP.walls > 0) {
@@ -2273,7 +1981,7 @@
             }
             
             if (botP.walls > 0) {
-                let bestWall = findBestMasterWall(botP, humanP);
+                const bestWall = findBestMasterWall(botP, humanP);
                 if (bestWall) {
                     placeWall(bestWall.r, bestWall.c, bestWall.type);
                     botP.walls--;
@@ -2287,15 +1995,18 @@
     }
 
     function makeBestMove(botP) {
-        let moves = getValidMoves(botP);
-        if (!moves || moves.length === 0) return;
+        const moves = getValidMoves(botP);
+        if (!moves || moves.length === 0) {
+            switchTurn();
+            return;
+        }
 
         let bestMove = moves[0];
         let minDistance = Infinity;
 
-        for (let m of moves) {
-            let tempP = { ...botP, r: m.r, c: m.c };
-            let dist = getShortestPathLength(tempP);
+        for (const m of moves) {
+            const tempP = { ...botP, r: m.r, c: m.c };
+            const dist = getShortestPathLength(tempP);
             if (dist < minDistance) {
                 minDistance = dist;
                 bestMove = m;
@@ -2305,15 +2016,12 @@
         botP.r = bestMove.r;
         botP.c = bestMove.c;
 
-        if (gameSetup.rule === 'center_race' && botP.r === 4 && botP.c === 4) return endGame(botP);
-        if (gameSetup.rule === 'finish_race' && botP.r === 0) return endGame(botP);
-        if (gameSetup.rule === 'classic' && botP.r === 8) return endGame(botP);
-
+        if (checkWinCondition(botP)) return;
         switchTurn();
     }
 
     function tryBlockingWall(botP, humanP) {
-        let bestWall = findBestMasterWall(botP, humanP);
+        const bestWall = findBestMasterWall(botP, humanP);
         if (bestWall) {
             placeWall(bestWall.r, bestWall.c, bestWall.type);
             botP.walls--;
@@ -2325,11 +2033,11 @@
     }
 
     function tryRandomWall(botP) {
-        let types = ['H', 'V'];
-        for (let attempt = 0; attempt < 10; attempt++) {
-            let r = Math.floor(Math.random() * 8);
-            let c = Math.floor(Math.random() * 8);
-            let type = types[Math.floor(Math.random() * 2)];
+        const types = ['H', 'V'];
+        for (let attempt = 0; attempt < 15; attempt++) {
+            const r = Math.floor(Math.random() * 8);
+            const c = Math.floor(Math.random() * 8);
+            const type = types[Math.floor(Math.random() * 2)];
 
             if (canPlaceWall(r, c, type)) {
                 placeWall(r, c, type);
@@ -2343,27 +2051,37 @@
     }
 
     function findBestMasterWall(botP, humanP) {
-        let currentHumanDist = getShortestPathLength(humanP);
-        let currentBotDist = getShortestPathLength(botP);
+        const currentHumanDist = getShortestPathLength(humanP);
+        const currentBotDist = getShortestPathLength(botP);
 
         let bestWall = null;
         let maxHumanDistIncrease = 0;
 
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
-                for (let type of ['H', 'V']) {
+                for (const type of ['H', 'V']) {
                     if (canPlaceWall(r, c, type)) {
-                        if (type === 'H') hWalls[r][c] = true;
-                        else vWalls[r][c] = true;
+                        if (type === 'H') {
+                            hWalls[r][c] = true;
+                            hWalls[r][c + 1] = true;
+                        } else {
+                            vWalls[r][c] = true;
+                            vWalls[r + 1][c] = true;
+                        }
 
-                        let newHumanDist = getShortestPathLength(humanP);
-                        let newBotDist = getShortestPathLength(botP);
+                        const newHumanDist = getShortestPathLength(humanP);
+                        const newBotDist = getShortestPathLength(botP);
 
-                        if (type === 'H') hWalls[r][c] = false;
-                        else vWalls[r][c] = false;
+                        if (type === 'H') {
+                            hWalls[r][c] = false;
+                            hWalls[r][c + 1] = false;
+                        } else {
+                            vWalls[r][c] = false;
+                            vWalls[r + 1][c] = false;
+                        }
 
-                        let humanDistIncrease = newHumanDist - currentHumanDist;
-                        let botDistIncrease = newBotDist - currentBotDist;
+                        const humanDistIncrease = newHumanDist - currentHumanDist;
+                        const botDistIncrease = newBotDist - currentBotDist;
 
                         if (humanDistIncrease > maxHumanDistIncrease && botDistIncrease <= 1) {
                             maxHumanDistIncrease = humanDistIncrease;
@@ -2373,15 +2091,31 @@
                 }
             }
         }
-
         return bestWall;
+    }
+
+    // ==================== WIN CHECK ====================
+    function checkWinCondition(p) {
+        if (gameSetup.rule === 'center_race' && p.r === 4 && p.c === 4) {
+            endGame(p);
+            return true;
+        }
+        if (gameSetup.rule === 'finish_race' && p.r === 0) {
+            endGame(p);
+            return true;
+        }
+        if (gameSetup.rule === 'classic') {
+            if (p.targetSide === 'top' && p.r === 0) { endGame(p); return true; }
+            if (p.targetSide === 'bottom' && p.r === 8) { endGame(p); return true; }
+            if (p.targetSide === 'right' && p.c === 8) { endGame(p); return true; }
+            if (p.targetSide === 'left' && p.c === 0) { endGame(p); return true; }
+        }
+        return false;
     }
 
     function endGame(winnerP) {
         currentUser.games++;
-        let isP1Win = (winnerP.id === 0);
-
-        if(isP1Win) {
+        if (winnerP.id === 0 || (currentGameMode === 'online_p2p' && winnerP.id === myOnlinePlayerIndex)) {
             currentUser.wins++;
             currentUser.score += 50;
         }
@@ -2395,10 +2129,14 @@
     }
 
     function restartGame() {
-        let count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
-        let initialWalls = count === 2 ? 10 : (count === 3 ? 7 : 5);
+        const count = gameSetup.mode === 'vs_bot' ? 2 : gameSetup.playerCount;
+        const initialWalls = count === 2 ? 10 : (count === 3 ? 7 : 5);
 
         players = [];
+
+        // Reset walls correctly
+        hWalls = Array(8).fill(0).map(() => Array(9).fill(false));
+        vWalls = Array(9).fill(0).map(() => Array(8).fill(false));
 
         if (gameSetup.rule === 'finish_race') {
             let startCols = [1, 3, 5, 7];
@@ -2417,32 +2155,53 @@
                 });
             }
         } else {
-            players.push({ id: 0, r: 8, c: 4, walls: initialWalls, name: gameSetup.players[0].name, color: gameSetup.players[0].color, targetSide: 'top' });
+            players.push({ 
+                id: 0, r: 8, c: 4, walls: initialWalls, 
+                name: gameSetup.players[0].name, 
+                color: gameSetup.players[0].color, 
+                targetSide: 'top' 
+            });
 
             if (count === 2) {
-                players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
+                players.push({ 
+                    id: 1, r: 0, c: 4, walls: initialWalls, 
+                    name: gameSetup.players[1].name, 
+                    color: gameSetup.players[1].color, 
+                    targetSide: 'bottom' 
+                });
             } else {
-                players.push({ id: 1, r: 0, c: 4, walls: initialWalls, name: gameSetup.players[1].name, color: gameSetup.players[1].color, targetSide: 'bottom' });
-                players.push({ id: 2, r: 4, c: 0, walls: initialWalls, name: gameSetup.players[2].name, color: gameSetup.players[2].color, targetSide: 'right' });
+                players.push({ 
+                    id: 1, r: 0, c: 4, walls: initialWalls, 
+                    name: gameSetup.players[1].name, 
+                    color: gameSetup.players[1].color, 
+                    targetSide: 'bottom' 
+                });
+                players.push({ 
+                    id: 2, r: 4, c: 0, walls: initialWalls, 
+                    name: gameSetup.players[2].name, 
+                    color: gameSetup.players[2].color, 
+                    targetSide: 'right' 
+                });
                 if (count === 4) {
-                    players.push({ id: 3, r: 4, c: 8, walls: initialWalls, name: gameSetup.players[3].name, color: gameSetup.players[3].color, targetSide: 'left' });
+                    players.push({ 
+                        id: 3, r: 4, c: 8, walls: initialWalls, 
+                        name: gameSetup.players[3].name, 
+                        color: gameSetup.players[3].color, 
+                        targetSide: 'left' 
+                    });
                 }
             }
         }
 
         turnIndex = 0;
         activeMode = 'move';
-        hWalls = Array(8).fill(0).map(() => Array(8).fill(false));
-        vWalls = Array(8).fill(0).map(() => Array(8).fill(false));
         document.querySelectorAll('.wall-placed').forEach(w => w.remove());
         document.getElementById('modal').classList.remove('active');
         setMode('move');
         initBoard();
     }
 
-    // ======================================================
-    // CANLI ONLAYN MULTIPLAYER ƏLAVƏSİ (PeerJS - P2P ŞƏBƏKƏ)
-    // ======================================================
+    // ==================== ONLINE (IMPROVED) ====================
     let peer = null;
     let peerConn = null;
     let myPeerId = "";
@@ -2460,12 +2219,6 @@
             peerConn = conn;
             myOnlinePlayerIndex = 0;
             setupConnectionListeners();
-            alert(i18nData[currentLang].alert_peer_connected);
-            
-            gameSetup.playerCount = 2;
-            gameSetup.players[0].name = currentUser.name || `${i18nData[currentLang].player_label} 1`;
-            gameSetup.players[1].name = i18nData[currentLang].opponent;
-            startGame('online_p2p');
         });
     }
 
@@ -2486,27 +2239,29 @@
     }
 
     function joinOnlineRoomPrompt() {
-        let hostId = prompt(i18nData[currentLang].alert_enter_code);
-        if (hostId) {
-            peerConn = peer.connect(hostId.trim());
-            myOnlinePlayerIndex = 1;
-            setupConnectionListeners();
-            alert(i18nData[currentLang].alert_joined);
+        const hostId = prompt(i18nData[currentLang].alert_enter_code);
+        if (!hostId) return;
 
-            gameSetup.playerCount = 2;
-            gameSetup.players[0].name = i18nData[currentLang].host;
-            gameSetup.players[1].name = currentUser.name || `${i18nData[currentLang].player_label} 2`;
-            startGame('online_p2p');
-        }
+        peerConn = peer.connect(hostId.trim());
+        myOnlinePlayerIndex = 1;
+
+        peerConn.on('open', () => {
+            peerConn.send({ type: 'READY', name: currentUser.name || 'Player 2' });
+        });
+
+        setupConnectionListeners();
     }
 
     function setupConnectionListeners() {
+        if (!peerConn) return;
+
         peerConn.on('data', function(data) {
             handleRemoteAction(data);
         });
 
         peerConn.on('close', function() {
             alert(i18nData[currentLang].alert_peer_disconnected);
+            navigateTo('screen-lobby');
         });
     }
 
@@ -2517,27 +2272,51 @@
     }
 
     function handleRemoteAction(data) {
-        if (data.type === 'MOVE') {
-            let p = players[data.playerIndex];
-            p.r = data.r;
-            p.c = data.c;
+        if (data.type === 'READY') {
+            // Host side
+            myOnlinePlayerIndex = 0;
+            gameSetup.playerCount = 2;
+            gameSetup.players[0].name = currentUser.name || 'Player 1';
+            gameSetup.players[1].name = data.name || i18nData[currentLang].opponent;
 
-            if(gameSetup.rule === 'center_race' && p.r === 4 && p.c === 4) return endGame(p);
-            if(gameSetup.rule === 'finish_race' && p.r === 0) return endGame(p);
-            if(gameSetup.rule === 'classic') {
-                if (p.targetSide === 'top' && p.r === 0) return endGame(p);
-                if (p.targetSide === 'bottom' && p.r === 8) return endGame(p);
+            peerConn.send({
+                type: 'START_GAME',
+                rule: gameSetup.rule,
+                p1Name: gameSetup.players[0].name,
+                p2Name: gameSetup.players[1].name,
+                p1Color: gameSetup.players[0].color,
+                p2Color: gameSetup.players[1].color
+            });
+
+            alert(i18nData[currentLang].alert_peer_connected);
+            startGame('online_p2p');
+        }
+        else if (data.type === 'START_GAME') {
+            // Guest side
+            gameSetup.rule = data.rule || 'classic';
+            gameSetup.players[0].name = data.p1Name;
+            gameSetup.players[1].name = data.p2Name;
+            gameSetup.players[0].color = data.p1Color || '#f59e0b';
+            gameSetup.players[1].color = data.p2Color || '#ef4444';
+            
+            alert(i18nData[currentLang].alert_joined);
+            startGame('online_p2p');
+        }
+        else if (data.type === 'MOVE') {
+            const p = players[data.playerIndex];
+            if (p) {
+                p.r = data.r;
+                p.c = data.c;
+                if (checkWinCondition(p)) return;
+                switchTurn();
             }
-
-            switchTurn();
-        } else if (data.type === 'WALL') {
+        }
+        else if (data.type === 'WALL') {
             placeWall(data.r, data.c, data.wallType);
-            let p = players[data.playerIndex];
-            p.walls--;
+            if (players[data.playerIndex]) players[data.playerIndex].walls--;
             switchTurn();
         }
     }
 </script>
 </body>
-</html>
-  
+    </html>
