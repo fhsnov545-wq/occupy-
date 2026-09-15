@@ -2086,16 +2086,19 @@
         let gap = 10;
         ghostWall.style.display = 'block';
 
+        let boardOffsetLeft = boardEl.offsetLeft;
+        let boardOffsetTop = boardEl.offsetTop;
+
         if (activeMode === 'H') {
             ghostWall.style.width = `${cellW * 2 + gap}px`;
             ghostWall.style.height = `10px`;
-            ghostWall.style.left = `${10 + dragPos.c * (cellW + gap)}px`;
-            ghostWall.style.top = `${10 + (dragPos.r + 1) * cellW + dragPos.r * gap}px`;
+            ghostWall.style.left = `${boardOffsetLeft + dragPos.c * (cellW + gap)}px`;
+            ghostWall.style.top = `${boardOffsetTop + (dragPos.r + 1) * cellW + dragPos.r * gap}px`;
         } else {
             ghostWall.style.width = `10px`;
             ghostWall.style.height = `${cellW * 2 + gap}px`;
-            ghostWall.style.left = `${10 + (dragPos.c + 1) * cellW + dragPos.c * gap}px`;
-            ghostWall.style.top = `${10 + dragPos.r * (cellW + gap)}px`;
+            ghostWall.style.left = `${boardOffsetLeft + (dragPos.c + 1) * cellW + dragPos.c * gap}px`;
+            ghostWall.style.top = `${boardOffsetTop + dragPos.r * (cellW + gap)}px`;
         }
 
         let valid = canPlaceWall(dragPos.r, dragPos.c, activeMode);
@@ -2540,4 +2543,3 @@
 </script>
 </body>
 </html>
-  
