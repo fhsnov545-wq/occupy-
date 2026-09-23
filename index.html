@@ -1,29 +1,6 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <!-- Y8 SDK -->
-<script src="https://sdk.y8.com/v2/player.js"></script>
-<script>
-  window.y8SDK = window.y8SDK || [];
-  
-  // Y8 SDK Başlatma
-  ID.init({
-    app_id: '6ab23c779a1e10cc20efdbb7'
-  });
-
-  // Reklam göstərmək üçün funksiya
-  function showY8Ad() {
-    if (typeof ID !== 'undefined' && ID.ads) {
-      ID.ads.display();
-    }
-  }
-
-  // Oyun yüklənən kimi ilk reklamı göstər
-  window.onload = function() {
-    showY8Ad();
-  };
-</script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Occupy - Dungeon Escape Multiplayer</title>
@@ -1882,8 +1859,8 @@
         }
 
         document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
-y8Sdk.showAd
-   restartGame();
+
+        restartGame();
     }
 
     function initBoard() {
