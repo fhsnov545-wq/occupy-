@@ -33,6 +33,65 @@
     window.y8.emitReadyEvent();
   }
 </script>
+// 1. Səviyyə bitəndə və ya oyunun müəyyən yerində çıxan reklam (Interstitial)
+function showMidgameAd() {
+  if (!y8Sdk) {
+    console.log("Y8 SDK hələ işə düşməyib");
+    return;
+  }
+
+  y8Sdk.showAd({
+    type: "next", // "start" | "pause" | "next"
+    name: "level-complete",
+    beforeAd: () => { 
+      // Burada oyunun səsini və ya gedişatını dayandıra bilərsən (Pause)
+      console.log("Reklam başladı, oyun dayandırıldı");
+    },
+    afterAd: () => { 
+      // Reklam bitəndən sonra oyun yenidən davam edir
+      console.log("Reklam bitdi, oyun davam edir");
+    },
+    adBreakDone: (info) => {
+      console.log("Reklam prosesi tamamlandı", info);
+    }
+  }).catch((e) => console.error("Reklam xətası:", e));
+}
+
+// 2. Mükafatlı reklam (Rewarded Ad - Məsələn, əlavə can qazanmaq üçün)
+function showRewardedAd() {
+  if (!y8Sdk) {
+    console.log("Y8 SDK hələ işə düşməyib");
+    return;
+  }
+
+  y8Sdk.showAd({
+    type: "reward",
+    name: "extra-life",
+    beforeAd: () => { 
+      // Oyunu dayandır
+    },
+    afterAd: () => { 
+      // Oyunu davam etdir
+    },
+    beforeReward: (showAdFn) => {
+      // Burada reklam başlamazdan əvvəl istifadəçiyə bildiriş verə bilərsən
+      showAdFn();
+    },
+    adDismissed: () => {
+      console.log("İstifadəçi reklamı yarıda bağladı, mükafat verilmir");
+    },
+    adViewed: () => {
+      // İSTİFADƏÇİ REKLAMI SONUNA QƏDƏR İZLƏDİ:
+      console.log("Mükafat qazanıldı!");
+      
+      // BURADA OYUNÇUYA MÜKAFATINI VER (məsələn: canı artır)
+      // playerLives += 1; 
+    },
+    adBreakDone: (info) => {
+      console.log("Mükafatlı reklam tamamlandı", info);
+    }
+  }).catch((e) => console.error("Mükafatlı reklam xətası:", e));
+}
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
