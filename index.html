@@ -2539,7 +2539,52 @@
             p.walls--;
             switchTurn();
         }
+    }    function joinOnlineRoom() {
+        let remoteId = prompt(i18nData[currentLang].alert_enter_code);
+        if (!remoteId) return;
+
+        peerConn = peer.connect(remoteId.trim());
+        myOnlinePlayerIndex = 1;
+
+        peerConn.on('open', function() {
+            alert(i18nData[currentLang].alert_joined);
+            setupConnectionListeners();
+            
+            gameSetup.playerCount = 2;
+            gameSetup.players[0].name = i18nData[currentLang].opponent;
+            gameSetup.players[1].name = currentUser.name || `${i18nData[currentLang].player_label} 2`;
+            startGame('online_p2p');
+        });
     }
+
+    function setupConnectionListeners() {
+        peerConn.on('data', function(data) {
+            if (data.type === 'MOVE') {
+                let p = players[data.playerIndex];
+                p.r = data.r;
+                p.c = data.c;
+                renderPawns();
+                switchTurn();
+            } else if (data.type === 'WALL') {
+                placeWall(data.r, data.c, data.wallType);
+                players[data.playerIndex].walls--;
+                setMode('move');
+                switchTurn();
+            }
+        });
+
+        peerConn.on('close', function() {
+            alert(i18nData[currentLang].alert_peer_disconnected);
+            navigateTo('screen-menu');
+        });
+    }
+
+    function sendOnlineAction(data) {
+        if (peerConn && peerConn.open) {
+            peerConn.send(data);
+        }
+    }
+
 </script>
 </body>
 </html>
