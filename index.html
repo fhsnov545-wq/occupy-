@@ -32,8 +32,7 @@
   if (window.y8 && window.y8.emitReadyEvent) {
     window.y8.emitReadyEvent();
   }
-</script>
-// 1. Səviyyə bitəndə və ya oyunun müəyyən yerində çıxan reklam (Interstitial)
+    // 1. Səviyyə bitəndə və ya oyunun müəyyən yerində çıxan reklam (Interstitial)
 function showMidgameAd() {
   if (!y8Sdk) {
     console.log("Y8 SDK hələ işə düşməyib");
@@ -92,6 +91,9 @@ function showRewardedAd() {
     }
   }).catch((e) => console.error("Mükafatlı reklam xətası:", e));
 }
+
+</script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
