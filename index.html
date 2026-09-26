@@ -2080,6 +2080,8 @@ showMidgameAd();
                 if (currentGameMode === 'online_p2p') {
                     sendOnlineAction({ type: 'MOVE', r: r, c: c, playerIndex: myOnlinePlayerIndex });
                 }
+                showMidgameAd();
+
 
                 // WIN CONDITIONS
                 if(gameSetup.rule === 'center_race') {
