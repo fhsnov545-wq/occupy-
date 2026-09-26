@@ -1910,7 +1910,8 @@ function showRewardedAd() {
                 gameSetup.players[i].name = inp.value.trim();
             }
         }
-        startGame(gameSetup.mode);showMidgameAd();
+        startGame(gameSetup.mode);
+        showMidgameAd();
 
     }
 
@@ -1956,9 +1957,7 @@ function showRewardedAd() {
         document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
 
   restartGame(); 
- 
-
-        
+ showMidgameAd();
 
     }
 
