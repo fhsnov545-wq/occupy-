@@ -2080,9 +2080,7 @@ showMidgameAd();
                 if (currentGameMode === 'online_p2p') {
                     sendOnlineAction({ type: 'MOVE', r: r, c: c, playerIndex: myOnlinePlayerIndex });
                 }
-                showMidgameAd();
-
-
+            
                 // WIN CONDITIONS
                 if(gameSetup.rule === 'center_race') {
                     if (currP.r === 4 && currP.c === 4) return endGame(currP);
@@ -2540,6 +2538,8 @@ showMidgameAd();
         setMode('move');
         initBoard();
     }
+    showMidgameAd();
+
 
     // ======================================================
     // CANLI ONLAYN MULTIPLAYER ƏLAVƏSİ (PeerJS - P2P ŞƏBƏKƏ)
