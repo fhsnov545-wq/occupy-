@@ -1910,7 +1910,8 @@ function showRewardedAd() {
                 gameSetup.players[i].name = inp.value.trim();
             }
         }
-        startGame(gameSetup.mode);
+        startGame(gameSetup.mode);showMidgameAd();
+
     }
 
     // GAME LOGIC
@@ -1953,7 +1954,8 @@ function showRewardedAd() {
         }
 
         document.getElementById('game-mode-title').innerHTML = `${icon} ${modeText}`;
-showMidgameAd(); restartGame();  
+ restartGame(); showMidgameAd();
+ 
 
         
 
